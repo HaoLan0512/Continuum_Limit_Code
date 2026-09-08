@@ -1,0 +1,188 @@
+<div id="lj-parameter-picture">
+  <h2>LJ parameter geometry</h2>
+  <div class="lj-visual-grid">
+    <section aria-label="Two-layer geometry">
+      <h3>Geometry: spacing and separation</h3>
+      <svg viewBox="0 0 350 300" role="img" aria-labelledby="lj-geometry-title lj-geometry-desc">
+        <title id="lj-geometry-title">Two parallel atomic layers</title>
+        <desc id="lj-geometry-desc">Atoms within each layer are separated by lattice constant a. The layers are vertically separated by L. A phase s gives horizontal separation d of a times s over two pi and pair distance r equal to the square root of L squared plus d squared.</desc>
+        <defs>
+          <marker id="lj-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" class="lj-arrowhead"></path>
+          </marker>
+        </defs>
+
+        <text x="12" y="40" class="lj-layer-label">Layer 2</text>
+        <line x1="45" y1="70" x2="300" y2="70" class="lj-layer-line"></line>
+        <circle cx="55" cy="70" r="9" class="lj-atom-top"></circle>
+        <circle cx="135" cy="70" r="9" class="lj-atom-top"></circle>
+        <circle cx="215" cy="70" r="11" class="lj-atom-selected"></circle>
+        <circle cx="295" cy="70" r="9" class="lj-atom-top"></circle>
+
+        <line x1="55" y1="43" x2="135" y2="43" class="lj-dimension" marker-start="url(#lj-arrow)" marker-end="url(#lj-arrow)"></line>
+        <text x="95" y="34" text-anchor="middle" class="lj-parameter">a = lattice constant</text>
+
+        <text x="12" y="231" class="lj-layer-label">Layer 1</text>
+        <line x1="45" y1="220" x2="300" y2="220" class="lj-layer-line"></line>
+        <circle cx="90" cy="220" r="9" class="lj-atom-bottom"></circle>
+        <circle cx="170" cy="220" r="11" class="lj-atom-selected"></circle>
+        <circle cx="250" cy="220" r="9" class="lj-atom-bottom"></circle>
+
+        <line x1="170" y1="220" x2="170" y2="70" class="lj-guide"></line>
+        <line x1="170" y1="70" x2="215" y2="70" class="lj-guide"></line>
+        <line x1="170" y1="220" x2="215" y2="70" class="lj-pair-line"></line>
+
+        <line x1="154" y1="90" x2="154" y2="200" class="lj-dimension" marker-start="url(#lj-arrow)" marker-end="url(#lj-arrow)"></line>
+        <text x="145" y="150" text-anchor="end" class="lj-parameter">L</text>
+
+        <line x1="176" y1="91" x2="209" y2="91" class="lj-dimension" marker-start="url(#lj-arrow)" marker-end="url(#lj-arrow)"></line>
+        <text x="192" y="108" text-anchor="middle" class="lj-parameter">d(s)</text>
+
+        <text x="211" y="156" class="lj-pair-label">r(s)</text>
+        <text x="175" y="267" text-anchor="middle" class="lj-formula">d(s)=as/(2π),  r(s)²=L²+d(s)²</text>
+      </svg>
+    </section>
+
+    <section aria-label="Lennard-Jones energy curve">
+      <h3>Interaction energy versus distance</h3>
+      <svg viewBox="0 0 350 300" role="img" aria-labelledby="lj-curve-title lj-curve-desc">
+        <title id="lj-curve-title">Lennard-Jones potential curve</title>
+        <desc id="lj-curve-desc">The potential is strongly repulsive at short distance, crosses zero at sigma, reaches minimum minus epsilon at two to the one sixth times sigma, and approaches zero from below at long distance.</desc>
+        <defs>
+          <marker id="lj-axis-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" class="lj-arrowhead"></path>
+          </marker>
+        </defs>
+
+        <line x1="40" y1="168" x2="300" y2="168" class="lj-axis" marker-end="url(#lj-axis-arrow)"></line>
+        <line x1="40" y1="250" x2="40" y2="35" class="lj-axis" marker-end="url(#lj-axis-arrow)"></line>
+        <text x="48" y="40" class="lj-axis-label">V(r)</text>
+
+        <path d="M48,40 C57,75 66,132 80,168 C89,197 98,222 106,224 C122,224 139,211 160,197 C195,181 242,172 292,169" class="lj-curve"></path>
+
+        <line x1="80" y1="168" x2="80" y2="255" class="lj-guide"></line>
+        <circle cx="80" cy="168" r="4" class="lj-zero-mark"></circle>
+        <text x="80" y="274" text-anchor="middle" class="lj-parameter">σ</text>
+        <text x="91" y="153" class="lj-note">V(σ) = 0</text>
+
+        <line x1="106" y1="224" x2="106" y2="255" class="lj-guide"></line>
+        <line x1="40" y1="224" x2="106" y2="224" class="lj-guide"></line>
+        <circle cx="106" cy="224" r="5" class="lj-min-mark"></circle>
+        <text x="122" y="245" class="lj-parameter">r* = 2¹ᐟ⁶σ</text>
+        <text x="48" y="218" class="lj-parameter">−ε</text>
+
+        <text x="130" y="65" class="lj-note">repulsion</text>
+        <text x="165" y="213" class="lj-note">attraction</text>
+        <text x="150" y="294" text-anchor="middle" class="lj-formula">V=4ε[(σ/r)¹² − (σ/r)⁶]</text>
+      </svg>
+    </section>
+  </div>
+</div>
+
+<style>
+  #lj-parameter-picture {
+    color: var(--foreground);
+    background: transparent;
+    width: 100%;
+  }
+
+  #lj-parameter-picture h2 {
+    margin: 0 0 12px;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+  }
+
+  #lj-parameter-picture h3 {
+    margin: 0 0 4px;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+  }
+
+  #lj-parameter-picture .lj-visual-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    align-items: start;
+  }
+
+  #lj-parameter-picture section,
+  #lj-parameter-picture svg {
+    width: 100%;
+    min-width: 0;
+  }
+
+  #lj-parameter-picture svg {
+    display: block;
+    overflow: visible;
+  }
+
+  #lj-parameter-picture text {
+    fill: var(--foreground);
+    font-size: 12px;
+    font-weight: 400;
+  }
+
+  #lj-parameter-picture .lj-layer-label,
+  #lj-parameter-picture .lj-axis-label,
+  #lj-parameter-picture .lj-parameter,
+  #lj-parameter-picture .lj-formula {
+    font-weight: 500;
+  }
+
+  #lj-parameter-picture .lj-note,
+  #lj-parameter-picture .lj-pair-label {
+    fill: var(--muted-foreground);
+  }
+
+  #lj-parameter-picture .lj-layer-line,
+  #lj-parameter-picture .lj-axis {
+    stroke: var(--foreground);
+    stroke-width: 1.5;
+    fill: none;
+  }
+
+  #lj-parameter-picture .lj-guide {
+    stroke: var(--border);
+    stroke-width: 1.5;
+    stroke-dasharray: 5 4;
+    fill: none;
+  }
+
+  #lj-parameter-picture .lj-dimension {
+    stroke: var(--foreground);
+    stroke-width: 1.25;
+    fill: none;
+  }
+
+  #lj-parameter-picture .lj-pair-line,
+  #lj-parameter-picture .lj-curve {
+    stroke: var(--viz-series-1);
+    stroke-width: 3;
+    fill: none;
+  }
+
+  #lj-parameter-picture .lj-arrowhead {
+    fill: var(--foreground);
+  }
+
+  #lj-parameter-picture .lj-atom-top,
+  #lj-parameter-picture .lj-zero-mark {
+    fill: var(--viz-series-2);
+  }
+
+  #lj-parameter-picture .lj-atom-bottom {
+    fill: var(--viz-series-3);
+  }
+
+  #lj-parameter-picture .lj-atom-selected,
+  #lj-parameter-picture .lj-min-mark {
+    fill: var(--viz-series-1);
+  }
+
+  @media (max-width: 360px) {
+    #lj-parameter-picture .lj-visual-grid {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+  }
+</style>

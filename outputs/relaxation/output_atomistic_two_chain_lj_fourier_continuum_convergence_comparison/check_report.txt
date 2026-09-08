@@ -1,0 +1,41 @@
+Atomistic LJ / Fourier-continuum convergence comparison
+=======================================================
+The atomistic minimizers are reused from the validated M=80 study.
+The fitted slopes are empirical evidence, not a proof of global minimality or of the paper's uniform atomistic stability gap.
+
+Model
+  source: C:\Users\lh201\Desktop\Continuum_Limit_Relaxation\Continuum_Limit_Code\outputs\relaxation\output_atomistic_two_chain_lj_lbfgs_convergence_study\profiles.npz
+  a=1, sigma=0.9, L=1, epsilon=0.5
+  continuum Fourier cutoff: K=5
+
+Convergence
+  N= 20: H2_add=3.566986e-02, H2_sqrt=2.059632e-02, max=5.568588e-03, orders=(nan, nan)
+  N= 40: H2_add=1.773081e-02, H2_sqrt=1.023696e-02, max=2.584192e-03, orders=(1.0084, 1.1076)
+  N= 80: H2_add=8.875962e-03, H2_sqrt=5.124550e-03, max=1.240586e-03, orders=(0.9983, 1.0587)
+  N=160: H2_add=4.445109e-03, H2_sqrt=2.566394e-03, max=5.941779e-04, orders=(0.9977, 1.0621)
+  N=320: H2_add=2.226440e-03, H2_sqrt=1.285441e-03, max=2.978152e-04, orders=(0.9975, 0.9965)
+
+Log-log slopes against N; expected value -1
+  additive H2, all five: -0.999976
+  additive H2, finest three: -0.997582
+  maximum, all five: -1.057039
+  maximum, finest three: -1.029266
+
+Reference changes on N=320
+  continuum_mesh: H2_sqrt=1.339911e-05, max=1.276175e-06
+  fourier_cutoff: H2_sqrt=1.170273e-05, max=5.250276e-07
+  real_image: H2_sqrt=1.241118e-05, max=4.457351e-07
+
+Acceptance checks
+  PASS  K=5 to K=6 potential change: value=1.745404e-11, required <= 2.0e-11
+  PASS  K=5 to K=6 derivative change: value=1.047232e-10, required <= 1.1e-10
+  PASS  K=5 to M=160 potential change: value=3.348566e-11, required <= 5.0e-11
+  PASS  K=5 to M=160 derivative change: value=1.051766e-10, required <= 1.1e-10
+  PASS  K=5 to K=6 H_h^2 reference change: value=1.170273e-05, required < 5% of 1.285441e-03
+  PASS  K=5 to K=6 maximum reference change: value=5.250276e-07, required < 5% of 2.978152e-04
+  PASS  K=5 to M=160 H_h^2 reference change: value=1.241118e-05, required < 5% of 1.285441e-03
+  PASS  K=5 to M=160 maximum reference change: value=4.457351e-07, required < 5% of 2.978152e-04
+  PASS  K=5 continuum 400/800 H_h^2 change: value=1.339911e-05, required < 5% of 1.285441e-03
+  PASS  K=5 continuum 400/800 maximum change: value=1.276175e-06, required < 5% of 2.978152e-04
+
+OVERALL: PASS

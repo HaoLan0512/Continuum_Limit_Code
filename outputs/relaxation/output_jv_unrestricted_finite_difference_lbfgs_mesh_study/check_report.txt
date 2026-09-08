@@ -1,0 +1,31 @@
+Independent numerical check of Theorem 1
+===========================================
+These computations are numerical evidence, not a proof of global minimality.
+
+Mesh summaries
+  N=100: best=random_fourier_4, E=-4.389235997527249e+00, J=-1.247643343937456e+00
+    grad_inf=7.977e-08, EL_residual=1.270e-06, min_Dv=1.328975e-01
+    energy_spread=6.839e-14, profile_spread=6.173e-07, max_oddness=5.316e-07
+    reference_dE=1.865e-14, reference_dprofile=5.293e-07, mesh_change=nan
+  N=200: best=random_fourier_5, E=-4.388313952060084e+00, J=-1.246721298470291e+00
+    grad_inf=9.396e-08, EL_residual=2.991e-06, min_Dv=1.328426e-01
+    energy_spread=1.164e-13, profile_spread=3.435e-07, max_oddness=2.978e-07
+    reference_dE=4.796e-14, reference_dprofile=1.181e-07, mesh_change=4.434e-04
+  N=400: best=random_fourier_5, E=-4.388083554165516e+00, J=-1.246490900575723e+00
+    grad_inf=9.594e-08, EL_residual=6.108e-06, min_Dv=1.328237e-01
+    energy_spread=1.990e-13, profile_spread=3.380e-07, max_oddness=4.155e-07
+    reference_dE=5.329e-14, reference_dprofile=1.071e-07, mesh_change=1.108e-04
+
+Acceptance checks
+  PASS  all unrestricted profiles alignable: value=1.000000e+00, required == 1
+  PASS  Mesh size N=400 result: Euler-Lagrange residual infinity norm: value=6.107749e-06, required <= 1.0e-05
+  PASS  Mesh size N=400 result: minimum forward derivative: value=1.328236e-01, required > 0
+  PASS  Mesh size N=400 result: minimum cubic derivative: value=1.328204e-01, required > 0
+  PASS  Mesh size N=400 result: unrestricted energy spread: value=1.989520e-13, required <= 2.0e-09
+  PASS  Mesh size N=400 result: aligned profile spread: value=3.379611e-07, required <= 1.0e-05
+  PASS  Mesh size N=400 result: maximum aligned oddness defect: value=4.154837e-07, required <= 1.0e-05
+  PASS  Mesh size N=400 result: energy difference from odd reference: value=5.329071e-14, required <= 2.0e-09
+  PASS  Mesh size N=400 result: profile difference from odd reference: value=1.070900e-07, required <= 1.0e-05
+  PASS  successive mesh-profile change decreases: value=2.498267e-01, required < 1
+
+OVERALL: PASS

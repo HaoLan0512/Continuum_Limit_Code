@@ -1,0 +1,39 @@
+Independent numerical check of Theorem 1
+===========================================
+These computations are numerical evidence, not a proof of global minimality.
+Potential: W=4 sum_m V(s-2*pi*m), analytic LJ Fourier truncation K=5; a=1, sigma=0.9, L=1, epsilon=0.5; gradient tolerance=3e-7, EL tolerance=2e-5
+
+Mesh summaries
+  N=100: best=random_fourier_5, E=-2.054976499566603e+01, J=-1.740817234207624e+01
+    grad_inf=2.216e-07, EL_residual=3.526e-06, min_Dv=8.335490e-01
+    energy_spread=1.574e-12, profile_spread=1.926e-06, max_oddness=2.033e-06
+    reference_dE=1.634e-13, reference_dprofile=4.105e-07, mesh_change=nan
+  N=200: best=random_fourier_2, E=-2.054975144976141e+01, J=-1.740815879617161e+01
+    grad_inf=2.336e-07, EL_residual=7.436e-06, min_Dv=8.335511e-01
+    energy_spread=3.439e-12, profile_spread=2.392e-06, max_oddness=3.954e-06
+    reference_dE=6.715e-13, reference_dprofile=4.758e-07, mesh_change=4.683e-05
+  N=400: best=random_fourier_4, E=-2.054974806398384e+01, J=-1.740815541039405e+01
+    grad_inf=2.690e-07, EL_residual=1.713e-05, min_Dv=8.335535e-01
+    energy_spread=6.658e-12, profile_spread=3.802e-06, max_oddness=6.694e-06
+    reference_dE=5.329e-14, reference_dprofile=6.833e-07, mesh_change=1.219e-05
+
+Acceptance checks
+  PASS  all unrestricted profiles alignable: value=1.000000e+00, required == 1
+  PASS  Mesh size N=400 result: Euler-Lagrange residual infinity norm: value=1.712729e-05, required <= 2.0e-05
+  PASS  Mesh size N=400 result: minimum forward derivative: value=8.335524e-01, required > 0
+  PASS  Mesh size N=400 result: minimum cubic derivative: value=8.335506e-01, required > 0
+  PASS  Mesh size N=400 result: unrestricted energy spread: value=6.657785e-12, required <= 2.0e-09
+  PASS  Mesh size N=400 result: aligned profile spread: value=3.801814e-06, required <= 1.0e-05
+  PASS  Mesh size N=400 result: maximum aligned oddness defect: value=6.693664e-06, required <= 1.0e-05
+  PASS  Mesh size N=400 result: energy difference from odd reference: value=5.329071e-14, required <= 2.0e-09
+  PASS  Mesh size N=400 result: profile difference from odd reference: value=6.833145e-07, required <= 1.0e-05
+  PASS  successive mesh-profile change decreases: value=2.601983e-01, required < 1
+  PASS  K=5 to K=6 potential change: value=1.745404e-11, required <= 2.0e-11
+  PASS  K=5 to K=6 derivative change: value=1.047232e-10, required <= 1.1e-10
+  PASS  LJ-Fourier W evenness: value=0.000000e+00, required <= 1.0e-14
+  PASS  LJ-Fourier W' oddness: value=0.000000e+00, required <= 1.0e-14
+  PASS  LJ-Fourier W'<0 on (0,pi): value=-4.661766e-04, required < 0
+  PASS  LJ-Fourier W'/s increasing: value=0.000000e+00, required <= 1.0e-12
+  PASS  Fourier coefficient bound for Lip(W'): value=2.304661e-01, required < 1
+
+OVERALL: PASS

@@ -1,0 +1,37 @@
+Atomistic two-chain LJ convergence study
+=========================================
+Two independent tracks are reported; neither is selected over the other.
+
+Configuration
+  N=(20, 40, 80, 160, 320, 640); continuum points=(400, 800)
+  atomistic cutoff M=80; tail check M=160
+  effective LJ: a=1, sigma=0.9, L=1, epsilon=0.5; W=4 sum V
+  starts=sampled_continuum, random_fourier_seed_3; seed=3; modes=1-5; decay=1/k^2; amplitude=0.1
+  acceptance: successful finite solve, Appendix B bounds, EL_inf/h <= 1.0e-02
+
+Errors and seed-3 normalized mean
+  N    warm_H2     warm_max    seed3_H2    seed3_max   seed3_mean1
+   20  2.0368e-02  4.7784e-03  1.5909e-01  5.3481e-02  +4.3359e-02
+   40  1.0204e-02  2.3688e-03  1.2448e-01  4.1450e-02  -3.4088e-02
+   80  5.1203e-03  1.1850e-03  1.6874e-02  5.7998e-03  +4.4177e-03
+  160  2.5664e-03  5.9410e-04  1.5619e-02  5.2286e-03  +4.2332e-03
+  320  1.2852e-03  2.9766e-04  1.5129e-02  5.0206e-03  +4.1418e-03
+  640  6.4287e-04  1.4931e-04  3.0204e-03  1.0171e-03  -8.1080e-04
+
+All-grid log(error) versus log(N) slopes; expected -1
+  sampled_continuum: H2=-0.996919, max=-0.999255
+  random_fourier_seed_3: H2=-1.080796, max=-1.081950
+  largest scaled errors: H2/h=0.802343, max/h=0.267174
+  seed-3 plateau ratio H2(640)/H2(320)=0.199647
+
+Focused validation
+  directional errors: atomistic=6.351e-10, continuum=5.024e-10
+  exact symmetry energy defect=1.776e-13
+  continuum 400/800 change: H2=9.816e-06, max=1.381e-06
+  largest M=80/160 EL difference over h=1.618e-11
+  checks passed=21/21
+
+Interpretation: seed 3 is an intentionally selected illustrative phase-stress realization, not representative random-start statistics.
+Its finite-grid sawtooth is assessed by an O(h) envelope; smooth pointwise halving is not claimed.
+Accepted endpoints are local stationary candidates; global minimality and the paper's stability-gap hypothesis are not verified.
+OVERALL VERIFICATION CHECKS: PASS

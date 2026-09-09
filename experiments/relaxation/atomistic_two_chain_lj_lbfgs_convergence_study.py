@@ -614,7 +614,31 @@ def local_verification_checks():
 
 
 def run_study():
-    """Compute two atomistic tracks, empirical rates, and focused checks."""
+    """Run the complete atomistic-to-continuum convergence study.
+
+    Workflow:
+        1. Check the building blocks. Run the inexpensive N=20 gradient,
+           symmetry, and initial-condition checks.
+        2. Compute the continuum reference. Solve the continuum problem on
+           400- and 800-point meshes. The finer 800-point solution becomes the
+           main reference.
+        3. Run the atomistic convergence study. For every atom count N and
+           both initial guesses, sample the continuum reference on the N and
+           N+1 atomistic grids; run the atomistic L-BFGS-B optimization;
+           normalize the solution; align its reflection representative; and
+           calculate the discrete H_h^2 and maximum-norm errors.
+        4. Measure convergence. Fit log-log slopes to determine whether the
+           atomistic errors behave approximately like N^-1.
+        5. Check numerical robustness. At the finest atomistic system, compare
+           the M=80 and M=160 interaction cutoffs. Also compare the 400- and
+           800-point continuum references.
+        6. Assemble all validation results. Combine the local checks,
+           optimizer endpoint checks, normalization checks, convergence
+           slopes, monotonicity, cutoff sensitivity, and continuum-refinement
+           checks.
+        7. Return everything in one study dictionary containing solutions,
+           errors, slopes, diagnostics, and PASS/FAIL checks.
+    """
     verification = local_verification_checks()
     continuum_results = {
         points: solve_continuum_reference(points)
@@ -893,6 +917,15 @@ def save_plots(outdir, study):
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
+    def mean_mode_h2(result):
+        """Return the H_h^2 contribution from the two layer-error means."""
+        u1, u2 = split_layers(result["normalized_u"], result["N"])
+        reference1, reference2 = split_layers(result["continuum_pair"],
+                                               result["N"])
+        mean_error1 = float(np.mean(u1 - reference1))
+        mean_error2 = float(np.mean(u2 - reference2))
+        return float(np.sqrt(TWOPI * (mean_error1**2 + mean_error2**2)))
+
     N = np.asarray(N_VALUES, dtype=float)
     figure, axes = plt.subplots(1, 2, figsize=(11, 4.8))
     styles = {
@@ -917,6 +950,11 @@ def save_plots(outdir, study):
         result for result in study["results"]
         if result["start"] == "sampled_continuum"
     ]
+    warm_mean_modes = [mean_mode_h2(result) for result in warm]
+    warm_mean_percentages = [
+        100.0 * mean_mode / result["h2_error"]
+        for mean_mode, result in zip(warm_mean_modes, warm)
+    ]
     for axis, key in ((axes[0], "h2_error"), (axes[1], "max_error")):
         axis.loglog(N,
                     warm[0][key] * N[0] / N,
@@ -927,12 +965,37 @@ def save_plots(outdir, study):
         result for result in study["results"]
         if result["start"] == "random_fourier_seed_3"
     ]
+    seed3_mean_modes = [mean_mode_h2(result) for result in seed3]
+    seed3_mean_free_h2 = [
+        float(np.sqrt(max(result["h2_error"]**2 - mean_mode**2, 0.0)))
+        for result, mean_mode in zip(seed3, seed3_mean_modes)
+    ]
+    seed3_mean_free_slope = loglog_slope(N_VALUES, seed3_mean_free_h2)
     axes[0].loglog(
-        N, [2.0 * np.sqrt(PI) * abs(result["mean1"]) for result in seed3],
+        N, seed3_mean_modes,
         ":",
         color="tab:red",
         linewidth=1.5,
         label=r"seed 3 mean mode $2\sqrt{\pi}|\bar u_1|$")
+    axes[0].loglog(
+        N,
+        seed3_mean_free_h2,
+        "--",
+        color="tab:green",
+        linewidth=1.5,
+        label=(r"seed 3 mean-free $H_h^2$ "
+               f"(slope={seed3_mean_free_slope:.3f})"))
+    axes[0].annotate(
+        ("warm mean mode\n" + r"$\leq$ "
+        f"{max(warm_mean_percentages):.2f}% of total $H_h^2$ error"),
+        xy=(N[0], warm[0]["h2_error"]),
+        xytext=(5, -150),
+        textcoords="offset points",
+        fontsize=8,
+        color="tab:blue",
+        arrowprops={"arrowstyle": "->", "color": "tab:blue"},
+        bbox={"boxstyle": "round,pad=0.25", "facecolor": "white",
+              "edgecolor": "tab:blue", "alpha": 0.9})
     axes[0].set_title(r"Layer-weighted $H_h^2$ error")
     axes[1].set_title("Maximum error")
     for axis in axes:

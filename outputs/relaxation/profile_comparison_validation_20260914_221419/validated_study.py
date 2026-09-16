@@ -74,9 +74,7 @@ ATOMISTIC_EL_OVER_H_TOL = 1.0e-2
 ATOMISTIC_RANDOM_FOURIER_SEED = 3
 ATOMISTIC_RANDOM_FOURIER_MODES = 5
 ATOMISTIC_RANDOM_MAX_AMPLITUDE = 0.1
-ATOMISTIC_RANDOM_START_NAME = f"random_fourier_seed_{ATOMISTIC_RANDOM_FOURIER_SEED}"
-ATOMISTIC_RANDOM_SEED_TAG = f"seed{ATOMISTIC_RANDOM_FOURIER_SEED}"
-ATOMISTIC_START_NAMES = ("sampled_continuum", ATOMISTIC_RANDOM_START_NAME)
+ATOMISTIC_START_NAMES = ("sampled_continuum", "random_fourier_seed_3")
 CONTINUUM_GRAD_TOL = 2.0e-7
 CONTINUUM_EL_TOL = 2.0e-5
 MAX_CONTINUUM_SOLVER_CALLS = 3
@@ -446,22 +444,18 @@ def atomistic_tangent_hessian(u, N, cutoff):
     return transformed[:-1, :-1], reflector
 
 
-def sample_continuum_pair(spline, N, phase_shift=0.0):
-    """Sample (q(x-delta)-delta)/2 and its negative on the native grids.
-
-    The coupled shift is the continuum translation symmetry, with q=v_0-x.
-    It changes the reference only; it is not an atomistic transformation.
-    """
+def sample_continuum_pair(spline, N):
+    """Sample u1=q/2 and u2=-q/2 on the two native atomistic grids. The q here is v_0(x)-x in the paper."""
     N1, N2, h1, h2, _ = atomistic_geometry(N)
     x1 = h1 * np.arange(N1)
     x2 = h2 * np.arange(N2)
-    q1 = spline(wrap_to_paper_cell(x1 - phase_shift)) - phase_shift
-    q2 = spline(wrap_to_paper_cell(x2 - phase_shift)) - phase_shift
+    q1 = spline(wrap_to_paper_cell(x1))
+    q2 = spline(wrap_to_paper_cell(x2))
     return np.concatenate((0.5 * q1, -0.5 * q2))
 
 
 def random_fourier_atomistic_start(N):
-    """Return the configured mean-gauged smooth random-Fourier start.
+    """Return the fixed seed-3 mean-gauged smooth phase-stress start.
 
     The same continuous Fourier coefficients are sampled on every
     atomistic refinement. Opposite constant modes probe relative registry,
@@ -493,7 +487,7 @@ def atomistic_initial_guesses(N, continuum_pair):
     """Return the independent warm and fixed phase-stress starts."""
     return {
         "sampled_continuum": atomistic_reduced_coordinates(continuum_pair, N),
-        ATOMISTIC_RANDOM_START_NAME: random_fourier_atomistic_start(N),
+        "random_fourier_seed_3": random_fourier_atomistic_start(N),
     }
 
 
@@ -689,16 +683,16 @@ def appendix_b_normalize(u, N):
     }
 
 
-def compare_atomistic_energies(warm, random_result, N):
+def compare_atomistic_energies(warm, seed3, N):
     """Compare raw feasible endpoints; a lower competitor need not be stationary."""
     comparison = {
         "N": N,
-        f"{ATOMISTIC_RANDOM_SEED_TAG}_minus_warm_energy": np.nan,
+        "seed3_minus_warm_energy": np.nan,
         "energy_comparison_tolerance": np.nan,
         "lower_energy_competitor_found": None,
         "energy_comparison_status": "unavailable",
     }
-    for result in (warm, random_result):
+    for result in (warm, seed3):
         if result is None or not np.isfinite(result["raw_energy"]):
             return comparison
         u = result["raw_u"]
@@ -707,18 +701,18 @@ def compare_atomistic_energies(warm, random_result, N):
         u1, u2 = split_layers(u, N)
         if abs(np.mean(u1) + np.mean(u2)) > MEAN_TOL:
             return comparison
-    gap = random_result["raw_energy"] - warm["raw_energy"]
+    gap = seed3["raw_energy"] - warm["raw_energy"]
     tolerance = ENERGY_COMPARISON_RTOL * max(
-        1.0, abs(warm["raw_energy"]), abs(random_result["raw_energy"]))
+        1.0, abs(warm["raw_energy"]), abs(seed3["raw_energy"]))
     lower_found = gap < -tolerance
     if lower_found:
-        status = f"{ATOMISTIC_RANDOM_SEED_TAG}_lower"
-    elif not (warm["accepted"] and random_result["accepted"]):
+        status = "seed3_lower"
+    elif not (warm["accepted"] and seed3["accepted"]):
         status = "incomplete"
     else:
         status = "warm_lower" if gap > tolerance else "agree"
     comparison.update({
-        f"{ATOMISTIC_RANDOM_SEED_TAG}_minus_warm_energy": float(gap),
+        "seed3_minus_warm_energy": float(gap),
         "energy_comparison_tolerance": float(tolerance),
         "lower_energy_competitor_found": bool(lower_found),
         "energy_comparison_status": status,
@@ -906,28 +900,6 @@ def run_study():
                 "reflection_applied": reflection_applied,
                 **errors,
             })
-            # Phase motivation, using the final normalized/reflected endpoint:
-            # m_N = mean(u_1,N) = -mean(u_2,N). For an unknown continuum phase
-            # delta_*, write the layer-1 profile discrepancy as
-            # u_1,N,n = u_1^c(x_1,n - delta_*) - delta_*/2 + epsilon_1,N,n.
-            # Taking the discrete mean gives
-            # m_N = -delta_*/2 + s_N(delta_*) + mean(epsilon_1,N),
-            # s_N(delta_*) = (1/N) sum_n u_1^c(x_1,n - delta_*).
-            # The continuous mean of u_1^c is zero, so s_N is the quadrature
-            # discrepancy in its sampled mean. mean(epsilon_1,N) is the mean
-            # profile discrepancy, not the atomistic EL consistency residual.
-            # If both terms are small, delta_* is approximately -2*m_N.
-            # Hence choose delta_N := -2*m_N = mean(u_2,N) - mean(u_1,N).
-            # This selects a continuum reference; the matched norms below test
-            # the remaining profile mismatch without changing the endpoint.
-            phase_shift = run["mean2"] - run["mean1"]
-            matched_errors = two_layer_errors(
-                comparison_u, sample_continuum_pair(finest_spline, N, phase_shift), N)
-            run.update({
-                "continuum_phase_shift": phase_shift,
-                "phase_matched_h2_error": matched_errors["h2_error"],
-                "phase_matched_max_error": matched_errors["max_error"],
-            })
             run["relative_mean_fraction"] = (4.0 * abs(run["mean1"]) /
                                              run["h"])
             run["h2_error_over_h"] = run["h2_error"] / run["h"]
@@ -935,7 +907,7 @@ def run_study():
             results.append(run)
         cases = {result["start"]: result for result in results if result["N"] == N}
         comparison = compare_atomistic_energies(
-            cases.get("sampled_continuum"), cases.get(ATOMISTIC_RANDOM_START_NAME), N)
+            cases.get("sampled_continuum"), cases.get("random_fourier_seed_3"), N)
         energy_comparisons.append(comparison)
         for result in cases.values():
             result.update(comparison)
@@ -952,14 +924,9 @@ def run_study():
                 "max":
                 loglog_slope(N_VALUES,
                              [result["max_error"] for result in case]),
-                "phase_matched_h2": loglog_slope(
-                    N_VALUES, [result["phase_matched_h2_error"] for result in case]),
-                "phase_matched_max": loglog_slope(
-                    N_VALUES, [result["phase_matched_max_error"] for result in case]),
             }
         else:
-            slopes[start] = {"h2": np.nan, "max": np.nan,
-                             "phase_matched_h2": np.nan, "phase_matched_max": np.nan}
+            slopes[start] = {"h2": np.nan, "max": np.nan}
 
     # --------------------step 5------------------------#
     #Atomistic cutoff \(M=80\) versus \(M=160\), checking the Euler-Lagrange residual over h.
@@ -1019,11 +986,11 @@ def run_study():
          <= GRADIENT_CHECK_TOL,
          verification["continuum_gradient_relative_error"],
          f"<= {GRADIENT_CHECK_TOL:.1e}"),
-        (f"seed-{ATOMISTIC_RANDOM_FOURIER_SEED} reduced length", verification["random_shape_ok"],
+        ("seed-3 reduced length", verification["random_shape_ok"],
          float(verification["random_shape_ok"]), "== 1"),
-        (f"seed-{ATOMISTIC_RANDOM_FOURIER_SEED} mean gauge", verification["random_gauge_defect"] <= MEAN_TOL,
+        ("seed-3 mean gauge", verification["random_gauge_defect"] <= MEAN_TOL,
          verification["random_gauge_defect"], f"<= {MEAN_TOL:.1e}"),
-        (f"seed-{ATOMISTIC_RANDOM_FOURIER_SEED} finite energy and gradient",
+        ("seed-3 finite energy and gradient",
          verification["random_initial_values_finite"],
          float(verification["random_initial_values_finite"]), "== 1"),
         ("accepted atomistic endpoints", accepted_count == len(results),
@@ -1039,7 +1006,7 @@ def run_study():
              for item in energy_comparisons),
          float(sum(item["energy_comparison_status"] in ("agree", "warm_lower")
                    for item in energy_comparisons)),
-         f"== {len(N_VALUES)}; accepted pair and E_{ATOMISTIC_RANDOM_SEED_TAG} >= E_warm - tau_E"),
+         f"== {len(N_VALUES)}; accepted pair and E_seed3 >= E_warm - tau_E"),
         ("Appendix B mean sums", maximum_mean_sum
          <= MEAN_TOL, maximum_mean_sum, f"<= {MEAN_TOL:.1e}"),
         ("Appendix B mean bounds", maximum_bound_excess
@@ -1150,10 +1117,9 @@ def save_summary(outdir, study):
                 "gradient_reduction_ratio", "newton_correction_status",
                 "newton_correction_applied", "newton_step_inf_norm",
                 "curvature_min_eigenvalue", "curvature_tolerance", "curvature_status",
-                f"{ATOMISTIC_RANDOM_SEED_TAG}_minus_warm_energy", "energy_comparison_tolerance",
+                "seed3_minus_warm_energy", "energy_comparison_tolerance",
                 "lower_energy_competitor_found", "energy_comparison_status",
-                "energy_minus_continuum", "continuum_phase_shift",
-                "phase_matched_h2_error", "phase_matched_max_error")},
+                "energy_minus_continuum")},
         })
     write_csv(outdir / "convergence_summary.csv", rows)
 
@@ -1218,8 +1184,7 @@ def save_plots(outdir, study):
     figure, axes = plt.subplots(1, 2, figsize=(11, 4.8))
     styles = {
         "sampled_continuum": ("o-", "continuum warm start"),
-        ATOMISTIC_RANDOM_START_NAME: (
-            "s-", f"seed-{ATOMISTIC_RANDOM_FOURIER_SEED} phase-stress start"),
+        "random_fourier_seed_3": ("s-", "seed-3 phase-stress start"),
     }
     for start, (style, label) in styles.items():
         case = [
@@ -1250,26 +1215,29 @@ def save_plots(outdir, study):
                     "k--",
                     alpha=0.65,
                     label="$N^{-1}$ guide")
-    random_results = [
+    seed3 = [
         result for result in study["results"]
-        if result["start"] == ATOMISTIC_RANDOM_START_NAME
+        if result["start"] == "random_fourier_seed_3"
     ]
-    random_mean_modes = [mean_mode_h2(result) for result in random_results]
+    seed3_mean_modes = [mean_mode_h2(result) for result in seed3]
+    seed3_mean_free_h2 = [
+        float(np.sqrt(max(result["h2_error"]**2 - mean_mode**2, 0.0)))
+        for result, mean_mode in zip(seed3, seed3_mean_modes)
+    ]
+    seed3_mean_free_slope = loglog_slope(N_VALUES, seed3_mean_free_h2)
     axes[0].loglog(N,
-                   random_mean_modes,
+                   seed3_mean_modes,
                    ":",
                    color="tab:red",
                    linewidth=1.5,
-                   label=(f"seed {ATOMISTIC_RANDOM_FOURIER_SEED} mean mode "
-                          r"$2\sqrt{\pi}|\bar u_1|$"))
-    for axis, norm in zip(axes, ("h2", "max")):
-        slope = study["slopes"][ATOMISTIC_RANDOM_START_NAME][f"phase_matched_{norm}"]
-        slope_text = "unavailable" if not np.isfinite(slope) else f"{slope:.3f}"
-        axis.loglog(N,
-                    [result[f"phase_matched_{norm}_error"] for result in random_results],
-                    "--", color="tab:green", linewidth=1.5,
-                    label=(f"seed {ATOMISTIC_RANDOM_FOURIER_SEED} vs shifted continuum "
-                           f"(slope={slope_text})"))
+                   label=r"seed 3 mean mode $2\sqrt{\pi}|\bar u_1|$")
+    axes[0].loglog(N,
+                   seed3_mean_free_h2,
+                   "--",
+                   color="tab:green",
+                   linewidth=1.5,
+                   label=(r"seed 3 mean-free $H_h^2$ "
+                          f"(slope={seed3_mean_free_slope:.3f})"))
     axes[0].annotate(
         ("warm mean mode\n" + r"$\leq$ "
          f"{max(warm_mean_percentages):.2f}% of total $H_h^2$ error"),
@@ -1304,15 +1272,13 @@ def save_plots(outdir, study):
 
 def save_report(outdir, study, overall_pass):
     """Write a compact report of the two tracks and necessary checks."""
-    random_label = f"seed-{ATOMISTIC_RANDOM_FOURIER_SEED}"
-    random_tag = ATOMISTIC_RANDOM_SEED_TAG
     warm = [
         result for result in study["results"]
         if result["start"] == "sampled_continuum"
     ]
-    random_results = [
+    seed3 = [
         result for result in study["results"]
-        if result["start"] == ATOMISTIC_RANDOM_START_NAME
+        if result["start"] == "random_fourier_seed_3"
     ]
     failed = [check for check in study["checks"] if not check[1]]
     lines = [
@@ -1323,7 +1289,7 @@ def save_report(outdir, study, overall_pass):
         f"  N={N_VALUES}; continuum points={CONTINUUM_POINTS}",
         f"  atomistic cutoff M={PAIR_CUTOFF}; tail check M={CUTOFF_CHECK}",
         "  effective LJ: a=1, sigma=0.9, L=1, epsilon=0.5; W=4 sum V",
-        (f"  starts=sampled_continuum, {ATOMISTIC_RANDOM_START_NAME}; seed="
+        (f"  starts=sampled_continuum, random_fourier_seed_3; seed="
          f"{ATOMISTIC_RANDOM_FOURIER_SEED}; modes=1-"
          f"{ATOMISTIC_RANDOM_FOURIER_MODES}; decay=1/k^2; amplitude="
          f"{ATOMISTIC_RANDOM_MAX_AMPLITUDE}"),
@@ -1336,13 +1302,13 @@ def save_report(outdir, study, overall_pass):
          f"{NEWTON_ENERGY_ROUNDOFF_FACTOR:g}*eps*max(1, |E_before|, |E_after|)"),
         (f"  tau_H = max({CURVATURE_SOFT_TOL:.1e}, "
          "100*eps*max(1, ||H||_inf) + 10*eigenpair residual)"),
-        (f"  tau_E = {ENERGY_COMPARISON_RTOL:.1e}*max(1, |E_warm|, |E_{random_tag}|)"),
+        (f"  tau_E = {ENERGY_COMPARISON_RTOL:.1e}*max(1, |E_warm|, |E_seed3|)"),
         "",
-        f"Errors and {random_label} normalized mean",
-        (f"  N    warm_H2     warm_max    {random_tag}_H2    {random_tag}_max   {random_tag}_mean1"
-         f"  {random_tag}_warm_H2  {random_tag}_warm_max"),
+        "Errors and seed-3 normalized mean",
+        ("  N    warm_H2     warm_max    seed3_H2    seed3_max   seed3_mean1"
+         "  seed3_warm_H2  seed3_warm_max"),
     ]
-    for warm_result, seed_result in zip(warm, random_results):
+    for warm_result, seed_result in zip(warm, seed3):
         cross_errors = two_layer_errors(seed_result["normalized_u"],
                                         warm_result["normalized_u"],
                                         warm_result["N"])
@@ -1351,33 +1317,16 @@ def save_report(outdir, study, overall_pass):
             f"{warm_result['max_error']:.4e}  {seed_result['h2_error']:.4e}  "
             f"{seed_result['max_error']:.4e}  {seed_result['mean1']:+.4e}  "
             f"{cross_errors['h2_error']:13.4e}  {cross_errors['max_error']:14.4e}")
-    lines.append(f"  {random_tag}_warm_*: {random_label} versus warm-start profiles after "
+    lines.append("  seed3_warm_*: seed-3 versus warm-start profiles after "
                  "normalization and reflection alignment.")
-    lines.extend([
-        "",
-        f"{random_label.capitalize()} errors against a phase-matched continuum reference",
-        (f"  {CONTINUUM_POINTS[-1]}-point reference; phase_shift = mean2 - mean1; "
-         "atomistic endpoints unchanged"),
-        "  N     phase_shift     matched_H2   matched_max",
-    ])
-    for result in random_results:
-        lines.append(
-            f"  {result['N']:3d}  {result['continuum_phase_shift']:+.6e}  "
-            f"{result['phase_matched_h2_error']:.4e}  {result['phase_matched_max_error']:.4e}")
-    matched_slopes = study["slopes"][ATOMISTIC_RANDOM_START_NAME]
-    lines.extend([
-        (f"  matched log-log slopes: H2={matched_slopes['phase_matched_h2']:.6f}, "
-         f"max={matched_slopes['phase_matched_max']:.6f}"),
-        "  green: phase-matched continuum reference; blue/orange: original fixed-phase reference",
-    ])
     lines.extend([
         "",
         "Energy differences to continuum (E_atom - E_cont)",
         (f"  Finite-resolution reference: {CONTINUUM_POINTS[-1]} points; "
          "E_cont = F[q]/2 (two-layer energy)."),
-        f"    N        warm_dE        {random_tag}_dE",
+        "    N        warm_dE        seed3_dE",
     ])
-    for warm_result, seed_result in zip(warm, random_results):
+    for warm_result, seed_result in zip(warm, seed3):
         lines.append(
             f"  {warm_result['N']:3d}  {warm_result['energy_minus_continuum']:+.6e}  "
             f"{seed_result['energy_minus_continuum']:+.6e}")
@@ -1387,18 +1336,18 @@ def save_report(outdir, study, overall_pass):
         ("  sampled_continuum: H2="
          f"{study['slopes']['sampled_continuum']['h2']:.6f}, max="
          f"{study['slopes']['sampled_continuum']['max']:.6f}"),
-        (f"  {ATOMISTIC_RANDOM_START_NAME}: H2="
-         f"{study['slopes'][ATOMISTIC_RANDOM_START_NAME]['h2']:.6f}, max="
-         f"{study['slopes'][ATOMISTIC_RANDOM_START_NAME]['max']:.6f}"),
+        ("  random_fourier_seed_3: H2="
+         f"{study['slopes']['random_fourier_seed_3']['h2']:.6f}, max="
+         f"{study['slopes']['random_fourier_seed_3']['max']:.6f}"),
         ("  largest scaled errors: H2/h="
          f"{max(result['h2_error_over_h'] for result in study['results']):.6f}, "
          f"max/h={max(result['max_error_over_h'] for result in study['results']):.6f}"
          ),
-        (f"  {random_label} plateau ratio H2(640)/H2(320)="
-         f"{random_results[-1]['h2_error'] / random_results[-2]['h2_error']:.6f}"),
+        ("  seed-3 plateau ratio H2(640)/H2(320)="
+         f"{seed3[-1]['h2_error'] / seed3[-2]['h2_error']:.6f}"),
     ])
-    lines.extend(["", "Endpoint audit", f"  N    warm correction / curvature       {random_tag} correction / curvature      energy comparison"])
-    for warm_result, seed_result, comparison in zip(warm, random_results, study["energy_comparisons"]):
+    lines.extend(["", "Endpoint audit", "  N    warm correction / curvature       seed3 correction / curvature      energy comparison"])
+    for warm_result, seed_result, comparison in zip(warm, seed3, study["energy_comparisons"]):
         warm_status = (f"{warm_result['newton_correction_status']} / "
                        f"{warm_result['curvature_status']}")
         seed_status = (f"{seed_result['newton_correction_status']} / "
@@ -1418,12 +1367,12 @@ def save_report(outdir, study, overall_pass):
         ("Atomistic directional-gradient accuracy", "Relative error {}"),
         "phase-fixed continuum gradient":
         ("Continuum directional-gradient accuracy", "Relative error {}"),
-        f"{random_label} reduced length":
-        (f"{random_label.capitalize()} initial vector length", "Correct length (2N)"),
-        f"{random_label} mean gauge":
-        (f"{random_label.capitalize()} initial layer means sum to zero", "abs(mean1 + mean2) {}"),
-        f"{random_label} finite energy and gradient":
-        (f"{random_label.capitalize()} initial energy and gradient are finite", "All values finite"),
+        "seed-3 reduced length":
+        ("Seed-3 initial vector length", "Correct length (2N)"),
+        "seed-3 mean gauge":
+        ("Seed-3 initial layer means sum to zero", "abs(mean1 + mean2) {}"),
+        "seed-3 finite energy and gradient":
+        ("Seed-3 initial energy and gradient are finite", "All values finite"),
         "accepted atomistic endpoints":
         ("All atomistic endpoints are accepted", "Accepted count {}"),
         "Appendix B mean sums":
@@ -1440,13 +1389,13 @@ def save_report(outdir, study, overall_pass):
     validation_rows = []
     for name, passed, value, requirement in study["checks"]:
         description = (name.replace("sampled_continuum", "warm")
-                       .replace(ATOMISTIC_RANDOM_START_NAME, random_label)
+                       .replace("random_fourier_seed_3", "seed-3")
                        .replace(" h2 ", " H_h^2 ")
                        .replace(" max ", " maximum-error "))
         description, criterion = check_labels.get(name, (description, "{}"))
         criterion = criterion.format(requirement)
         measured = (str(bool(value)) if name in (
-            f"{random_label} reduced length", f"{random_label} finite energy and gradient")
+            "seed-3 reduced length", "seed-3 finite energy and gradient")
                     else f"{value:.6e}")
         validation_rows.append((description, passed, measured, criterion))
     check_width = max([len("Check")] + [len(row[0]) for row in validation_rows])
@@ -1485,11 +1434,11 @@ def save_report(outdir, study, overall_pass):
             if comparison["energy_comparison_status"] not in ("agree", "warm_lower"):
                 lines.append(f"  comparison N={comparison['N']}: "
                              f"{comparison['energy_comparison_status']}, "
-                             f"E_{random_tag}-E_warm={comparison[f'{random_tag}_minus_warm_energy']:.6e}, "
+                             f"E_seed3-E_warm={comparison['seed3_minus_warm_energy']:.6e}, "
                              f"tau_E={comparison['energy_comparison_tolerance']:.6e}")
     lines.extend([
         "",
-        (f"Interpretation: seed {ATOMISTIC_RANDOM_FOURIER_SEED} is an intentionally selected illustrative "
+        ("Interpretation: seed 3 is an intentionally selected illustrative "
          "phase-stress realization, not representative random-start statistics."
          ),
         ("Its finite-grid sawtooth is assessed by an O(h) envelope; smooth "

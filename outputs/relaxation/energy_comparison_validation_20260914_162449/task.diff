@@ -1,0 +1,47 @@
+--- before
++++ after
+@@ -860,6 +860,8 @@
+             continuum["q"], continuum["x"], continuum["dx"]))
+         continuum.update(curvature)
+     finest_continuum = continuum_results[CONTINUUM_POINTS[-1]]
++    # For u1=q/2 and u2=-q/2, the two-layer continuum energy is F[q]/2.
++    continuum_energy = 0.5 * finest_continuum["energy"]
+     finest_spline = periodic_q_spline(finest_continuum["x"],
+                                       finest_continuum["q"])
+ 
+@@ -892,6 +894,7 @@
+                 "start": start,
+                 "continuum_pair": continuum_pair,
+                 "normalized_u": comparison_u,
++                "energy_minus_continuum": run["raw_energy"] - continuum_energy,
+                 "mean1": float(np.mean(mean1)),
+                 "mean2": float(np.mean(mean2)),
+                 "reflection_applied": reflection_applied,
+@@ -1115,7 +1118,8 @@
+                 "newton_correction_applied", "newton_step_inf_norm",
+                 "curvature_min_eigenvalue", "curvature_tolerance", "curvature_status",
+                 "seed3_minus_warm_energy", "energy_comparison_tolerance",
+-                "lower_energy_competitor_found", "energy_comparison_status")},
++                "lower_energy_competitor_found", "energy_comparison_status",
++                "energy_minus_continuum")},
+         })
+     write_csv(outdir / "convergence_summary.csv", rows)
+ 
+@@ -1308,6 +1312,17 @@
+             f"  {warm_result['N']:3d}  {warm_result['h2_error']:.4e}  "
+             f"{warm_result['max_error']:.4e}  {seed_result['h2_error']:.4e}  "
+             f"{seed_result['max_error']:.4e}  {seed_result['mean1']:+.4e}")
++    lines.extend([
++        "",
++        "Energy differences to continuum (E_atom - E_cont)",
++        (f"  Finite-resolution reference: {CONTINUUM_POINTS[-1]} points; "
++         "E_cont = F[q]/2 (two-layer energy)."),
++        "    N        warm_dE        seed3_dE",
++    ])
++    for warm_result, seed_result in zip(warm, seed3):
++        lines.append(
++            f"  {warm_result['N']:3d}  {warm_result['energy_minus_continuum']:+.6e}  "
++            f"{seed_result['energy_minus_continuum']:+.6e}")
+     lines.extend([
+         "",
+         "All-grid log(error) versus log(N) slopes; expected -1",

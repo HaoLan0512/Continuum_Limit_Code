@@ -1,0 +1,25 @@
+--- before
++++ after
+@@ -1305,13 +1305,20 @@
+         (f"  tau_E = {ENERGY_COMPARISON_RTOL:.1e}*max(1, |E_warm|, |E_seed3|)"),
+         "",
+         "Errors and seed-3 normalized mean",
+-        "  N    warm_H2     warm_max    seed3_H2    seed3_max   seed3_mean1",
++        ("  N    warm_H2     warm_max    seed3_H2    seed3_max   seed3_mean1"
++         "  seed3_warm_H2  seed3_warm_max"),
+     ]
+     for warm_result, seed_result in zip(warm, seed3):
++        cross_errors = two_layer_errors(seed_result["normalized_u"],
++                                        warm_result["normalized_u"],
++                                        warm_result["N"])
+         lines.append(
+             f"  {warm_result['N']:3d}  {warm_result['h2_error']:.4e}  "
+             f"{warm_result['max_error']:.4e}  {seed_result['h2_error']:.4e}  "
+-            f"{seed_result['max_error']:.4e}  {seed_result['mean1']:+.4e}")
++            f"{seed_result['max_error']:.4e}  {seed_result['mean1']:+.4e}  "
++            f"{cross_errors['h2_error']:13.4e}  {cross_errors['max_error']:14.4e}")
++    lines.append("  seed3_warm_*: seed-3 versus warm-start profiles after "
++                 "normalization and reflection alignment.")
+     lines.extend([
+         "",
+         "Energy differences to continuum (E_atom - E_cont)",

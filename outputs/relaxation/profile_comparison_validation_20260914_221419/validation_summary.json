@@ -1,0 +1,43 @@
+{
+  "optimizer_calls": 0,
+  "norm_calls_in_report": 6,
+  "rows_checked": 6,
+  "only_save_report_changed": true,
+  "study_dictionary_unchanged": true,
+  "existing_report_content_unchanged": true,
+  "existing_output_files_unchanged": true,
+  "syntax_check_passed": true,
+  "warnings": [],
+  "profile_differences": [
+    {
+      "N": 20,
+      "h2_error": 0.15767913983244955,
+      "max_error": 0.05276955188534942
+    },
+    {
+      "N": 40,
+      "h2_error": 0.12407940468836504,
+      "max_error": 0.041272191649195794
+    },
+    {
+      "N": 80,
+      "h2_error": 0.016075901647896327,
+      "max_error": 0.00533228446474168
+    },
+    {
+      "N": 160,
+      "h2_error": 0.015406313076214545,
+      "max_error": 0.005102712848923816
+    },
+    {
+      "N": 320,
+      "h2_error": 0.015073830514029316,
+      "max_error": 0.004988969286932429
+    },
+    {
+      "N": 640,
+      "h2_error": 0.0029508541973632743,
+      "max_error": 0.0009762902690616649
+    }
+  ]
+}

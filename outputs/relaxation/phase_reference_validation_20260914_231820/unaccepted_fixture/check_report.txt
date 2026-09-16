@@ -46,14 +46,14 @@ Energy differences to continuum (E_atom - E_cont)
   640  -6.093044e-06  -6.093044e-06
 
 All-grid log(error) versus log(N) slopes; expected -1
-  sampled_continuum: H2=-0.996899, max=-0.999081
+  sampled_continuum: H2=nan, max=nan
   random_fourier_seed_3: H2=-1.080815, max=-1.081861
   largest scaled errors: H2/h=0.802343, max/h=0.267174
   seed-3 plateau ratio H2(640)/H2(320)=0.199629
 
 Endpoint audit
   N    warm correction / curvature       seed3 correction / curvature      energy comparison
-   20  not_needed / soft                 not_needed / soft                 agree
+   20  not_needed / soft                 not_needed / soft                 incomplete
    40  not_needed / soft                 applied / soft                    agree
    80  applied / soft                    applied / soft                    agree
   160  applied / soft                    applied / soft                    agree
@@ -73,23 +73,31 @@ Focused validation
   Seed-3 initial vector length                  |   √    | Correct length (2N)
   Seed-3 initial layer means sum to zero        |   √    | abs(mean1 + mean2) <= 1.0e-12
   Seed-3 initial energy and gradient are finite |   √    | All values finite
-  All atomistic endpoints are accepted          |   √    | Accepted count == 12
+  All atomistic endpoints are accepted          |   ×    | Accepted count == 12
   continuum curvature screen                    |   √    | == 2; lambda_min >= -tau_H
-  two-start energy comparison                   |   √    | == 6; accepted pair and E_seed3 >= E_warm - tau_E
+  two-start energy comparison                   |   ×    | == 6; accepted pair and E_seed3 >= E_warm - tau_E
   Appendix B layer means sum to zero            |   √    | abs(mean1 + mean2) <= 1.0e-12
   Appendix B mean-bound excess                  |   √    | Excess above h/4 <= 1.0e-14
   M=80/160 EL difference over h                 |   √    | <= 1.0e-04
   continuum 400/800 H_h^2 change                |   √    | < 5% of 6.429924e-04
   continuum 400/800 maximum change              |   √    | < 5% of 1.493826e-04
-  warm H_h^2 all-grid slope                     |   √    | in [-1.2, -0.8]
-  warm maximum-error all-grid slope             |   √    | in [-1.2, -0.8]
+  warm H_h^2 all-grid slope                     |   ×    | in [-1.2, -0.8]
+  warm maximum-error all-grid slope             |   ×    | in [-1.2, -0.8]
   seed-3 H_h^2 all-grid slope                   |   √    | in [-1.2, -0.8]
   seed-3 maximum-error all-grid slope           |   √    | in [-1.2, -0.8]
   Warm H_h^2 error decreases on refinement      |   √    | Every consecutive error change < 0
   Warm maximum error decreases on refinement    |   √    | Every consecutive error change < 0
-  checks passed=19/19
+  checks passed=15/19
+
+  Failed check details
+  FAIL All atomistic endpoints are accepted: measured=1.100000e+01, required Accepted count == 12
+  FAIL two-start energy comparison: measured=5.000000e+00, required == 6; accepted pair and E_seed3 >= E_warm - tau_E
+  FAIL warm H_h^2 all-grid slope: measured=nan, required in [-1.2, -0.8]
+  FAIL warm maximum-error all-grid slope: measured=nan, required in [-1.2, -0.8]
+  endpoint N=20 sampled_continuum: raw gradient=2.638467e-08, normalized gradient=2.638467e-08, raw EL/h=2.977298e-07, normalized EL/h=2.977298e-07, lambda_min=1.020265e-09, tau_H=1.000000e-08; CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL; not_needed
+  comparison N=20: incomplete, E_seed3-E_warm=4.263256e-14, tau_E=1.028097e-09
 
 Interpretation: seed 3 is an intentionally selected illustrative phase-stress realization, not representative random-start statistics.
 Its finite-grid sawtooth is assessed by an O(h) envelope; smooth pointwise halving is not claimed.
 Accepted endpoints are stationary candidates with no resolved negative curvature at the raw endpoint. Global minimality and the paper's stability-gap hypothesis are not verified.
-OVERALL VERIFICATION CHECKS: PASS
+OVERALL VERIFICATION CHECKS: FAIL

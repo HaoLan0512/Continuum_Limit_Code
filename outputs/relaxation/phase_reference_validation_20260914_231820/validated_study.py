@@ -906,20 +906,6 @@ def run_study():
                 "reflection_applied": reflection_applied,
                 **errors,
             })
-            # Phase motivation, using the final normalized/reflected endpoint:
-            # m_N = mean(u_1,N) = -mean(u_2,N). For an unknown continuum phase
-            # delta_*, write the layer-1 profile discrepancy as
-            # u_1,N,n = u_1^c(x_1,n - delta_*) - delta_*/2 + epsilon_1,N,n.
-            # Taking the discrete mean gives
-            # m_N = -delta_*/2 + s_N(delta_*) + mean(epsilon_1,N),
-            # s_N(delta_*) = (1/N) sum_n u_1^c(x_1,n - delta_*).
-            # The continuous mean of u_1^c is zero, so s_N is the quadrature
-            # discrepancy in its sampled mean. mean(epsilon_1,N) is the mean
-            # profile discrepancy, not the atomistic EL consistency residual.
-            # If both terms are small, delta_* is approximately -2*m_N.
-            # Hence choose delta_N := -2*m_N = mean(u_2,N) - mean(u_1,N).
-            # This selects a continuum reference; the matched norms below test
-            # the remaining profile mismatch without changing the endpoint.
             phase_shift = run["mean2"] - run["mean1"]
             matched_errors = two_layer_errors(
                 comparison_u, sample_continuum_pair(finest_spline, N, phase_shift), N)

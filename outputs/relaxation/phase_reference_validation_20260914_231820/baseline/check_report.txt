@@ -23,18 +23,6 @@ Errors and seed-3 normalized mean
   640  6.4299e-04  1.4938e-04  3.0201e-03  1.0176e-03  -8.1079e-04     2.9509e-03      9.7629e-04
   seed3_warm_*: seed-3 versus warm-start profiles after normalization and reflection alignment.
 
-Seed-3 errors against a phase-matched continuum reference
-  800-point reference; phase_shift = mean2 - mean1; atomistic endpoints unchanged
-  N     phase_shift     matched_H2   matched_max
-   20  -8.671819e-02  2.0386e-02  4.7399e-03
-   40  +6.817639e-02  1.0210e-02  2.3745e-03
-   80  -8.835445e-03  5.1203e-03  1.1852e-03
-  160  -8.466426e-03  2.5664e-03  5.9446e-04
-  320  -8.283583e-03  1.2850e-03  2.9802e-04
-  640  +1.621588e-03  6.4299e-04  1.4940e-04
-  matched log-log slopes: H2=-0.997152, max=-0.997603
-  green: phase-matched continuum reference; blue/orange: original fixed-phase reference
-
 Energy differences to continuum (E_atom - E_cont)
   Finite-resolution reference: 800 points; E_cont = F[q]/2 (two-layer energy).
     N        warm_dE        seed3_dE

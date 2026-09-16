@@ -1,6 +1,6 @@
 # CLR Code Hierarchy
 
-This document is the authoritative map of the organized one-dimensional continuum-limit relaxation research code. The reorganization is structural: numerical algorithms, equations, grids, parameters, solver settings, conventions, and public computational function signatures were preserved.
+This document maps the organized one-dimensional continuum-limit relaxation research code. The original reorganization preserved numerical algorithms, equations, grids, parameters, solver settings, conventions, and public computational function signatures. Later additions and their validation are recorded below; verify live code and artifacts when relying on those records.
 
 ## Workflow taxonomy
 
@@ -17,6 +17,12 @@ Names containing fd_symbol_fft deliberately distinguish FFT application of finit
     Continuum_Limit_Code/
     +-- CODE_SUMMARY.md
     +-- CODE_HIERARCHY.md
+    +-- AGENTS.md
+    +-- skills.md
+    +-- .agents/skills/
+    |   +-- clr-scientific-python/SKILL.md
+    |   +-- clr-repository-reorganization/SKILL.md
+    +-- docs/agent_guidance_audit.md
     +-- clr/
     |   +-- __init__.py
     |   +-- potentials/
@@ -71,7 +77,19 @@ Names containing fd_symbol_fft deliberately distinguish FFT application of finit
         +-- band_structure/
         +-- archive/
 
-Existing repository configuration, AGENTS.md, .git, .vscode, and ignored caches remain outside the reorganization.
+Existing repository configuration, .git, .vscode, and ignored caches remain outside the original code reorganization.
+
+## Agent instructions and workflows
+
+[AGENTS.md](AGENTS.md) contains repository-wide scientific invariants and
+authorization boundaries. [skills.md](skills.md) indexes the two repository-local
+skills; each `SKILL.md` contains one focused workflow, loaded only when relevant.
+The skills cover computational Python changes/reviews and source/output
+reorganization respectively. They add no independent approval policy.
+
+The [2026-09-13 guidance audit](docs/agent_guidance_audit.md) records the approved
+instruction changes, source guidance, rule mapping, and documentation checks.
+These instruction files do not alter the scientific workflow or producer paths.
 
 ## Python inventory
 
@@ -216,7 +234,13 @@ The two default LJ CLI output directories are repository-relative. An explicitly
 
 ## Validation record
 
-Environment selected for validation:
+These are historical results for the revisions and artifacts described in each
+entry, not evidence that the current working tree has just passed those checks.
+Revalidate the affected behavior when code, inputs, dependencies, or outputs
+change. The 2026-09-13 instruction audit used documentation checks only; it did
+not rerun the numerical studies recorded here.
+
+Environment selected for the original validation:
 
 - Python 3.12.12 from the relax Conda environment
 - NumPy 2.4.2

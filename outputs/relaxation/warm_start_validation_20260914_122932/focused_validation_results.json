@@ -1,0 +1,994 @@
+{
+  "python": "C:\\Users\\lh201\\anaconda3\\envs\\relax\\python.exe",
+  "source": "C:\\Users\\lh201\\Desktop\\Continuum_Limit_Relaxation\\Continuum_Limit_Code\\experiments\\relaxation\\atomistic_two_chain_lj_lbfgs_convergence_study.py",
+  "count": 189,
+  "checks": [
+    {
+      "name": "N=1 tangent columns orthonormal",
+      "passed": true,
+      "measured": 1.1102230246251565e-16,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "N=1 gauge normal orthogonal",
+      "passed": true,
+      "measured": 1.2075015465778328e-16,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "N=1 tangent Euclidean projector",
+      "passed": true,
+      "measured": 2.220446049250313e-16,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "N=1,M=0 atomistic full Hessian FD",
+      "passed": true,
+      "measured": 1.0109829640114754e-11,
+      "criterion": "absolute error <= 1.943e-08"
+    },
+    {
+      "name": "N=1,M=0 atomistic Hessian symmetry",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.637e-14"
+    },
+    {
+      "name": "N=1,M=0 tangent Hessian projection",
+      "passed": true,
+      "measured": 1.1102230246251565e-16,
+      "criterion": "absolute error <= 2.981e-13"
+    },
+    {
+      "name": "N=1,M=0 reflector returned",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "N=1,M=3 atomistic full Hessian FD",
+      "passed": true,
+      "measured": 6.582635547758287e-10,
+      "criterion": "absolute error <= 2.040e-08"
+    },
+    {
+      "name": "N=1,M=3 atomistic Hessian symmetry",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.925e-14"
+    },
+    {
+      "name": "N=1,M=3 tangent Hessian projection",
+      "passed": true,
+      "measured": 1.1102230246251565e-16,
+      "criterion": "absolute error <= 2.824e-13"
+    },
+    {
+      "name": "N=1,M=3 reflector returned",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "N=2 tangent columns orthonormal",
+      "passed": true,
+      "measured": 1.454702381084236e-16,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "N=2 gauge normal orthogonal",
+      "passed": true,
+      "measured": 5.114023483821467e-17,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "N=2 tangent Euclidean projector",
+      "passed": true,
+      "measured": 3.3306690738754696e-16,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "N=2,M=0 atomistic full Hessian FD",
+      "passed": true,
+      "measured": 8.172362786496024e-11,
+      "criterion": "absolute error <= 1.727e-08"
+    },
+    {
+      "name": "N=2,M=0 atomistic Hessian symmetry",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 3.117e-14"
+    },
+    {
+      "name": "N=2,M=0 tangent Hessian projection",
+      "passed": true,
+      "measured": 1.1102230246251565e-16,
+      "criterion": "absolute error <= 3.482e-13"
+    },
+    {
+      "name": "N=2,M=0 reflector returned",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "N=2,M=3 atomistic full Hessian FD",
+      "passed": true,
+      "measured": 1.4295498118599426e-10,
+      "criterion": "absolute error <= 1.896e-08"
+    },
+    {
+      "name": "N=2,M=3 atomistic Hessian symmetry",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 3.113e-14"
+    },
+    {
+      "name": "N=2,M=3 tangent Hessian projection",
+      "passed": true,
+      "measured": 2.220446049250313e-16,
+      "criterion": "absolute error <= 3.356e-13"
+    },
+    {
+      "name": "N=2,M=3 reflector returned",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "N=5 tangent columns orthonormal",
+      "passed": true,
+      "measured": 3.3306690738754696e-16,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "N=5 gauge normal orthogonal",
+      "passed": true,
+      "measured": 7.131176145792667e-17,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "N=5 tangent Euclidean projector",
+      "passed": true,
+      "measured": 4.440892098500626e-16,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "N=5,M=0 atomistic full Hessian FD",
+      "passed": true,
+      "measured": 4.2987613468881136e-11,
+      "criterion": "absolute error <= 3.278e-08"
+    },
+    {
+      "name": "N=5,M=0 atomistic Hessian symmetry",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 4.009e-14"
+    },
+    {
+      "name": "N=5,M=0 tangent Hessian projection",
+      "passed": true,
+      "measured": 6.661338147750939e-16,
+      "criterion": "absolute error <= 4.390e-13"
+    },
+    {
+      "name": "N=5,M=0 reflector returned",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "N=5,M=3 atomistic full Hessian FD",
+      "passed": true,
+      "measured": 4.750522197838336e-11,
+      "criterion": "absolute error <= 3.207e-08"
+    },
+    {
+      "name": "N=5,M=3 atomistic Hessian symmetry",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 3.956e-14"
+    },
+    {
+      "name": "N=5,M=3 tangent Hessian projection",
+      "passed": true,
+      "measured": 4.440892098500626e-16,
+      "criterion": "absolute error <= 4.459e-13"
+    },
+    {
+      "name": "N=5,M=3 reflector returned",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "N=8 tangent columns orthonormal",
+      "passed": true,
+      "measured": 4.440892098500626e-16,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "N=8 gauge normal orthogonal",
+      "passed": true,
+      "measured": 5.899935647674546e-17,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "N=8 tangent Euclidean projector",
+      "passed": true,
+      "measured": 4.440892098500626e-16,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "N=8,M=0 atomistic full Hessian FD",
+      "passed": true,
+      "measured": 4.4302422841369093e-11,
+      "criterion": "absolute error <= 3.858e-08"
+    },
+    {
+      "name": "N=8,M=0 atomistic Hessian symmetry",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 4.933e-14"
+    },
+    {
+      "name": "N=8,M=0 tangent Hessian projection",
+      "passed": true,
+      "measured": 8.881784197001252e-16,
+      "criterion": "absolute error <= 5.483e-13"
+    },
+    {
+      "name": "N=8,M=0 reflector returned",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "N=8,M=3 atomistic full Hessian FD",
+      "passed": true,
+      "measured": 5.980080319822889e-11,
+      "criterion": "absolute error <= 3.817e-08"
+    },
+    {
+      "name": "N=8,M=3 atomistic Hessian symmetry",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 4.902e-14"
+    },
+    {
+      "name": "N=8,M=3 tangent Hessian projection",
+      "passed": true,
+      "measured": 1.3322676295501878e-15,
+      "criterion": "absolute error <= 5.503e-13"
+    },
+    {
+      "name": "N=8,M=3 reflector returned",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "P=2,M=0 continuum full Hessian FD",
+      "passed": true,
+      "measured": 4.988975899067327e-11,
+      "criterion": "absolute error <= 2.419e-08"
+    },
+    {
+      "name": "P=2,M=0 continuum Hessian symmetry",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.945e-14"
+    },
+    {
+      "name": "P=2,M=3 continuum full Hessian FD",
+      "passed": true,
+      "measured": 1.0825862428731625e-10,
+      "criterion": "absolute error <= 2.545e-08"
+    },
+    {
+      "name": "P=2,M=3 continuum Hessian symmetry",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 3.103e-14"
+    },
+    {
+      "name": "P=8,M=0 continuum full Hessian FD",
+      "passed": true,
+      "measured": 1.1055223403388936e-10,
+      "criterion": "absolute error <= 5.234e-08"
+    },
+    {
+      "name": "P=8,M=0 continuum Hessian symmetry",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 4.707e-14"
+    },
+    {
+      "name": "P=8,M=3 continuum full Hessian FD",
+      "passed": true,
+      "measured": 1.6342105446653932e-10,
+      "criterion": "absolute error <= 5.117e-08"
+    },
+    {
+      "name": "P=8,M=3 continuum Hessian symmetry",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 4.663e-14"
+    },
+    {
+      "name": "P=12,M=0 continuum full Hessian FD",
+      "passed": true,
+      "measured": 4.624511884543381e-11,
+      "criterion": "absolute error <= 5.362e-08"
+    },
+    {
+      "name": "P=12,M=0 continuum Hessian symmetry",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 5.933e-14"
+    },
+    {
+      "name": "P=12,M=3 continuum full Hessian FD",
+      "passed": true,
+      "measured": 8.249090299727868e-11,
+      "criterion": "absolute error <= 5.301e-08"
+    },
+    {
+      "name": "P=12,M=3 continuum Hessian symmetry",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 5.898e-14"
+    },
+    {
+      "name": "continuum full-grid screen includes negative constant mode",
+      "passed": true
+    },
+    {
+      "name": "curvature classification positive",
+      "passed": true
+    },
+    {
+      "name": "curvature eigenvalue positive",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "curvature tolerance formula positive",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.000e-15"
+    },
+    {
+      "name": "curvature classification negative",
+      "passed": true
+    },
+    {
+      "name": "curvature eigenvalue negative",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "curvature tolerance formula negative",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.000e-15"
+    },
+    {
+      "name": "curvature classification zero",
+      "passed": true
+    },
+    {
+      "name": "curvature eigenvalue zero",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "curvature tolerance formula zero",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.000e-15"
+    },
+    {
+      "name": "curvature classification small negative unresolved",
+      "passed": true
+    },
+    {
+      "name": "curvature eigenvalue small negative unresolved",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "curvature tolerance formula small negative unresolved",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.000e-15"
+    },
+    {
+      "name": "already stationary skips correction",
+      "passed": true
+    },
+    {
+      "name": "already stationary endpoint retained",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "already stationary skips trial step",
+      "passed": true
+    },
+    {
+      "name": "one Newton correction adopted",
+      "passed": true
+    },
+    {
+      "name": "adopted correction stationary",
+      "passed": true
+    },
+    {
+      "name": "adopted correction reaches quadratic minimum",
+      "passed": true,
+      "measured": 8.470329472543003e-22,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "excessive step rejects correction",
+      "passed": true,
+      "measured": "rejected_step"
+    },
+    {
+      "name": "excessive step preserves original endpoint",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "excessive step original still not stationary",
+      "passed": true
+    },
+    {
+      "name": "unresolved stationarity rejects correction",
+      "passed": true,
+      "measured": "rejected_acceptance"
+    },
+    {
+      "name": "unresolved stationarity preserves original endpoint",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "unresolved stationarity original still not stationary",
+      "passed": true
+    },
+    {
+      "name": "energy increase rejects correction",
+      "passed": true,
+      "measured": "rejected_acceptance"
+    },
+    {
+      "name": "energy increase preserves original endpoint",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "energy increase original still not stationary",
+      "passed": true
+    },
+    {
+      "name": "negative curvature rejects correction",
+      "passed": true,
+      "measured": "blocked_curvature"
+    },
+    {
+      "name": "negative curvature preserves original endpoint",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "negative curvature original still not stationary",
+      "passed": true
+    },
+    {
+      "name": "unsuccessful solver rejects correction",
+      "passed": true,
+      "measured": "not_attempted"
+    },
+    {
+      "name": "unsuccessful solver preserves original endpoint",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "unsuccessful solver original still not stationary",
+      "passed": true
+    },
+    {
+      "name": "soft component unchanged by correction",
+      "passed": true,
+      "measured": 1.734723475976807e-18,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "soft endpoint stationary without positive-gap claim",
+      "passed": true
+    },
+    {
+      "name": "solve retains exactly one L-BFGS-B call",
+      "passed": true
+    },
+    {
+      "name": "stationary stable successful solve accepted",
+      "passed": true
+    },
+    {
+      "name": "stationary stable successful solve skips correction",
+      "passed": true
+    },
+    {
+      "name": "pre-normalization initial energy recorded",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "pre-normalization final energy recorded",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "gradient reduction recorded",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.000e-14"
+    },
+    {
+      "name": "solve retains exactly one L-BFGS-B call",
+      "passed": true
+    },
+    {
+      "name": "zero initial gradient reduction is not applicable",
+      "passed": true
+    },
+    {
+      "name": "solve retains exactly one L-BFGS-B call",
+      "passed": true
+    },
+    {
+      "name": "solver stagnation corrected once and accepted",
+      "passed": true
+    },
+    {
+      "name": "solver gradient and final raw gradient distinguished",
+      "passed": true
+    },
+    {
+      "name": "solve retains exactly one L-BFGS-B call",
+      "passed": true
+    },
+    {
+      "name": "unsuccessful solver cannot use correction or be accepted",
+      "passed": true
+    },
+    {
+      "name": "solve retains exactly one L-BFGS-B call",
+      "passed": true
+    },
+    {
+      "name": "normalized-output stationarity independently enforced",
+      "passed": true
+    },
+    {
+      "name": "solve retains exactly one L-BFGS-B call",
+      "passed": true
+    },
+    {
+      "name": "curvature recomputed after correction",
+      "passed": true
+    },
+    {
+      "name": "newly negative curvature blocks accepted endpoint",
+      "passed": true
+    },
+    {
+      "name": "energy comparison agreement",
+      "passed": true,
+      "measured": "agree"
+    },
+    {
+      "name": "energy comparison competitor flag agreement",
+      "passed": true,
+      "measured": false
+    },
+    {
+      "name": "energy comparison tolerance agreement",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.000e-20"
+    },
+    {
+      "name": "energy comparison warm lower",
+      "passed": true,
+      "measured": "warm_lower"
+    },
+    {
+      "name": "energy comparison competitor flag warm lower",
+      "passed": true,
+      "measured": false
+    },
+    {
+      "name": "energy comparison tolerance warm lower",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.000e-20"
+    },
+    {
+      "name": "energy comparison seed3 lower",
+      "passed": true,
+      "measured": "seed3_lower"
+    },
+    {
+      "name": "energy comparison competitor flag seed3 lower",
+      "passed": true,
+      "measured": true
+    },
+    {
+      "name": "energy comparison tolerance seed3 lower",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.000e-20"
+    },
+    {
+      "name": "energy comparison failed feasible lower competitor",
+      "passed": true,
+      "measured": "seed3_lower"
+    },
+    {
+      "name": "energy comparison competitor flag failed feasible lower competitor",
+      "passed": true,
+      "measured": true
+    },
+    {
+      "name": "energy comparison tolerance failed feasible lower competitor",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 2.000e-20"
+    },
+    {
+      "name": "energy comparison failed nonlower competitor",
+      "passed": true,
+      "measured": "incomplete"
+    },
+    {
+      "name": "energy comparison competitor flag failed nonlower competitor",
+      "passed": true,
+      "measured": false
+    },
+    {
+      "name": "energy comparison failed warm with nonlower competitor",
+      "passed": true,
+      "measured": "incomplete"
+    },
+    {
+      "name": "energy comparison competitor flag failed warm with nonlower competitor",
+      "passed": true,
+      "measured": false
+    },
+    {
+      "name": "energy comparison missing competitor",
+      "passed": true,
+      "measured": "unavailable"
+    },
+    {
+      "name": "energy comparison competitor flag missing competitor",
+      "passed": true
+    },
+    {
+      "name": "energy comparison missing warm",
+      "passed": true,
+      "measured": "unavailable"
+    },
+    {
+      "name": "energy comparison competitor flag missing warm",
+      "passed": true
+    },
+    {
+      "name": "energy comparison nonfinite energy",
+      "passed": true,
+      "measured": "unavailable"
+    },
+    {
+      "name": "energy comparison competitor flag nonfinite energy",
+      "passed": true
+    },
+    {
+      "name": "energy comparison nonfinite raw endpoint",
+      "passed": true,
+      "measured": "unavailable"
+    },
+    {
+      "name": "energy comparison competitor flag nonfinite raw endpoint",
+      "passed": true
+    },
+    {
+      "name": "energy comparison infeasible lower endpoint",
+      "passed": true,
+      "measured": "unavailable"
+    },
+    {
+      "name": "energy comparison competitor flag infeasible lower endpoint",
+      "passed": true
+    },
+    {
+      "name": "cached replay executes no optimizer",
+      "passed": true
+    },
+    {
+      "name": "cached replay uses two continuum and twelve atomistic endpoints",
+      "passed": true
+    },
+    {
+      "name": "cached replay raises no warnings",
+      "passed": true,
+      "measured": []
+    },
+    {
+      "name": "cached full study retains all nineteen acceptance checks",
+      "passed": true
+    },
+    {
+      "name": "cached full study accepts all twelve endpoints",
+      "passed": true
+    },
+    {
+      "name": "cached full study preserves reflection decisions",
+      "passed": true,
+      "measured": 0
+    },
+    {
+      "name": "cached 20/sampled_continuum saved representative preserved",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "cached 20/sampled_continuum saved gradient matches actual representative",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "cached 20/sampled_continuum actual representative stationary",
+      "passed": true
+    },
+    {
+      "name": "cached 20/random_fourier_seed_3 saved representative preserved",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "cached 20/random_fourier_seed_3 saved gradient matches actual representative",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "cached 20/random_fourier_seed_3 actual representative stationary",
+      "passed": true
+    },
+    {
+      "name": "cached 40/sampled_continuum saved representative preserved",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "cached 40/sampled_continuum saved gradient matches actual representative",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "cached 40/sampled_continuum actual representative stationary",
+      "passed": true
+    },
+    {
+      "name": "cached 40/random_fourier_seed_3 saved representative preserved",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "cached 40/random_fourier_seed_3 saved gradient matches actual representative",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "cached 40/random_fourier_seed_3 actual representative stationary",
+      "passed": true
+    },
+    {
+      "name": "cached 80/sampled_continuum saved representative preserved",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "cached 80/sampled_continuum saved gradient matches actual representative",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "cached 80/sampled_continuum actual representative stationary",
+      "passed": true
+    },
+    {
+      "name": "cached 80/random_fourier_seed_3 saved representative preserved",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "cached 80/random_fourier_seed_3 saved gradient matches actual representative",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "cached 80/random_fourier_seed_3 actual representative stationary",
+      "passed": true
+    },
+    {
+      "name": "cached 160/sampled_continuum saved representative preserved",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "cached 160/sampled_continuum saved gradient matches actual representative",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "cached 160/sampled_continuum actual representative stationary",
+      "passed": true
+    },
+    {
+      "name": "cached 160/random_fourier_seed_3 saved representative preserved",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "cached 160/random_fourier_seed_3 saved gradient matches actual representative",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "cached 160/random_fourier_seed_3 actual representative stationary",
+      "passed": true
+    },
+    {
+      "name": "cached 320/sampled_continuum saved representative preserved",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "cached 320/sampled_continuum saved gradient matches actual representative",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "cached 320/sampled_continuum actual representative stationary",
+      "passed": true
+    },
+    {
+      "name": "cached 320/random_fourier_seed_3 saved representative preserved",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "cached 320/random_fourier_seed_3 saved gradient matches actual representative",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "cached 320/random_fourier_seed_3 actual representative stationary",
+      "passed": true
+    },
+    {
+      "name": "cached 640/sampled_continuum saved representative preserved",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "cached 640/sampled_continuum saved gradient matches actual representative",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "cached 640/sampled_continuum actual representative stationary",
+      "passed": true
+    },
+    {
+      "name": "cached 640/random_fourier_seed_3 saved representative preserved",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "cached 640/random_fourier_seed_3 saved gradient matches actual representative",
+      "passed": true,
+      "measured": 0.0,
+      "criterion": "absolute error <= 0.000e+00"
+    },
+    {
+      "name": "cached 640/random_fourier_seed_3 actual representative stationary",
+      "passed": true
+    },
+    {
+      "name": "cached replay executes no optimizer",
+      "passed": true
+    },
+    {
+      "name": "cached replay uses two continuum and twelve atomistic endpoints",
+      "passed": true
+    },
+    {
+      "name": "cached replay raises no warnings",
+      "passed": true,
+      "measured": []
+    },
+    {
+      "name": "controlled postreflection gradient failure rejects endpoint",
+      "passed": true
+    },
+    {
+      "name": "controlled postreflection failure fails existing acceptance check",
+      "passed": true
+    },
+    {
+      "name": "controlled postreflection failure withholds track slopes",
+      "passed": true
+    },
+    {
+      "name": "controlled postreflection failure makes comparison incomplete",
+      "passed": true
+    },
+    {
+      "name": "controlled postreflection failure preserves independent track",
+      "passed": true
+    },
+    {
+      "name": "final report includes Newton and curvature/energy tolerances",
+      "passed": true
+    },
+    {
+      "name": "cached replay preserves every NPZ array",
+      "passed": true
+    },
+    {
+      "name": "cached replay preserves baseline files exactly",
+      "passed": true
+    }
+  ]
+}

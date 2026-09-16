@@ -14,36 +14,13 @@ Configuration
   tau_E = 1.0e-10*max(1, |E_warm|, |E_seed3|)
 
 Errors and seed-3 normalized mean
-  N    warm_H2     warm_max    seed3_H2    seed3_max   seed3_mean1  seed3_warm_H2  seed3_warm_max
-   20  2.0368e-02  4.7784e-03  1.5909e-01  5.3481e-02  +4.3359e-02     1.5768e-01      5.2770e-02
-   40  1.0204e-02  2.3688e-03  1.2448e-01  4.1450e-02  -3.4088e-02     1.2408e-01      4.1272e-02
-   80  5.1203e-03  1.1850e-03  1.6874e-02  5.7998e-03  +4.4177e-03     1.6076e-02      5.3323e-03
-  160  2.5664e-03  5.9408e-04  1.5619e-02  5.2287e-03  +4.2332e-03     1.5406e-02      5.1027e-03
-  320  1.2850e-03  2.9785e-04  1.5129e-02  5.0205e-03  +4.1418e-03     1.5074e-02      4.9890e-03
-  640  6.4299e-04  1.4938e-04  3.0201e-03  1.0176e-03  -8.1079e-04     2.9509e-03      9.7629e-04
-  seed3_warm_*: seed-3 versus warm-start profiles after normalization and reflection alignment.
-
-Seed-3 errors against a phase-matched continuum reference
-  800-point reference; phase_shift = mean2 - mean1; atomistic endpoints unchanged
-  N     phase_shift     matched_H2   matched_max
-   20  -8.671819e-02  2.0386e-02  4.7399e-03
-   40  +6.817639e-02  1.0210e-02  2.3745e-03
-   80  -8.835445e-03  5.1203e-03  1.1852e-03
-  160  -8.466426e-03  2.5664e-03  5.9446e-04
-  320  -8.283583e-03  1.2850e-03  2.9802e-04
-  640  +1.621588e-03  6.4299e-04  1.4940e-04
-  matched log-log slopes: H2=-0.997152, max=-0.997603
-  green: phase-matched continuum reference; blue/orange: original fixed-phase reference
-
-Energy differences to continuum (E_atom - E_cont)
-  Finite-resolution reference: 800 points; E_cont = F[q]/2 (two-layer energy).
-    N        warm_dE        seed3_dE
-   20  -6.092386e-03  -6.092386e-03
-   40  -1.559516e-03  -1.559516e-03
-   80  -3.945457e-04  -3.945457e-04
-  160  -9.914087e-05  -9.914087e-05
-  320  -2.475657e-05  -2.475657e-05
-  640  -6.093044e-06  -6.093044e-06
+  N    warm_H2     warm_max    seed3_H2    seed3_max   seed3_mean1
+   20  2.0368e-02  4.7784e-03  1.5909e-01  5.3481e-02  +4.3359e-02
+   40  1.0204e-02  2.3688e-03  1.2448e-01  4.1450e-02  -3.4088e-02
+   80  5.1203e-03  1.1850e-03  1.6874e-02  5.7998e-03  +4.4177e-03
+  160  2.5664e-03  5.9408e-04  1.5619e-02  5.2287e-03  +4.2332e-03
+  320  1.2850e-03  2.9785e-04  1.5129e-02  5.0205e-03  +4.1418e-03
+  640  6.4299e-04  1.4938e-04  3.0201e-03  1.0176e-03  -8.1079e-04
 
 All-grid log(error) versus log(N) slopes; expected -1
   sampled_continuum: H2=-0.996899, max=-0.999081

@@ -10,13 +10,11 @@ Purpose:
     Test the predicted O(N^-1) atomistic-to-continuum convergence rate in the
     layer-weighted discrete H^2 and maximum norms.
 Inputs:
-    N=20, 40, 80, 160, 320, 640; matched LJ shape; M=80 images;
-    explicit positive interaction multipliers (one by default).
+    N=20, 40, 80, 160, 320, 640; matched effective LJ parameters; M=80 images.
 Outputs:
-    Per-case CSV diagnostics, NPZ profiles, convergence figure, and report;
-    cross-scale status tables, dominance bounds, and comparison plots.
+    One CSV diagnostic table, one NPZ profile archive, one PNG convergence
+    figure, and a compact check report.
 Output location:
-    A new elastic_regime_<timestamp> directory per invocation under
     outputs/relaxation/output_atomistic_two_chain_lj_lbfgs_convergence_study.
 Dependencies:
     NumPy, SciPy, and Matplotlib; clr.potentials.lj_periodic for the effective
@@ -100,29 +98,29 @@ SLOPE_INTERVAL = (-1.2, -0.8)
 REFLECTION_TIE_TOL = 1.0e-12
 
 
-def V(s, interaction_scale=1.0):
+def V(s):
     """Return the even effective LJ pair potential in paper coordinates."""
-    return interaction_scale * pair_potential(s, LJ_PARAMETERS)
+    return pair_potential(s, LJ_PARAMETERS)
 
 
-def Vprime(s, interaction_scale=1.0):
+def Vprime(s):
     """Return the derivative of V with respect to its paper coordinate."""
-    return interaction_scale * pair_potential_prime(s, LJ_PARAMETERS)
+    return pair_potential_prime(s, LJ_PARAMETERS)
 
 
-def Vsecond(s, interaction_scale=1.0):
+def Vsecond(s):
     """Return the second derivative of V in paper coordinates."""
-    return interaction_scale * pair_potential_second(s, LJ_PARAMETERS)
+    return pair_potential_second(s, LJ_PARAMETERS)
 
 
-def W(s, cutoff=PAIR_CUTOFF, interaction_scale=1.0):
+def W(s, cutoff=PAIR_CUTOFF):
     """Return W(s)=4 sum_m V(s-2*pi*m) with a symmetric cutoff."""
-    return interaction_scale * periodized_W(s, LJ_PARAMETERS, cutoff)
+    return periodized_W(s, LJ_PARAMETERS, cutoff)
 
 
-def Wprime(s, cutoff=PAIR_CUTOFF, interaction_scale=1.0):
+def Wprime(s, cutoff=PAIR_CUTOFF):
     """Return the derivative of the truncated matched continuum potential."""
-    return interaction_scale * periodized_Wprime(s, LJ_PARAMETERS, cutoff)
+    return periodized_Wprime(s, LJ_PARAMETERS, cutoff)
 
 
 def continuum_grid(point_count):
@@ -137,14 +135,12 @@ def continuum_full_value_gradient(q,
                                   x,
                                   dx,
                                   potential=W,
-                                  potential_prime=Wprime,
-                                  interaction_scale=1.0):
-    """Return continuum energy and gradient; supplied potentials are unscaled."""
+                                  potential_prime=Wprime):
+    """Return the matched continuum correction energy and full gradient."""
     difference = np.roll(q, -1) - q
-    energy = dx * np.sum(0.5 * (difference / dx)**2 +
-                         interaction_scale * potential(x + q))
+    energy = dx * np.sum(0.5 * (difference / dx)**2 + potential(x + q))
     gradient = ((2.0 * q - np.roll(q, 1) - np.roll(q, -1)) / dx +
-                dx * interaction_scale * potential_prime(x + q))
+                dx * potential_prime(x + q))
     return float(energy), gradient
 
 
@@ -157,11 +153,11 @@ def periodic_elastic_hessian(point_count, spacing):
     return hessian
 
 
-def continuum_full_hessian(q, x, dx, cutoff=PAIR_CUTOFF, interaction_scale=1.0):
+def continuum_full_hessian(q, x, dx, cutoff=PAIR_CUTOFF):
     """Return the matched LJ Hessian on all periodic continuum grid variables."""
     arguments = ((x + q)[:, None] - TWOPI *
                  np.arange(-cutoff, cutoff + 1)[None, :])
-    wsecond = 4.0 * np.sum(Vsecond(arguments, interaction_scale), axis=1)
+    wsecond = 4.0 * np.sum(Vsecond(arguments), axis=1)
     return periodic_elastic_hessian(q.size, dx) + np.diag(dx * wsecond)
 
 
@@ -198,32 +194,23 @@ def continuum_reduced_value_gradient(a,
                                      x,
                                      dx,
                                      potential=W,
-                                     potential_prime=Wprime,
-                                     interaction_scale=1.0):
+                                     potential_prime=Wprime):
     """Return F(a)=E(build_odd_q(a)) and its reduced gradient."""
     q = build_odd_q(a, x.size)
     energy, full_gradient = continuum_full_value_gradient(
-        q, x, dx, potential, potential_prime, interaction_scale)
+        q, x, dx, potential, potential_prime)
     return energy, reduce_odd_gradient(full_gradient)
 
 
-def continuum_diagnostics(q, x, dx, potential_prime=Wprime, interaction_scale=1.0):
+def continuum_diagnostics(q, x, dx, potential_prime=Wprime):
     """Return monotonicity and Euler-Lagrange diagnostics."""
     residual = ((np.roll(q, -1) - 2.0 * q + np.roll(q, 1)) / dx**2 -
-                interaction_scale * potential_prime(x + q))
+                potential_prime(x + q))
     return {
         "el_residual_inf_norm": float(np.max(np.abs(residual))),
         "min_forward_derivative":
         float(np.min(1.0 + (np.roll(q, -1) - q) / dx)),
     }
-
-
-class ContinuumSolveError(RuntimeError):
-    """Carry a rejected continuum candidate so a sweep can retain its evidence."""
-
-    def __init__(self, message, solution):
-        super().__init__(message)
-        self.solution = {**solution, "accepted": False, "failure_reason": message}
 
 
 def solve_continuum_initial(initial,
@@ -232,8 +219,7 @@ def solve_continuum_initial(initial,
                             potential=W,
                             potential_prime=Wprime,
                             gradient_tol=CONTINUUM_GRAD_TOL,
-                            el_residual_tol=CONTINUUM_EL_TOL,
-                            interaction_scale=1.0):
+                            el_residual_tol=CONTINUUM_EL_TOL):
     """Solve the continuum zero start, continuing at most twice after FACTR.
     The following checks were performed:
     1. The L-BFGS-B solver must not return a warning flag.
@@ -245,19 +231,11 @@ def solve_continuum_initial(initial,
     point = np.array(initial, dtype=float, copy=True)
     total_iterations = 0
     total_function_calls = 0
-    def failure(message):
-        return ContinuumSolveError(message, {
-            "point_count": x.size, "x": x, "dx": dx,
-            "q": q, "energy": float(energy), "gradient_inf_norm": gradient_inf,
-            "iterations": total_iterations, "function_calls": total_function_calls,
-            "solver_calls": solver_call, "task": task, **diagnostics,
-        })
-
     for solver_call in range(1, MAX_CONTINUUM_SOLVER_CALLS + 1):
         point, energy, info = opt.fmin_l_bfgs_b(
             continuum_reduced_value_gradient,
             point,
-            args=(x, dx, potential, potential_prime, interaction_scale),
+            args=(x, dx, potential, potential_prime),
             pgtol=gradient_tol,
             factr=1.0,
             maxiter=MAX_ITERATIONS,
@@ -267,13 +245,12 @@ def solve_continuum_initial(initial,
         total_function_calls += int(info["funcalls"])
         gradient_inf = float(np.max(np.abs(info["grad"])))
         q = build_odd_q(point, x.size)
-        diagnostics = continuum_diagnostics(q, x, dx, potential_prime,
-                                            interaction_scale)
+        diagnostics = continuum_diagnostics(q, x, dx, potential_prime)
         task = str(info["task"])
         if (info["warnflag"] != 0 or not np.isfinite(energy)
                 or not np.all(np.isfinite(point))
                 or not np.isfinite(gradient_inf)):
-            raise failure(
+            raise RuntimeError(
                 f"Continuum L-BFGS-B failed: task={task}, grad={gradient_inf:.3e}"
             )
         accepted = (gradient_inf <= gradient_tol
@@ -281,7 +258,6 @@ def solve_continuum_initial(initial,
                     and diagnostics["min_forward_derivative"] > 0.0)
         if accepted:
             return {
-                "accepted": True,
                 "q": q,
                 "energy": float(energy),
                 "gradient_inf_norm": gradient_inf,
@@ -292,11 +268,11 @@ def solve_continuum_initial(initial,
                 **diagnostics,
             }
         if "RELATIVE REDUCTION OF F" not in task:
-            raise failure(
+            raise RuntimeError(
                 "Continuum solve missed its acceptance tolerances: "
                 f"task={task}, grad={gradient_inf:.3e}, "
                 f"residual={diagnostics['el_residual_inf_norm']:.3e}")
-    raise failure(
+    raise RuntimeError(
         "Continuum FACTR restarts missed the acceptance tolerances: "
         f"grad={gradient_inf:.3e}, residual={diagnostics['el_residual_inf_norm']:.3e}"
     )
@@ -306,14 +282,13 @@ def solve_continuum_reference(point_count,
                               potential=W,
                               potential_prime=Wprime,
                               gradient_tol=CONTINUUM_GRAD_TOL,
-                              el_residual_tol=CONTINUUM_EL_TOL,
-                              interaction_scale=1.0):
+                              el_residual_tol=CONTINUUM_EL_TOL):
     """Return one deterministic phase-fixed continuum reference."""
     x, dx = continuum_grid(point_count)
     initial = np.zeros(point_count // 2 - 1)
     solution = solve_continuum_initial(initial, x, dx, potential,
                                        potential_prime, gradient_tol,
-                                       el_residual_tol, interaction_scale)
+                                       el_residual_tol)
     return {"point_count": point_count, "x": x, "dx": dx, **solution}
 
 
@@ -383,7 +358,7 @@ def atomistic_reduced_coordinates(u, N):
     return np.concatenate((u1, u2[:-1]))
 
 
-def raw_atomistic_value_gradient(u, N, cutoff, interaction_scale=1.0):
+def raw_atomistic_value_gradient(u, N, cutoff):
     """Return truncated Equations (12)-(13) and their exact full gradient."""
     N1, N2, h1, h2, h = atomistic_geometry(N)
     u1, u2 = split_layers(np.asarray(u, dtype=float), N)
@@ -406,8 +381,8 @@ def raw_atomistic_value_gradient(u, N, cutoff, interaction_scale=1.0):
         arguments = (sign * h * n + (h / ho) * ui[:, None] -
                      (h / hi) * opposite[opposite_indices] - TWOPI *
                      (h / hi) * m)
-        pair_values = V(arguments, interaction_scale)
-        pair_derivatives = Vprime(arguments, interaction_scale)
+        pair_values = V(arguments)
+        pair_derivatives = Vprime(arguments)
         energy += hi * np.sum(pair_values)
         gi += hi * (h / ho) * np.sum(pair_derivatives, axis=1)
         np.add.at(go, opposite_indices.ravel(),
@@ -415,15 +390,14 @@ def raw_atomistic_value_gradient(u, N, cutoff, interaction_scale=1.0):
     return float(energy), np.concatenate((g1, g2))
 
 
-def atomistic_value_gradient(a, N, cutoff, interaction_scale=1.0):
+def atomistic_value_gradient(a, N, cutoff):
     """Evaluate the mean-gauged objective and its exact chain-rule gradient."""
     u = build_mean_gauge(a, N)
-    energy, full_gradient = raw_atomistic_value_gradient(
-        u, N, cutoff, interaction_scale)
+    energy, full_gradient = raw_atomistic_value_gradient(u, N, cutoff)
     return energy, reduce_mean_gauge_gradient(full_gradient, N)
 
 
-def raw_atomistic_hessian(u, N, cutoff, interaction_scale=1.0):
+def raw_atomistic_hessian(u, N, cutoff):
     """Differentiate the same two directed image sums as the full gradient."""
     N1, N2, h1, h2, h = atomistic_geometry(N)
     u1, u2 = split_layers(u, N)
@@ -440,7 +414,7 @@ def raw_atomistic_hessian(u, N, cutoff, interaction_scale=1.0):
         alpha, beta = h / ho, h / hi
         arguments = (sign * h * n + alpha * ui[:, None] -
                      beta * opposite[opposite_indices] - TWOPI * beta * images)
-        weights = hi * Vsecond(arguments, interaction_scale)
+        weights = hi * Vsecond(arguments)
         row = np.broadcast_to(n + offset, weights.shape).ravel()
         column = (opposite_indices + other_offset).ravel()
         weights = weights.ravel()
@@ -460,9 +434,9 @@ def mean_gauge_reflector(N):
     return normal / np.linalg.norm(normal)
 
 
-def atomistic_tangent_hessian(u, N, cutoff, interaction_scale=1.0):
+def atomistic_tangent_hessian(u, N, cutoff):
     """Return Q.T H Q (2N by 2N) and its Householder reflector, without forming Q."""
-    hessian = raw_atomistic_hessian(u, N, cutoff, interaction_scale)
+    hessian = raw_atomistic_hessian(u, N, cutoff)
     reflector = mean_gauge_reflector(N)
     product = hessian @ reflector
     transformed = (hessian - 2.0 * np.outer(reflector, product)
@@ -523,9 +497,9 @@ def atomistic_initial_guesses(N, continuum_pair):
     }
 
 
-def atomistic_diagnostics(u, N, cutoff, interaction_scale=1.0):
+def atomistic_diagnostics(u, N, cutoff):
     """Evaluate energy, stationarity, and means on a full atomistic state."""
-    energy, gradient = raw_atomistic_value_gradient(u, N, cutoff, interaction_scale)
+    energy, gradient = raw_atomistic_value_gradient(u, N, cutoff)
     _, _, h1, h2, h = atomistic_geometry(N)
     u1, u2 = split_layers(u, N)
     g1, g2 = split_layers(gradient, N)
@@ -557,12 +531,10 @@ def atomistic_stationary(diagnostics):
                 and residual <= ATOMISTIC_EL_OVER_H_TOL)
 
 
-def polish_atomistic_endpoint(u, N, cutoff, allow_correction=True,
-                              interaction_scale=1.0):
+def polish_atomistic_endpoint(u, N, cutoff, allow_correction=True):
     """Assess the raw endpoint and attempt at most one positive-spectrum Newton step."""
-    diagnostics = atomistic_diagnostics(u, N, cutoff, interaction_scale)
-    hessian, reflector = atomistic_tangent_hessian(u, N, cutoff,
-                                                 interaction_scale)
+    diagnostics = atomistic_diagnostics(u, N, cutoff)
+    hessian, reflector = atomistic_tangent_hessian(u, N, cutoff)
     values, vectors, curvature = hessian_spectrum(hessian)
     stationary = atomistic_stationary(diagnostics)
     correction = {
@@ -576,7 +548,7 @@ def polish_atomistic_endpoint(u, N, cutoff, allow_correction=True,
         correction["newton_correction_status"] = "blocked_curvature"
         return u, diagnostics, curvature, correction
 
-    _, gradient = raw_atomistic_value_gradient(u, N, cutoff, interaction_scale)
+    _, gradient = raw_atomistic_value_gradient(u, N, cutoff)
     tangent_gradient = (gradient - 2.0 * reflector * np.dot(reflector, gradient))[:-1]
     positive = values > curvature["curvature_tolerance"]
     tangent_step = -vectors[:, positive] @ (
@@ -591,11 +563,9 @@ def polish_atomistic_endpoint(u, N, cutoff, allow_correction=True,
         return u, diagnostics, curvature, correction
 
     candidate = u + step
-    candidate_diagnostics = atomistic_diagnostics(candidate, N, cutoff,
-                                                 interaction_scale)
+    candidate_diagnostics = atomistic_diagnostics(candidate, N, cutoff)
     normalized, _ = appendix_b_normalize(candidate, N)
-    normalized_diagnostics = atomistic_diagnostics(normalized, N, cutoff,
-                                                  interaction_scale)
+    normalized_diagnostics = atomistic_diagnostics(normalized, N, cutoff)
     energy_tolerance = (NEWTON_ENERGY_ROUNDOFF_FACTOR * np.finfo(float).eps
                         * max(1.0, abs(diagnostics["energy"]),
                               abs(candidate_diagnostics["energy"])))
@@ -606,24 +576,22 @@ def polish_atomistic_endpoint(u, N, cutoff, allow_correction=True,
         correction["newton_correction_status"] = "rejected_acceptance"
         return u, diagnostics, curvature, correction
 
-    hessian, _ = atomistic_tangent_hessian(candidate, N, cutoff,
-                                          interaction_scale)
+    hessian, _ = atomistic_tangent_hessian(candidate, N, cutoff)
     _, _, curvature = hessian_spectrum(hessian)
     correction["newton_correction_status"] = "applied"
     correction["newton_correction_applied"] = True
     return candidate, candidate_diagnostics, curvature, correction
 
 
-def solve_atomistic_initial(initial, N, cutoff, interaction_scale=1.0):
+def solve_atomistic_initial(initial, N, cutoff):
     """Run one L-BFGS-B call, optionally polish once, and assess both representatives."""
-    initial_energy, initial_gradient = atomistic_value_gradient(initial, N, cutoff,
-                                                               interaction_scale)
+    initial_energy, initial_gradient = atomistic_value_gradient(initial, N, cutoff)
     initial_gradient_norm = float(np.max(np.abs(initial_gradient)))
     # run L-BFGS-B on the 2N reduced coordinates, with sum of means = 0
     point, _, info = opt.fmin_l_bfgs_b(
         atomistic_value_gradient,
         np.array(initial, dtype=float, copy=True),
-        args=(N, cutoff, interaction_scale),
+        args=(N, cutoff),
         m=ATOMISTIC_MEMORY,
         pgtol=ATOMISTIC_PGTOL,
         factr=1.0,
@@ -633,12 +601,11 @@ def solve_atomistic_initial(initial, N, cutoff, interaction_scale=1.0):
     endpoint = build_mean_gauge(point, N)  #recover the 2N+1 full state
     if np.all(np.isfinite(endpoint)):
         endpoint, raw_diagnostics, curvature, correction = polish_atomistic_endpoint(
-            endpoint, N, cutoff, allow_correction=info["warnflag"] == 0,
-            interaction_scale=interaction_scale)
+            endpoint, N, cutoff, allow_correction=info["warnflag"] == 0)
         normalized, normalization = appendix_b_normalize(
             endpoint, N)  #apply appendix-B normalization
         diagnostics = atomistic_diagnostics(
-            normalized, N, cutoff, interaction_scale
+            normalized, N, cutoff
         )  # compute the energy, reduced gradient, and Euler-Lagrange residual of the normalized endpoint
     else:
         normalized = endpoint
@@ -798,15 +765,14 @@ def loglog_slope(N, error):
     return float(slope)
 
 
-def directional_gradient_error(value_gradient, point, direction, *args,
-                               step=GRADIENT_CHECK_STEP):
+def directional_gradient_error(value_gradient, point, direction, *args):
     """Return a centered directional-derivative relative error."""
     direction = np.asarray(direction, dtype=float)
     direction /= np.linalg.norm(direction)
     _, gradient = value_gradient(point, *args)
-    plus = value_gradient(point + step * direction, *args)[0]
-    minus = value_gradient(point - step * direction, *args)[0]
-    finite_difference = (plus - minus) / (2.0 * step)
+    plus = value_gradient(point + GRADIENT_CHECK_STEP * direction, *args)[0]
+    minus = value_gradient(point - GRADIENT_CHECK_STEP * direction, *args)[0]
+    finite_difference = (plus - minus) / (2.0 * GRADIENT_CHECK_STEP)
     analytic = float(np.dot(gradient, direction))
     relative_error = abs(finite_difference - analytic) / max(
         1.0, abs(finite_difference), abs(analytic))
@@ -822,12 +788,8 @@ def reflected_state(u, N):
     ))
 
 
-def local_verification_checks(interaction_scale=1.0):
+def local_verification_checks():
     """Run the focused construction and gradient checks."""
-    # Stronger interactions enlarge the constant energy offset. Increase only
-    # the finite-difference diagnostic step to reduce subtraction cancellation;
-    # scale=1 and every optimizer tolerance/settings remain unchanged.
-    check_step = GRADIENT_CHECK_STEP * max(1.0, interaction_scale)
     rng = np.random.default_rng(123)
     N = 20
     point = 0.08 * rng.normal(size=2 * N + 1)
@@ -836,23 +798,22 @@ def local_verification_checks(interaction_scale=1.0):
     reduced_error = directional_gradient_error(atomistic_value_gradient,
                                                reduced_point,
                                                reduced_direction, N,
-                                               PAIR_CUTOFF, interaction_scale, step=check_step)
+                                               PAIR_CUTOFF)
 
     continuum_x, continuum_dx = continuum_grid(N)
     continuum_point = 0.05 * rng.normal(size=N // 2 - 1)
     continuum_direction = rng.normal(size=continuum_point.size)
     continuum_error = directional_gradient_error(
         continuum_reduced_value_gradient, continuum_point, continuum_direction,
-        continuum_x, continuum_dx, W, Wprime, interaction_scale, step=check_step)
+        continuum_x, continuum_dx, W, Wprime)
 
     random_reduced = random_fourier_atomistic_start(N)
     random_full = build_mean_gauge(random_reduced, N)
     random1, random2 = split_layers(random_full, N)
     random_energy, random_gradient = raw_atomistic_value_gradient(
-        random_full, N, PAIR_CUTOFF, interaction_scale)
+        random_full, N, PAIR_CUTOFF)
 
     return {
-        "gradient_check_step": check_step,
         "reduced_gradient_relative_error":  #use the directional derivative to check whether the atomistic gradient is correct for N=20
         reduced_error,
         "continuum_gradient_relative_error":  # use the directional derivative to check whether the continuum gradient is correct for N=20
@@ -867,12 +828,8 @@ def local_verification_checks(interaction_scale=1.0):
     }
 
 
-def run_study(interaction_scale=1.0, n_values=N_VALUES,
-              continuum_points=CONTINUUM_POINTS, max_continuum_points=3200):
-    """Run one interaction scale with explicit grids and unchanged atomistic starts.
-
-    Refine the comparison reference up to max_continuum_points after the
-    atomistic solves, keeping their initial continuum reference and endpoints.
+def run_study():
+    """Run the complete atomistic-to-continuum convergence study.
 
     Workflow:
         1. Check the building blocks. Run the inexpensive N=20 gradient
@@ -897,42 +854,18 @@ def run_study(interaction_scale=1.0, n_values=N_VALUES,
         7. Return everything in one study dictionary containing solutions,
            errors, slopes, diagnostics, and PASS/FAIL checks.
     """
-    from experiments.relaxation.lj_elastic_regime_sweep import (
-        complete_regime_study, failed_atomistic_result,
-    )
-    if not np.isfinite(interaction_scale) or interaction_scale <= 0:
-        raise ValueError("interaction_scale must be finite and positive.")
-    n_values = tuple(n_values)
-    continuum_points = tuple(continuum_points)
-    if (len(n_values) < 2 or any(not isinstance(N, (int, np.integer)) or N < 2 for N in n_values)
-            or any(a >= b for a, b in zip(n_values, n_values[1:]))):
-        raise ValueError("n_values must contain at least two increasing integers >= 2.")
-    if (len(continuum_points) != 2 or
-            any(not isinstance(n, (int, np.integer)) or n < 4 or n % 2 for n in continuum_points)
-            or continuum_points[0] >= continuum_points[1]
-            or max_continuum_points < continuum_points[-1]):
-        raise ValueError("Use two increasing even continuum grids within the refinement cap.")
-    verification = local_verification_checks(interaction_scale)  #step 1
+    verification = local_verification_checks()  #step 1
 
     # --------------------step 2------------------------#
-    continuum_results = {}
-    continuum_failures = []
-    for points in continuum_points:
-        try:
-            reference = solve_continuum_reference(points, interaction_scale=interaction_scale)
-        except ContinuumSolveError as error:
-            x, dx = continuum_grid(points)
-            reference = {"point_count": points, "x": x, "dx": dx, **error.solution}
-            if not np.all(np.isfinite(reference["q"])):
-                raise
-            continuum_failures.append({"points": points, "error": str(error)})
-        continuum_results[points] = reference
+    continuum_results = {
+        points: solve_continuum_reference(points)
+        for points in CONTINUUM_POINTS
+    }
     for continuum in continuum_results.values():
         _, _, curvature = hessian_spectrum(continuum_full_hessian(
-            continuum["q"], continuum["x"], continuum["dx"],
-            interaction_scale=interaction_scale))
+            continuum["q"], continuum["x"], continuum["dx"]))
         continuum.update(curvature)
-    finest_continuum = continuum_results[continuum_points[-1]]
+    finest_continuum = continuum_results[CONTINUUM_POINTS[-1]]
     # For u1=q/2 and u2=-q/2, the two-layer continuum energy is F[q]/2.
     continuum_energy = 0.5 * finest_continuum["energy"]
     finest_spline = periodic_q_spline(finest_continuum["x"],
@@ -941,7 +874,7 @@ def run_study(interaction_scale=1.0, n_values=N_VALUES,
     # --------------------step 3------------------------#
     results = []
     energy_comparisons = []
-    for N in n_values:
+    for N in N_VALUES:
         continuum_pair = sample_continuum_pair(
             finest_spline, N
         )  # sample the continuum reference on the N and N+1 atomistic grids
@@ -949,18 +882,14 @@ def run_study(interaction_scale=1.0, n_values=N_VALUES,
         for start, initial in atomistic_initial_guesses(
                 N, continuum_pair).items():
             #performs the optimization, applies Appendix-B normalization and computes endpoint diagnostics.
-            try:
-                run = solve_atomistic_initial(initial, N, PAIR_CUTOFF, interaction_scale)
-            except (RuntimeError, ValueError, la.LinAlgError) as error:
-                run = failed_atomistic_result(sys.modules[__name__], N, error)
+            run = solve_atomistic_initial(initial, N, PAIR_CUTOFF)
             #selects a odd symmetry-equivalent representative
             comparison_u, errors, reflection_applied = (
                 reflection_aligned_errors(run["normalized_u"], continuum_pair,
                                           N))
             # Reduction singles out one gradient component, so its infinity norm
             # can change under reflection. Check the actual stored representative.
-            comparison_diagnostics = atomistic_diagnostics(
-                comparison_u, N, PAIR_CUTOFF, interaction_scale)
+            comparison_diagnostics = atomistic_diagnostics(comparison_u, N, PAIR_CUTOFF)
             run.update(comparison_diagnostics)
             run["accepted"] = run["accepted"] and atomistic_stationary(comparison_diagnostics)
             #separates the displacement vector into the two layer arrays, length N and N+1, respectively
@@ -1018,15 +947,15 @@ def run_study(interaction_scale=1.0, n_values=N_VALUES,
         if all(result["accepted"] for result in case):
             slopes[start] = {
                 "h2":
-                loglog_slope(n_values,
+                loglog_slope(N_VALUES,
                              [result["h2_error"] for result in case]),
                 "max":
-                loglog_slope(n_values,
+                loglog_slope(N_VALUES,
                              [result["max_error"] for result in case]),
                 "phase_matched_h2": loglog_slope(
-                    n_values, [result["phase_matched_h2_error"] for result in case]),
+                    N_VALUES, [result["phase_matched_h2_error"] for result in case]),
                 "phase_matched_max": loglog_slope(
-                    n_values, [result["phase_matched_max_error"] for result in case]),
+                    N_VALUES, [result["phase_matched_max_error"] for result in case]),
             }
         else:
             slopes[start] = {"h2": np.nan, "max": np.nan,
@@ -1034,13 +963,13 @@ def run_study(interaction_scale=1.0, n_values=N_VALUES,
 
     # --------------------step 5------------------------#
     #Atomistic cutoff \(M=80\) versus \(M=160\), checking the Euler-Lagrange residual over h.
-    finest_N = n_values[-1]
+    finest_N = N_VALUES[-1]
     cutoff_evaluations = []
     for result in (item for item in results if item["N"] == finest_N):
         _, gradient80 = raw_atomistic_value_gradient(result["normalized_u"],
-                                                     finest_N, PAIR_CUTOFF, interaction_scale)
+                                                     finest_N, PAIR_CUTOFF)
         _, gradient160 = raw_atomistic_value_gradient(result["normalized_u"],
-                                                      finest_N, CUTOFF_CHECK, interaction_scale)
+                                                      finest_N, CUTOFF_CHECK)
         difference1, difference2 = split_layers(gradient160 - gradient80,
                                                 finest_N)
         _, _, h1, h2, h = atomistic_geometry(finest_N)
@@ -1055,7 +984,7 @@ def run_study(interaction_scale=1.0, n_values=N_VALUES,
             float(el_difference / h),
         })
     #Continuum reference on 400 versus 800 points, checking the H_h^2 and maximum errors.
-    coarse_continuum = continuum_results[continuum_points[0]]
+    coarse_continuum = continuum_results[CONTINUUM_POINTS[0]]
     coarse_spline = periodic_q_spline(coarse_continuum["x"],
                                       coarse_continuum["q"])
     coarse_pair = sample_continuum_pair(coarse_spline, finest_N)
@@ -1110,7 +1039,7 @@ def run_study(interaction_scale=1.0, n_values=N_VALUES,
              for item in energy_comparisons),
          float(sum(item["energy_comparison_status"] in ("agree", "warm_lower")
                    for item in energy_comparisons)),
-         f"== {len(n_values)}; accepted pair and E_{ATOMISTIC_RANDOM_SEED_TAG} >= E_warm - tau_E"),
+         f"== {len(N_VALUES)}; accepted pair and E_{ATOMISTIC_RANDOM_SEED_TAG} >= E_warm - tau_E"),
         ("Appendix B mean sums", maximum_mean_sum
          <= MEAN_TOL, maximum_mean_sum, f"<= {MEAN_TOL:.1e}"),
         ("Appendix B mean bounds", maximum_bound_excess
@@ -1118,12 +1047,12 @@ def run_study(interaction_scale=1.0, n_values=N_VALUES,
         ("M=80/160 EL difference over h", maximum_cutoff_difference
          <= CUTOFF_EL_OVER_H_TOL, maximum_cutoff_difference,
          f"<= {CUTOFF_EL_OVER_H_TOL:.1e}"),
-        (f"continuum {continuum_points[0]}/{continuum_points[1]} H_h^2 change",
+        ("continuum 400/800 H_h^2 change",
          continuum_reference_change["h2_error"]
          < REFINEMENT_FRACTION * warm[-1]["h2_error"],
          continuum_reference_change["h2_error"],
          f"< 5% of {warm[-1]['h2_error']:.6e}"),
-        (f"continuum {continuum_points[0]}/{continuum_points[1]} maximum change",
+        ("continuum 400/800 maximum change",
          continuum_reference_change["max_error"]
          < REFINEMENT_FRACTION * warm[-1]["max_error"],
          continuum_reference_change["max_error"],
@@ -1146,14 +1075,9 @@ def run_study(interaction_scale=1.0, n_values=N_VALUES,
          float(np.max(np.diff([item["max_error"] for item in warm]))), "< 0"),
     ])
     #--------------------step 7------------------------#
-    study = {
-        "interaction_scale": float(interaction_scale),
-        "n_values": n_values,
-        "continuum_points": continuum_points,
-        "warm_initial_continuum_points": continuum_points[-1],
+    return {
         "verification": verification,
         "continuum_results": continuum_results,
-        "continuum_failures": continuum_failures,
         "results": results,
         "energy_comparisons": energy_comparisons,
         "slopes": slopes,
@@ -1161,7 +1085,6 @@ def run_study(interaction_scale=1.0, n_values=N_VALUES,
         "continuum_reference_change": continuum_reference_change,
         "checks": checks,
     }
-    return complete_regime_study(study, sys.modules[__name__], max_continuum_points)
 
 
 def write_csv(path, rows):
@@ -1178,15 +1101,6 @@ def save_summary(outdir, study):
     for result in study["results"]:
         normalization = result["normalization"]
         rows.append({
-            "interaction_scale": study["interaction_scale"],
-            "rho_continuum": study["continuum_regime"]["rho"],
-            "reference_points": study["reference_points"],
-            "warm_initial_continuum_points": study["warm_initial_continuum_points"],
-            **{key: result[key] for key in (
-                "rho_atomistic", "elastic_dominance_gap", "elastic_dominance_established",
-                "force_lipschitz_bound", "poincare_constant", "rho_atomistic_cutoff_check",
-                "regime_cutoff_change", "reference_resolved", "comparison_valid",
-                "phase_matched_h2_error_over_h", "phase_matched_max_error_over_h")},
             "N":
             result["N"],
             "h":
@@ -1247,18 +1161,14 @@ def save_summary(outdir, study):
 def save_profiles(outdir, study):
     """Save existing profile keys plus raw endpoints and continuum curvature."""
     arrays = {
-        "N_values": np.asarray(study["n_values"]),
+        "N_values": np.asarray(N_VALUES),
         "pair_cutoff": np.asarray(PAIR_CUTOFF),
         "cutoff_check": np.asarray(CUTOFF_CHECK),
-        "continuum_points": np.asarray(study["continuum_points"]),
-        "interaction_scale": np.asarray(study["interaction_scale"]),
-        "reference_points": np.asarray(study["reference_points"]),
-        "warm_initial_continuum_points": np.asarray(study["warm_initial_continuum_points"]),
-        "rho_continuum": np.asarray(study["continuum_regime"]["rho"]),
+        "continuum_points": np.asarray(CONTINUUM_POINTS),
         "atomistic_start_names": np.asarray(ATOMISTIC_START_NAMES),
         "random_fourier_seed": np.asarray(ATOMISTIC_RANDOM_FOURIER_SEED),
     }
-    for N in study["n_values"]:
+    for N in N_VALUES:
         _, _, h1, h2, _ = atomistic_geometry(N)
         cases = {
             result["start"]: result
@@ -1281,51 +1191,112 @@ def save_profiles(outdir, study):
             arrays[f"u1_atomistic_{start}_N{N}"] = atom1
             arrays[f"u2_atomistic_{start}_N{N}"] = atom2
             arrays[f"raw_u_atomistic_{start}_N{N}"] = result["raw_u"]
-            for key in ("rho_atomistic", "elastic_dominance_gap", "elastic_dominance_established",
-                        "comparison_valid", "accepted", "reference_resolved"):
-                arrays[f"{key}_{start}_N{N}"] = np.asarray(result[key])
     for points, continuum in study["continuum_results"].items():
         arrays[f"continuum_x_N{points}"] = continuum["x"]
         arrays[f"continuum_q_N{points}"] = continuum["q"]
-        arrays[f"continuum_failure_reason_N{points}"] = np.asarray(continuum.get("failure_reason", ""))
-        for key in ("curvature_min_eigenvalue", "curvature_tolerance", "curvature_status", "accepted"):
+        for key in ("curvature_min_eigenvalue", "curvature_tolerance", "curvature_status"):
             arrays[f"continuum_{key}_N{points}"] = np.asarray(continuum[key])
     np.savez(outdir / "profiles.npz", **arrays)
 
 
 def save_plots(outdir, study):
-    """Plot fixed and matched errors, marking unresolved endpoints separately."""
+    """Save the two-track H2 and maximum-error convergence figure."""
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
-    figure, axes = plt.subplots(1, 2, figsize=(12, 5))
-    for start, color, label in (("sampled_continuum", "tab:blue", "warm"),
-                                (ATOMISTIC_RANDOM_START_NAME, "tab:orange", "seed 3")):
-        runs = [r for r in study["results"] if r["start"] == start]
-        for axis, norm in zip(axes, ("h2", "max")):
-            for prefix, style, phase in (("", "--", "fixed"), ("phase_matched_", "-", "matched")):
-                key = f"{prefix}{norm}_error"
-                values = [r[key] if r["comparison_valid"] else np.nan for r in runs]
-                slope = study["slopes"][start][f"{prefix}{norm}"]
-                slope_text = f"{slope:.3f}" if np.isfinite(slope) else "unavailable"
-                axis.loglog([r["N"] for r in runs], values, style, color=color,
-                            marker="o", markersize=4,
-                            label=f"{label}, {phase} (slope={slope_text})")
-                invalid = [r for r in runs if not r["comparison_valid"] and np.isfinite(r[key])]
-                axis.scatter([r["N"] for r in invalid], [r[key] for r in invalid],
-                             marker="x", color=color, alpha=.6)
-    warm = [r for r in study["results"] if r["start"] == "sampled_continuum" and r["comparison_valid"]]
-    if warm:
-        N = np.asarray(study["n_values"], dtype=float)
-        for axis, norm in zip(axes, ("h2", "max")):
-            axis.loglog(N, warm[0][f"{norm}_error"] * warm[0]["N"] / N,
-                        "k:", alpha=.6, label=r"$N^{-1}$ guide")
-    for axis, title in zip(axes, (r"Layer-weighted $H_h^2$ error", "Maximum error")):
-        axis.set(title=title, xlabel="Layer-1 atoms N", ylabel="error")
-        axis.grid(True, which="both", alpha=.3)
+    def mean_mode_h2(result):
+        """Return the H_h^2 contribution from the two layer-error means."""
+        u1, u2 = split_layers(result["normalized_u"], result["N"])
+        reference1, reference2 = split_layers(result["continuum_pair"],
+                                              result["N"])
+        mean_error1 = float(np.mean(u1 - reference1))
+        mean_error2 = float(np.mean(u2 - reference2))
+        return float(np.sqrt(TWOPI * (mean_error1**2 + mean_error2**2)))
+
+    N = np.asarray(N_VALUES, dtype=float)
+    figure, axes = plt.subplots(1, 2, figsize=(11, 4.8))
+    styles = {
+        "sampled_continuum": ("o-", "continuum warm start"),
+        ATOMISTIC_RANDOM_START_NAME: (
+            "s-", f"seed-{ATOMISTIC_RANDOM_FOURIER_SEED} phase-stress start"),
+    }
+    for start, (style, label) in styles.items():
+        case = [
+            result for result in study["results"] if result["start"] == start
+        ]
+        for axis, key, slope_key in ((axes[0], "h2_error", "h2"),
+                                     (axes[1], "max_error", "max")):
+            slope = study["slopes"][start][slope_key]
+            slope_text = "unavailable" if not np.isfinite(
+                slope) else f"{slope:.3f}"
+            axis.loglog(N, [result[key] for result in case],
+                        style,
+                        linewidth=2,
+                        label=f"{label} (slope={slope_text})")
+
+    warm = [
+        result for result in study["results"]
+        if result["start"] == "sampled_continuum"
+    ]
+    warm_mean_modes = [mean_mode_h2(result) for result in warm]
+    warm_mean_percentages = [
+        100.0 * mean_mode / result["h2_error"]
+        for mean_mode, result in zip(warm_mean_modes, warm)
+    ]
+    for axis, key in ((axes[0], "h2_error"), (axes[1], "max_error")):
+        axis.loglog(N,
+                    warm[0][key] * N[0] / N,
+                    "k--",
+                    alpha=0.65,
+                    label="$N^{-1}$ guide")
+    random_results = [
+        result for result in study["results"]
+        if result["start"] == ATOMISTIC_RANDOM_START_NAME
+    ]
+    random_mean_modes = [mean_mode_h2(result) for result in random_results]
+    axes[0].loglog(N,
+                   random_mean_modes,
+                   ":",
+                   color="tab:red",
+                   linewidth=1.5,
+                   label=(f"seed {ATOMISTIC_RANDOM_FOURIER_SEED} mean mode "
+                          r"$2\sqrt{\pi}|\bar u_1|$"))
+    for axis, norm in zip(axes, ("h2", "max")):
+        slope = study["slopes"][ATOMISTIC_RANDOM_START_NAME][f"phase_matched_{norm}"]
+        slope_text = "unavailable" if not np.isfinite(slope) else f"{slope:.3f}"
+        axis.loglog(N,
+                    [result[f"phase_matched_{norm}_error"] for result in random_results],
+                    "--", color="tab:green", linewidth=1.5,
+                    label=(f"seed {ATOMISTIC_RANDOM_FOURIER_SEED} vs shifted continuum "
+                           f"(slope={slope_text})"))
+    axes[0].annotate(
+        ("warm mean mode\n" + r"$\leq$ "
+         f"{max(warm_mean_percentages):.2f}% of total $H_h^2$ error"),
+        xy=(N[0], warm[0]["h2_error"]),
+        xytext=(5, -150),
+        textcoords="offset points",
+        fontsize=8,
+        color="tab:blue",
+        arrowprops={
+            "arrowstyle": "->",
+            "color": "tab:blue"
+        },
+        bbox={
+            "boxstyle": "round,pad=0.25",
+            "facecolor": "white",
+            "edgecolor": "tab:blue",
+            "alpha": 0.9
+        })
+    axes[0].set_title(r"Layer-weighted $H_h^2$ error")
+    axes[1].set_title("Maximum error")
+    for axis in axes:
+        axis.set_xlabel("number of layer-1 atoms $N$")
+        axis.set_ylabel("error")
+        axis.grid(True, which="both", linestyle="--", alpha=0.45)
         axis.legend(fontsize=8)
-    figure.suptitle(f"Interaction multiplier {study['interaction_scale']:g}; crosses mark unresolved/rejected comparisons")
+    figure.suptitle(
+        "Two atomistic solution tracks against the continuum reference")
     figure.tight_layout()
     figure.savefig(outdir / "convergence_loglog.png", dpi=180)
     plt.close(figure)
@@ -1349,7 +1320,7 @@ def save_report(outdir, study, overall_pass):
         "=========================================",
         "",
         "Configuration",
-        f"  N={study['n_values']}; continuum points={study['continuum_points']}",
+        f"  N={N_VALUES}; continuum points={CONTINUUM_POINTS}",
         f"  atomistic cutoff M={PAIR_CUTOFF}; tail check M={CUTOFF_CHECK}",
         "  effective LJ: a=1, sigma=0.9, L=1, epsilon=0.5; W=4 sum V",
         (f"  starts=sampled_continuum, {ATOMISTIC_RANDOM_START_NAME}; seed="
@@ -1360,7 +1331,6 @@ def save_report(outdir, study, overall_pass):
          f"gradient <= {ATOMISTIC_PGTOL:.1e}, EL_inf/h <= {ATOMISTIC_EL_OVER_H_TOL:.1e}, "
          "no resolved negative raw curvature"),
         "  gradients and EL are checked before and after normalization",
-        f"  directional-gradient diagnostic step={study['verification']['gradient_check_step']:.2e}",
         "  one L-BFGS-B call; at most one conditional positive-spectrum Newton correction",
         (f"  Newton step <= {NEWTON_MAX_STEP_OVER_H:g}h; energy allowance = "
          f"{NEWTON_ENERGY_ROUNDOFF_FACTOR:g}*eps*max(1, |E_before|, |E_after|)"),
@@ -1386,7 +1356,7 @@ def save_report(outdir, study, overall_pass):
     lines.extend([
         "",
         f"{random_label.capitalize()} errors against a phase-matched continuum reference",
-        (f"  {study['reference_points']}-point reference; phase_shift = mean2 - mean1; "
+        (f"  {CONTINUUM_POINTS[-1]}-point reference; phase_shift = mean2 - mean1; "
          "atomistic endpoints unchanged"),
         "  N     phase_shift     matched_H2   matched_max",
     ])
@@ -1398,12 +1368,12 @@ def save_report(outdir, study, overall_pass):
     lines.extend([
         (f"  matched log-log slopes: H2={matched_slopes['phase_matched_h2']:.6f}, "
          f"max={matched_slopes['phase_matched_max']:.6f}"),
-        "  solid: phase-matched continuum reference; dashed: fixed-phase reference",
+        "  green: phase-matched continuum reference; blue/orange: original fixed-phase reference",
     ])
     lines.extend([
         "",
         "Energy differences to continuum (E_atom - E_cont)",
-        (f"  Finite-resolution reference: {study['reference_points']} points; "
+        (f"  Finite-resolution reference: {CONTINUUM_POINTS[-1]} points; "
          "E_cont = F[q]/2 (two-layer energy)."),
         f"    N        warm_dE        {random_tag}_dE",
     ])
@@ -1413,7 +1383,7 @@ def save_report(outdir, study, overall_pass):
             f"{seed_result['energy_minus_continuum']:+.6e}")
     lines.extend([
         "",
-        "Observed all-grid log(error) versus log(N) slopes; baseline prediction -1",
+        "All-grid log(error) versus log(N) slopes; expected -1",
         ("  sampled_continuum: H2="
          f"{study['slopes']['sampled_continuum']['h2']:.6f}, max="
          f"{study['slopes']['sampled_continuum']['max']:.6f}"),
@@ -1421,10 +1391,10 @@ def save_report(outdir, study, overall_pass):
          f"{study['slopes'][ATOMISTIC_RANDOM_START_NAME]['h2']:.6f}, max="
          f"{study['slopes'][ATOMISTIC_RANDOM_START_NAME]['max']:.6f}"),
         ("  largest scaled errors: H2/h="
-         f"{np.max([result['h2_error_over_h'] for result in study['results']]):.6f}, "
-         f"max/h={np.max([result['max_error_over_h'] for result in study['results']]):.6f}"
+         f"{max(result['h2_error_over_h'] for result in study['results']):.6f}, "
+         f"max/h={max(result['max_error_over_h'] for result in study['results']):.6f}"
          ),
-        (f"  {random_label} finest-pair H2 ratio="
+        (f"  {random_label} plateau ratio H2(640)/H2(320)="
          f"{random_results[-1]['h2_error'] / random_results[-2]['h2_error']:.6f}"),
     ])
     lines.extend(["", "Endpoint audit", f"  N    warm correction / curvature       {random_tag} correction / curvature      energy comparison"])
@@ -1436,7 +1406,7 @@ def save_report(outdir, study, overall_pass):
         lines.append(f"  {warm_result['N']:3d}  {warm_status:<33} {seed_status:<33} "
                      f"{comparison['energy_comparison_status']}")
     for points, continuum in study["continuum_results"].items():
-        lines.append(f"  continuum {points}: {continuum['curvature_status']} (full periodic space); accepted={continuum['accepted']}")
+        lines.append(f"  continuum {points}: {continuum['curvature_status']} (full periodic space)")
     lines.extend([
         "  soft = unresolved near-zero curvature; no positive stability gap is claimed",
         "  agree = energies agree within tau_E for these two starts only",
@@ -1522,54 +1492,12 @@ def save_report(outdir, study, overall_pass):
         (f"Interpretation: seed {ATOMISTIC_RANDOM_FOURIER_SEED} is an intentionally selected illustrative "
          "phase-stress realization, not representative random-start statistics."
          ),
-        ("For the original baseline, seed-3 phase mismatch motivated an O(h) envelope. "
-         "Each new scale is assessed from its own valid comparisons."),
+        ("Its finite-grid sawtooth is assessed by an O(h) envelope; smooth "
+         "pointwise halving is not claimed."),
         ("Accepted endpoints are stationary candidates with no resolved negative "
          "curvature at the raw endpoint. Global minimality and the paper's "
          "stability-gap hypothesis are not verified."),
-        f"NUMERICAL VALIDITY: {'PASS' if overall_pass else 'FAIL'}",
-    ])
-    regime = study["continuum_regime"]
-    lines.extend([
-        "", "Elastic dominance (conservative finite-cutoff numerical bounds)",
-        f"  interaction_scale={study['interaction_scale']:g}; rho_continuum={regime['rho']:.8g}; gap={regime['gap']:.8g}",
-        f"  phase-cell coverage={regime['phase_cell_covered']}; condition established={regime['established']}",
-        f"  initial warm reference={study['warm_initial_continuum_points']} points; comparison reference={study['reference_points']} points",
-        "  N    start                         rho_atomistic       gap       established  comparison_valid",
-    ])
-    for run in study["results"]:
-        lines.append(f"  {run['N']:3d}  {run['start']:<28} {run['rho_atomistic']:.8g}  "
-                     f"{run['elastic_dominance_gap']:+.6g}  {str(run['elastic_dominance_established']):>11}  "
-                     f"{run['comparison_valid']}")
-    lines.extend(["", "Reference accuracy: both starts, phases, and norms"])
-    for check in study["reference_checks"]:
-        lines.append(f"  {check['start']} {check['phase']} {check['norm']}: "
-                     f"{'PASS' if check['passed'] else 'UNRESOLVED'}; "
-                     f"{check['coarse_points']}/{check['fine_points']} solves_accepted={check['solutions_accepted']}; "
-                     f"change={check['change']:.6e}; "
-                     f"required < {check['limit']:.6e}")
-    for failure in study["continuum_failures"]:
-        lines.append(f"  continuum candidate {failure['points']} rejected: {failure['error']}")
-    for failure in study["refinement_failures"]:
-        lines.append(f"  refinement {failure['points']} failed: {failure['error']}")
-    lines.extend(["", "Observed convergence: all grids / finest three (valid comparisons only)"])
-    for start in ATOMISTIC_START_NAMES:
-        for key in ("h2", "max", "phase_matched_h2", "phase_matched_max"):
-            lines.append(f"  {start} {key}: {study['slopes'][start][key]:.6f} / "
-                         f"{study['finest_slopes'][start][key]:.6f}")
-    for start in ATOMISTIC_START_NAMES:
-        lines.append(f"  {start} valid-subset N={study['fit_n_values'][start]}: "
-                     f"{study['valid_subset_slopes'][start]}")
-    if study["baseline_checks"]:
-        lines.append(f"  original baseline expectations: {sum(c[1] for c in study['baseline_checks'])}/{len(study['baseline_checks'])} passed")
-        for name, passed, value, criterion in study["baseline_checks"]:
-            if not passed:
-                lines.append(f"  baseline expectation missed: {name}; {value}; {criterion}")
-    lines.extend([
-        "  rho >= 1 means the sufficient condition is not established, not demonstrated instability.",
-        "  Layer means remain separate; the mean-sum gauge does not remove the relative constant mode.",
-        "  Bounds use floating-point interval extrema for M=80; no infinite-cutoff or uniform-in-N proof is claimed.",
-        "  Energy agreement and soft curvature do not prove global minimality.",
+        f"OVERALL VERIFICATION CHECKS: {'PASS' if overall_pass else 'FAIL'}",
     ])
     report = "\n".join(lines) + "\n"
     (outdir / "check_report.txt").write_text(report, encoding="utf-8")
@@ -1582,36 +1510,22 @@ def save_report(outdir, study, overall_pass):
     print(report, end="")
 
 
-def run_regime_sweep(interaction_scales=(1.0, 2.0, 3.0, 4.0, 5.0, 8.0),
-                     outdir=None, n_values=N_VALUES, continuum_points=CONTINUUM_POINTS,
-                     max_continuum_points=3200, time_budget_seconds=900):
-    """Run independent parameter cases in a fresh directory with a compute cap."""
-    from experiments.relaxation.lj_elastic_regime_sweep import run_sweep
-    return run_sweep(sys.modules[__name__], interaction_scales, outdir, n_values,
-                     continuum_points, max_continuum_points, time_budget_seconds)
-
-
 def main():
-    """Run one or more interaction strengths, preserving historical outputs."""
-    import argparse
-
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--interaction-scales", nargs="+", type=float, default=[1.0],
-                        help="Positive interaction multipliers; use 1 2 3 4 5 8 for the planned sweep.")
-    parser.add_argument("--output-dir", type=Path, help="New output directory (must not already exist).")
-    parser.add_argument("--n-values", nargs="+", type=int, default=N_VALUES)
-    parser.add_argument("--continuum-points", nargs=2, type=int, default=CONTINUUM_POINTS)
-    parser.add_argument("--max-continuum-points", type=int, default=3200)
-    parser.add_argument("--time-budget-seconds", type=float, default=900)
-    args = parser.parse_args()
-    summary = run_regime_sweep(args.interaction_scales, args.output_dir, args.n_values,
-                               args.continuum_points, args.max_continuum_points,
-                               args.time_budget_seconds)
-    print(f"Outputs: {summary['outdir']}", flush=True)
-    failed = any(c["status"] != "complete" or not c.get("numerically_valid", False)
-                 or c.get("baseline_checks_passed") is False for c in summary["cases"])
-    return int(failed)
+    """Run the complete study, save its artifacts, and enforce verification."""
+    study = run_study()
+    overall_pass = all(passed for _, passed, _, _ in study["checks"])
+    outdir = (Path(__file__).resolve().parents[2] / "outputs" / "relaxation" /
+              "output_atomistic_two_chain_lj_lbfgs_convergence_study")
+    outdir.mkdir(parents=True, exist_ok=True)
+    save_summary(outdir, study)
+    save_profiles(outdir, study)
+    save_plots(outdir, study)
+    save_report(outdir, study, overall_pass)
+    if not overall_pass:
+        raise RuntimeError(
+            f"Numerical acceptance checks failed; see {outdir / 'check_report.txt'}"
+        )
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    main()

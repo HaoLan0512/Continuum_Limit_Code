@@ -8,6 +8,7 @@ Configuration
   starts=sampled_continuum, random_fourier_seed_3; seed=3; modes=1-5; decay=1/k^2; amplitude=0.1
   acceptance: successful finite solve, Appendix B bounds, gradient <= 5.0e-08, EL_inf/h <= 1.0e-02, no resolved negative raw curvature
   gradients and EL are checked before and after normalization
+  directional-gradient diagnostic step=1.00e-06
   one L-BFGS-B call; at most one conditional positive-spectrum Newton correction
   Newton step <= 0.1h; energy allowance = 64*eps*max(1, |E_before|, |E_after|)
   tau_H = max(1.0e-08, 100*eps*max(1, ||H||_inf) + 10*eigenpair residual)
@@ -33,7 +34,7 @@ Seed-3 errors against a phase-matched continuum reference
   320  -8.283583e-03  1.2850e-03  2.9802e-04
   640  +1.621588e-03  6.4299e-04  1.4940e-04
   matched log-log slopes: H2=-0.997152, max=-0.997603
-  green: phase-matched continuum reference; blue/orange: original fixed-phase reference
+  solid: phase-matched continuum reference; dashed: fixed-phase reference
 
 Energy differences to continuum (E_atom - E_cont)
   Finite-resolution reference: 800 points; E_cont = F[q]/2 (two-layer energy).
@@ -45,11 +46,11 @@ Energy differences to continuum (E_atom - E_cont)
   320  -2.475657e-05  -2.475657e-05
   640  -6.093044e-06  -6.093044e-06
 
-All-grid log(error) versus log(N) slopes; expected -1
+Observed all-grid log(error) versus log(N) slopes; baseline prediction -1
   sampled_continuum: H2=-0.996899, max=-0.999081
   random_fourier_seed_3: H2=-1.080815, max=-1.081861
   largest scaled errors: H2/h=0.802343, max/h=0.267174
-  seed-3 plateau ratio H2(640)/H2(320)=0.199629
+  seed-3 finest-pair H2 ratio=0.199629
 
 Endpoint audit
   N    warm correction / curvature       seed3 correction / curvature      energy comparison
@@ -59,8 +60,8 @@ Endpoint audit
   160  applied / soft                    applied / soft                    agree
   320  applied / soft                    applied / soft                    agree
   640  applied / soft                    applied / soft                    agree
-  continuum 400: soft (full periodic space)
-  continuum 800: soft (full periodic space)
+  continuum 400: soft (full periodic space); accepted=True
+  continuum 800: soft (full periodic space); accepted=True
   soft = unresolved near-zero curvature; no positive stability gap is claimed
   agree = energies agree within tau_E for these two starts only
   progress ratios (blank if initial gradient is zero) and eigenvalues are saved in CSV/NPZ
@@ -75,21 +76,63 @@ Focused validation
   Seed-3 initial energy and gradient are finite |   √    | All values finite
   All atomistic endpoints are accepted          |   √    | Accepted count == 12
   continuum curvature screen                    |   √    | == 2; lambda_min >= -tau_H
-  two-start energy comparison                   |   √    | == 6; accepted pair and E_seed3 >= E_warm - tau_E
   Appendix B layer means sum to zero            |   √    | abs(mean1 + mean2) <= 1.0e-12
   Appendix B mean-bound excess                  |   √    | Excess above h/4 <= 1.0e-14
   M=80/160 EL difference over h                 |   √    | <= 1.0e-04
-  continuum 400/800 H_h^2 change                |   √    | < 5% of 6.429924e-04
-  continuum 400/800 maximum change              |   √    | < 5% of 1.493826e-04
-  warm H_h^2 all-grid slope                     |   √    | in [-1.2, -0.8]
-  warm maximum-error all-grid slope             |   √    | in [-1.2, -0.8]
-  seed-3 H_h^2 all-grid slope                   |   √    | in [-1.2, -0.8]
-  seed-3 maximum-error all-grid slope           |   √    | in [-1.2, -0.8]
-  Warm H_h^2 error decreases on refinement      |   √    | Every consecutive error change < 0
-  Warm maximum error decreases on refinement    |   √    | Every consecutive error change < 0
-  checks passed=19/19
+  continuum phase-cell coverage                 |   √    | == 1
+  all reference comparisons resolved            |   √    | == 8
+  final continuum pair accepted                 |   √    | == 1
+  refined continuum curvature                   |   √    | == 1
+  continuum regime cutoff change                |   √    | <= 1e-6
+  atomistic regime cutoff change                |   √    | <= 1e-6
+  checks passed=16/16
 
 Interpretation: seed 3 is an intentionally selected illustrative phase-stress realization, not representative random-start statistics.
-Its finite-grid sawtooth is assessed by an O(h) envelope; smooth pointwise halving is not claimed.
+For the original baseline, seed-3 phase mismatch motivated an O(h) envelope. Each new scale is assessed from its own valid comparisons.
 Accepted endpoints are stationary candidates with no resolved negative curvature at the raw endpoint. Global minimality and the paper's stability-gap hypothesis are not verified.
-OVERALL VERIFICATION CHECKS: PASS
+NUMERICAL VALIDITY: PASS
+
+Elastic dominance (conservative finite-cutoff numerical bounds)
+  interaction_scale=1; rho_continuum=0.23054041; gap=0.76945959
+  phase-cell coverage=True; condition established=True
+  initial warm reference=800 points; comparison reference=800 points
+  N    start                         rho_atomistic       gap       established  comparison_valid
+   20  sampled_continuum            0.34400481  +0.655995         True  True
+   20  random_fourier_seed_3        0.35219812  +0.647802         True  True
+   40  sampled_continuum            0.34206276  +0.657937         True  True
+   40  random_fourier_seed_3        0.34814478  +0.651855         True  True
+   80  sampled_continuum            0.34158238  +0.658418         True  True
+   80  random_fourier_seed_3        0.34234301  +0.657657         True  True
+  160  sampled_continuum            0.34148093  +0.658519         True  True
+  160  random_fourier_seed_3        0.34223078  +0.657769         True  True
+  320  sampled_continuum            0.34148383  +0.658516         True  True
+  320  random_fourier_seed_3        0.34218489  +0.657815         True  True
+  640  sampled_continuum            0.34147244  +0.658528         True  True
+  640  random_fourier_seed_3        0.34160941  +0.658391         True  True
+
+Reference accuracy: both starts, phases, and norms
+  sampled_continuum fixed h2: PASS; 400/800 solves_accepted=True; change=9.815920e-06; required < 3.214962e-05
+  sampled_continuum fixed max: PASS; 400/800 solves_accepted=True; change=1.381401e-06; required < 7.469128e-06
+  sampled_continuum phase_matched h2: PASS; 400/800 solves_accepted=True; change=9.815920e-06; required < 3.214962e-05
+  sampled_continuum phase_matched max: PASS; 400/800 solves_accepted=True; change=1.381401e-06; required < 7.469067e-06
+  random_fourier_seed_3 fixed h2: PASS; 400/800 solves_accepted=True; change=9.815920e-06; required < 1.510046e-04
+  random_fourier_seed_3 fixed max: PASS; 400/800 solves_accepted=True; change=1.381401e-06; required < 5.087786e-05
+  random_fourier_seed_3 phase_matched h2: PASS; 400/800 solves_accepted=True; change=9.813811e-06; required < 3.214963e-05
+  random_fourier_seed_3 phase_matched max: PASS; 400/800 solves_accepted=True; change=1.381411e-06; required < 7.469907e-06
+
+Observed convergence: all grids / finest three (valid comparisons only)
+  sampled_continuum h2: -0.996899 / -0.998429
+  sampled_continuum max: -0.999081 / -0.995828
+  sampled_continuum phase_matched_h2: -0.996895 / -0.998429
+  sampled_continuum phase_matched_max: -0.997336 / -0.995741
+  random_fourier_seed_3 h2: -1.080815 / -1.185312
+  random_fourier_seed_3 max: -1.081861 / -1.180667
+  random_fourier_seed_3 phase_matched_h2: -0.997152 / -0.998435
+  random_fourier_seed_3 phase_matched_max: -0.997603 / -0.996208
+  sampled_continuum valid-subset N=[20, 40, 80, 160, 320, 640]: {'h2': -0.9968990977337705, 'max': -0.9990810782048494, 'phase_matched_h2': -0.996894851598811, 'phase_matched_max': -0.9973355867284885}
+  random_fourier_seed_3 valid-subset N=[20, 40, 80, 160, 320, 640]: {'h2': -1.0808151244123894, 'max': -1.0818610551504921, 'phase_matched_h2': -0.9971522263312931, 'phase_matched_max': -0.9976027237319273}
+  original baseline expectations: 19/19 passed
+  rho >= 1 means the sufficient condition is not established, not demonstrated instability.
+  Layer means remain separate; the mean-sum gauge does not remove the relative constant mode.
+  Bounds use floating-point interval extrema for M=80; no infinite-cutoff or uniform-in-N proof is claimed.
+  Energy agreement and soft curvature do not prove global minimality.

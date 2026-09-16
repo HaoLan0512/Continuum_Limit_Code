@@ -1,0 +1,2 @@
+interaction_scale,status,numerically_valid,rho_continuum_cell,continuum_cell_gap,reference_points,accepted_endpoints,completed_endpoints,error,max_rho_warm,max_rho_seed3
+1.0,complete,True,0.2305404101281218,0.7694595898718782,800,12,12,,0.34400481368638536,0.3521981192045991

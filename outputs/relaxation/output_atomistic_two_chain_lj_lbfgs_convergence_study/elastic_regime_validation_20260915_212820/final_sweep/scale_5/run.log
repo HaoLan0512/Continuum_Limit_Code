@@ -1,0 +1,152 @@
+Atomistic two-chain LJ convergence study
+=========================================
+
+Configuration
+  N=(20, 40, 80, 160, 320, 640); continuum points=(400, 800, 1600, 3200)
+  atomistic cutoff M=80; tail check M=160
+  effective LJ: a=1, sigma=0.9, L=1, epsilon=0.5; W=4 sum V
+  starts=sampled_continuum, random_fourier_seed_3; seed=3; modes=1-5; decay=1/k^2; amplitude=0.1
+  acceptance: successful finite solve, Appendix B bounds, gradient <= 5.0e-08, EL_inf/h <= 1.0e-02, no resolved negative raw curvature
+  gradients and EL are checked before and after normalization
+  directional-gradient diagnostic step=5.00e-06
+  one L-BFGS-B call; at most one conditional positive-spectrum Newton correction
+  Newton step <= 0.1h; energy allowance = 64*eps*max(1, |E_before|, |E_after|)
+  tau_H = max(1.0e-08, 100*eps*max(1, ||H||_inf) + 10*eigenpair residual)
+  tau_E = 1.0e-10*max(1, |E_warm|, |E_seed3|)
+
+Errors and seed-3 normalized mean
+  N    warm_H2     warm_max    seed3_H2    seed3_max   seed3_mean1  seed3_warm_H2  seed3_warm_max
+   20  9.8471e-02  2.5488e-02  2.2336e-01  7.9938e-02  +3.7756e-02     1.9876e-01      7.7020e-02
+   40  4.7989e-02  1.1502e-02  2.0416e-01  7.5399e-02  -3.7088e-02     1.9868e-01      7.5020e-02
+   80  2.3895e-02  5.4692e-03  2.6102e-02  7.7063e-03  +1.9586e-03     1.0476e-02      3.9133e-03
+  160  1.1953e-02  2.6684e-03  1.5440e-02  4.9459e-03  +1.8213e-03     9.7700e-03      3.6299e-03
+  320  5.9818e-03  1.3179e-03  1.0930e-02  3.7663e-03  +1.7045e-03     9.1475e-03      3.3898e-03
+  640  2.9929e-03  6.5468e-04  9.2366e-03  3.3334e-03  +1.6281e-03     8.7382e-03      3.2339e-03
+  seed3_warm_*: seed-3 versus warm-start profiles after normalization and reflection alignment.
+
+Seed-3 errors against a phase-matched continuum reference
+  3200-point reference; phase_shift = mean2 - mean1; atomistic endpoints unchanged
+  N     phase_shift     matched_H2   matched_max
+   20  -7.551138e-02  9.8522e-02  2.5227e-02
+   40  +7.417546e-02  4.8024e-02  1.1466e-02
+   80  -3.917119e-03  2.3895e-02  5.4647e-03
+  160  -3.642584e-03  1.1953e-02  2.6681e-03
+  320  -3.408958e-03  5.9819e-03  1.3180e-03
+  640  -3.256196e-03  2.9929e-03  6.5473e-04
+  matched log-log slopes: H2=nan, max=nan
+  solid: phase-matched continuum reference; dashed: fixed-phase reference
+
+Energy differences to continuum (E_atom - E_cont)
+  Finite-resolution reference: 3200 points; E_cont = F[q]/2 (two-layer energy).
+    N        warm_dE        seed3_dE
+   20  -2.350233e-02  -2.350233e-02
+   40  -5.955830e-03  -5.955830e-03
+   80  -1.502980e-03  -1.502980e-03
+  160  -3.776752e-04  -3.776752e-04
+  320  -9.456420e-05  -9.456420e-05
+  640  -2.354528e-05  -2.354528e-05
+
+Observed all-grid log(error) versus log(N) slopes; baseline prediction -1
+  sampled_continuum: H2=nan, max=nan
+  random_fourier_seed_3: H2=nan, max=nan
+  largest scaled errors: H2/h=1.315975, max/h=0.486003
+  seed-3 finest-pair H2 ratio=0.845062
+
+Endpoint audit
+  N    warm correction / curvature       seed3 correction / curvature      energy comparison
+   20  blocked_curvature / negative      not_needed / soft                 incomplete
+   40  applied / soft                    applied / soft                    agree
+   80  applied / soft                    applied / soft                    agree
+  160  applied / soft                    applied / soft                    agree
+  320  applied / soft                    applied / soft                    agree
+  640  applied / soft                    applied / soft                    agree
+  continuum 400: soft (full periodic space); accepted=False
+  continuum 800: soft (full periodic space); accepted=False
+  continuum 1600: soft (full periodic space); accepted=False
+  continuum 3200: soft (full periodic space); accepted=False
+  soft = unresolved near-zero curvature; no positive stability gap is claimed
+  agree = energies agree within tau_E for these two starts only
+  progress ratios (blank if initial gradient is zero) and eigenvalues are saved in CSV/NPZ
+
+Focused validation
+  Check                                         | Result | Pass criterion
+  ----------------------------------------------+--------+---------------
+  Atomistic directional-gradient accuracy       |   √    | Relative error <= 1.0e-08
+  Continuum directional-gradient accuracy       |   √    | Relative error <= 1.0e-08
+  Seed-3 initial vector length                  |   √    | Correct length (2N)
+  Seed-3 initial layer means sum to zero        |   √    | abs(mean1 + mean2) <= 1.0e-12
+  Seed-3 initial energy and gradient are finite |   √    | All values finite
+  All atomistic endpoints are accepted          |   ×    | Accepted count == 12
+  continuum curvature screen                    |   √    | == 2; lambda_min >= -tau_H
+  Appendix B layer means sum to zero            |   √    | abs(mean1 + mean2) <= 1.0e-12
+  Appendix B mean-bound excess                  |   √    | Excess above h/4 <= 1.0e-14
+  M=80/160 EL difference over h                 |   √    | <= 1.0e-04
+  continuum phase-cell coverage                 |   √    | == 1
+  all reference comparisons resolved            |   ×    | == 8
+  final continuum pair accepted                 |   ×    | == 1
+  refined continuum curvature                   |   √    | == 1
+  continuum regime cutoff change                |   √    | <= 1e-6
+  atomistic regime cutoff change                |   √    | <= 1e-6
+  checks passed=13/16
+
+  Failed check details
+  FAIL All atomistic endpoints are accepted: measured=1.100000e+01, required Accepted count == 12
+  FAIL all reference comparisons resolved: measured=0.000000e+00, required == 8
+  FAIL final continuum pair accepted: measured=0.000000e+00, required == 1
+  endpoint N=20 sampled_continuum: raw gradient=1.079097e-07, normalized gradient=1.079097e-07, raw EL/h=1.120336e-06, normalized EL/h=1.120336e-06, lambda_min=-3.890767e-08, tau_H=1.000000e-08; CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH; blocked_curvature
+  comparison N=20: incomplete, E_seed3-E_warm=-1.138190e-09, tau_E=5.184532e-09
+
+Interpretation: seed 3 is an intentionally selected illustrative phase-stress realization, not representative random-start statistics.
+For the original baseline, seed-3 phase mismatch motivated an O(h) envelope. Each new scale is assessed from its own valid comparisons.
+Accepted endpoints are stationary candidates with no resolved negative curvature at the raw endpoint. Global minimality and the paper's stability-gap hypothesis are not verified.
+NUMERICAL VALIDITY: FAIL
+
+Elastic dominance (conservative finite-cutoff numerical bounds)
+  interaction_scale=5; rho_continuum=1.1527021; gap=-0.15270205
+  phase-cell coverage=True; condition established=False
+  initial warm reference=800 points; comparison reference=3200 points
+  N    start                         rho_atomistic       gap       established  comparison_valid
+   20  sampled_continuum            1.7144158  -0.714416        False  False
+   20  random_fourier_seed_3        1.7619482  -0.761948        False  False
+   40  sampled_continuum            1.711829  -0.711829        False  False
+   40  random_fourier_seed_3        1.7500758  -0.750076        False  False
+   80  sampled_continuum            1.7091926  -0.709193        False  False
+   80  random_fourier_seed_3        1.7111533  -0.711153        False  False
+  160  sampled_continuum            1.7080511  -0.708051        False  False
+  160  random_fourier_seed_3        1.7099284  -0.709928        False  False
+  320  sampled_continuum            1.7076331  -0.707633        False  False
+  320  random_fourier_seed_3        1.7094437  -0.709444        False  False
+  640  sampled_continuum            1.7074785  -0.707479        False  False
+  640  random_fourier_seed_3        1.7092054  -0.709205        False  False
+
+Reference accuracy: both starts, phases, and norms
+  sampled_continuum fixed h2: UNRESOLVED; 1600/3200 change=4.091377e-05; required < 1.496444e-04
+  sampled_continuum fixed max: UNRESOLVED; 1600/3200 change=9.030844e-07; required < 3.273391e-05
+  sampled_continuum phase_matched h2: UNRESOLVED; 1600/3200 change=4.091377e-05; required < 1.496444e-04
+  sampled_continuum phase_matched max: UNRESOLVED; 1600/3200 change=9.030844e-07; required < 3.273336e-05
+  random_fourier_seed_3 fixed h2: UNRESOLVED; 1600/3200 change=4.091377e-05; required < 4.618312e-04
+  random_fourier_seed_3 fixed max: UNRESOLVED; 1600/3200 change=9.030844e-07; required < 1.666714e-04
+  random_fourier_seed_3 phase_matched h2: UNRESOLVED; 1600/3200 change=4.068524e-05; required < 1.496446e-04
+  random_fourier_seed_3 phase_matched max: UNRESOLVED; 1600/3200 change=9.031498e-07; required < 3.273661e-05
+  continuum candidate 400 rejected: Continuum FACTR restarts missed the acceptance tolerances: grad=2.674e-07, residual=8.512e-06
+  continuum candidate 800 rejected: Continuum FACTR restarts missed the acceptance tolerances: grad=2.275e-07, residual=1.448e-05
+  continuum candidate 1600 rejected: Continuum FACTR restarts missed the acceptance tolerances: grad=4.635e-07, residual=5.901e-05
+  continuum candidate 3200 rejected: Continuum FACTR restarts missed the acceptance tolerances: grad=3.839e-07, residual=9.777e-05
+  refinement 1600 failed: Continuum FACTR restarts missed the acceptance tolerances: grad=4.635e-07, residual=5.901e-05
+  refinement 3200 failed: Continuum FACTR restarts missed the acceptance tolerances: grad=3.839e-07, residual=9.777e-05
+
+Observed convergence: all grids / finest three (valid comparisons only)
+  sampled_continuum h2: nan / nan
+  sampled_continuum max: nan / nan
+  sampled_continuum phase_matched_h2: nan / nan
+  sampled_continuum phase_matched_max: nan / nan
+  random_fourier_seed_3 h2: nan / nan
+  random_fourier_seed_3 max: nan / nan
+  random_fourier_seed_3 phase_matched_h2: nan / nan
+  random_fourier_seed_3 phase_matched_max: nan / nan
+  sampled_continuum valid-subset N=[]: {'h2': nan, 'max': nan, 'phase_matched_h2': nan, 'phase_matched_max': nan}
+  random_fourier_seed_3 valid-subset N=[]: {'h2': nan, 'max': nan, 'phase_matched_h2': nan, 'phase_matched_max': nan}
+  rho >= 1 means the sufficient condition is not established, not demonstrated instability.
+  Layer means remain separate; the mean-sum gauge does not remove the relative constant mode.
+  Bounds use floating-point interval extrema for M=80; no infinite-cutoff or uniform-in-N proof is claimed.
+  Energy agreement and soft curvature do not prove global minimality.

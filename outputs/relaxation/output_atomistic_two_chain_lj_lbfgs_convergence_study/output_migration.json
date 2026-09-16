@@ -1,0 +1,860 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-16T14:47:12.4110614-05:00",
+  "status": "complete",
+  "repository_root": "C:\\Users\\lh201\\Desktop\\Continuum_Limit_Relaxation\\Continuum_Limit_Code",
+  "retained_fixed_study": {
+    "path": "C:\\Users\\lh201\\Desktop\\Continuum_Limit_Relaxation\\Continuum_Limit_Code\\outputs\\relaxation\\output_atomistic_two_chain_lj_lbfgs_elastic_dominance_convergence_study",
+    "inventory": {
+      "directories": [],
+      "files": [
+        {
+          "path": "check_report.txt",
+          "bytes": 7846,
+          "sha256": "9a22858ffb6ca52909c3edc4f92a814e070389c24eeabf61163e40d563a96be2"
+        },
+        {
+          "path": "convergence_loglog.png",
+          "bytes": 197633,
+          "sha256": "4ecaf1afa562b075fdd0a9a5cd20c1d2b02a19813f1e6b8363cd620a3aa2b919"
+        },
+        {
+          "path": "convergence_summary.csv",
+          "bytes": 9565,
+          "sha256": "3272128c3ae725b01cebef6e2ed107074788aea95925ca6b8a705756c9e46e8c"
+        },
+        {
+          "path": "profiles.npz",
+          "bytes": 185780,
+          "sha256": "18a315dc0a2e685bad17e795e9317858fc7f39528c5c172e3b799764cf61c30d"
+        }
+      ],
+      "file_count": 4,
+      "total_bytes": null
+    }
+  },
+  "removed_fixed_outputs": {
+    "former_path": "C:\\Users\\lh201\\Desktop\\Continuum_Limit_Relaxation\\Continuum_Limit_Code\\outputs\\relaxation\\output_atomistic_two_chain_lj_lbfgs_convergence_study",
+    "inventory": {
+      "directories": [],
+      "files": [
+        {
+          "path": "check_report.txt",
+          "bytes": 6168,
+          "sha256": "d1720b2ed9333bf1f6fb050689cbb4d10a23ff348c1d24b4275e7e8ae8ddbc36"
+        },
+        {
+          "path": "convergence_loglog.png",
+          "bytes": 197633,
+          "sha256": "4ecaf1afa562b075fdd0a9a5cd20c1d2b02a19813f1e6b8363cd620a3aa2b919"
+        },
+        {
+          "path": "convergence_summary.csv",
+          "bytes": 9565,
+          "sha256": "3272128c3ae725b01cebef6e2ed107074788aea95925ca6b8a705756c9e46e8c"
+        },
+        {
+          "path": "profiles.npz",
+          "bytes": 185780,
+          "sha256": "18a315dc0a2e685bad17e795e9317858fc7f39528c5c172e3b799764cf61c30d"
+        }
+      ],
+      "file_count": 4,
+      "total_bytes": null
+    },
+    "identical_files": [
+      "convergence_loglog.png",
+      "convergence_summary.csv",
+      "profiles.npz"
+    ],
+    "report_comparison": "The retained report equals the former report plus the Continuum phase-mode overlap diagnostic section; removing that section reproduces the former report verbatim.",
+    "removal_authorized": true,
+    "removed": true
+  },
+  "migrations": [
+    {
+      "source": "C:\\Users\\lh201\\Desktop\\Continuum_Limit_Relaxation\\Continuum_Limit_Code\\outputs\\relaxation\\elastic_regime_20260915_221023_064807",
+      "destination": "C:\\Users\\lh201\\Desktop\\Continuum_Limit_Relaxation\\Continuum_Limit_Code\\outputs\\relaxation\\output_atomistic_two_chain_lj_lbfgs_convergence_study\\elastic_regime_20260915_221023_064807",
+      "inventory": {
+        "directories": [
+          "scale_1"
+        ],
+        "files": [
+          {
+            "path": "scale_1/case_status.json",
+            "bytes": 7791,
+            "sha256": "6b2d9c2c57f95cf0dbd05ada8fdbe0cc05f911df7962086417f5dcc38324b614"
+          },
+          {
+            "path": "scale_1/check_report.txt",
+            "bytes": 9544,
+            "sha256": "391331dde6737f2b9ebd04d55589af3b57869d49b811c356ee694e1c70a4c66d"
+          },
+          {
+            "path": "scale_1/convergence_loglog.png",
+            "bytes": 155910,
+            "sha256": "b8f59a889ca720ea118db6d04fbb80d7811e28a47116c3579c5ebe3083c47e59"
+          },
+          {
+            "path": "scale_1/convergence_summary.csv",
+            "bytes": 12356,
+            "sha256": "929b7e2b192fcd030210cd6417eb8acdf96c9ca36e47d5d319468a355eb9b68d"
+          },
+          {
+            "path": "scale_1/profiles.npz",
+            "bytes": 211028,
+            "sha256": "acfa38d0de76addf156b875aa38b798e6d08157205f5f5e8dddffd90831c29d7"
+          },
+          {
+            "path": "scale_1/run.log",
+            "bytes": 9544,
+            "sha256": "391331dde6737f2b9ebd04d55589af3b57869d49b811c356ee694e1c70a4c66d"
+          },
+          {
+            "path": "scale_1/study.pkl",
+            "bytes": 156453,
+            "sha256": "bb44555967e6fba0ad7eeff5db90b8d67f5db3421fc015efe68827e635b67562"
+          },
+          {
+            "path": "sweep_status.json",
+            "bytes": 9382,
+            "sha256": "d935e958089ba51e0b4bf9ff57a839edd3a88cf1b8ee7f589b508d3711aca94e"
+          },
+          {
+            "path": "sweep_status.json.tmp",
+            "bytes": 9431,
+            "sha256": "952c961a1dea48870424bddcd0d85d965902ba5d67eaa21b1f1d3283a7d680e4"
+          }
+        ],
+        "file_count": 9,
+        "total_bytes": null
+      },
+      "destination_verified": true,
+      "source_removed": true
+    },
+    {
+      "source": "C:\\Users\\lh201\\Desktop\\Continuum_Limit_Relaxation\\Continuum_Limit_Code\\outputs\\relaxation\\elastic_regime_20260915_221023_064807_recovered_20260915_221621_736973",
+      "destination": "C:\\Users\\lh201\\Desktop\\Continuum_Limit_Relaxation\\Continuum_Limit_Code\\outputs\\relaxation\\output_atomistic_two_chain_lj_lbfgs_convergence_study\\elastic_regime_20260915_221023_064807_recovered_20260915_221621_736973",
+      "inventory": {
+        "directories": [
+          "scale_1"
+        ],
+        "files": [
+          {
+            "path": "case_summary.csv",
+            "bytes": 278,
+            "sha256": "fa7be7585c1cf617a54f347294be311a4a057d348f50f2426d9ab8f1298e948c"
+          },
+          {
+            "path": "convergence_comparison.png",
+            "bytes": 184865,
+            "sha256": "03c67267e1b0d98299ab765fe2a7acd3720361de31800ceb168d495c577689f6"
+          },
+          {
+            "path": "profile_comparison.png",
+            "bytes": 108959,
+            "sha256": "8e8cdba7354eea5910a7e460d75965ac1f2ad3bbbab9bf2fb7fac0a76801323c"
+          },
+          {
+            "path": "recovery_validation.json",
+            "bytes": 1458,
+            "sha256": "a5ff98924e8cc4e65d61c699ef85bc1633f4d7c5cb993913ef985ff95c67aca4"
+          },
+          {
+            "path": "regime_bounds.png",
+            "bytes": 73864,
+            "sha256": "414ee6a17819e3f837128d4dc8ec2760bdc9105855ffcb035453c51420dbf7ad"
+          },
+          {
+            "path": "regime_summary.csv",
+            "bytes": 2486,
+            "sha256": "8923edb296e747b11855ccf7674384907cf43f0a3ab42912ead137d7273a0105"
+          },
+          {
+            "path": "scale_1/case_status.json",
+            "bytes": 7791,
+            "sha256": "6b2d9c2c57f95cf0dbd05ada8fdbe0cc05f911df7962086417f5dcc38324b614"
+          },
+          {
+            "path": "scale_1/check_report.txt",
+            "bytes": 9544,
+            "sha256": "391331dde6737f2b9ebd04d55589af3b57869d49b811c356ee694e1c70a4c66d"
+          },
+          {
+            "path": "scale_1/convergence_loglog.png",
+            "bytes": 155910,
+            "sha256": "b8f59a889ca720ea118db6d04fbb80d7811e28a47116c3579c5ebe3083c47e59"
+          },
+          {
+            "path": "scale_1/convergence_summary.csv",
+            "bytes": 12356,
+            "sha256": "929b7e2b192fcd030210cd6417eb8acdf96c9ca36e47d5d319468a355eb9b68d"
+          },
+          {
+            "path": "scale_1/profiles.npz",
+            "bytes": 211028,
+            "sha256": "acfa38d0de76addf156b875aa38b798e6d08157205f5f5e8dddffd90831c29d7"
+          },
+          {
+            "path": "scale_1/run.log",
+            "bytes": 9544,
+            "sha256": "391331dde6737f2b9ebd04d55589af3b57869d49b811c356ee694e1c70a4c66d"
+          },
+          {
+            "path": "scale_1/study.pkl",
+            "bytes": 156453,
+            "sha256": "bb44555967e6fba0ad7eeff5db90b8d67f5db3421fc015efe68827e635b67562"
+          },
+          {
+            "path": "slope_summary.csv",
+            "bytes": 842,
+            "sha256": "0334dcdf9bc654b38c342ebc59a6cc40e2a7beca33edebf48697a44ac9ea197f"
+          },
+          {
+            "path": "sweep_status.json",
+            "bytes": 9431,
+            "sha256": "952c961a1dea48870424bddcd0d85d965902ba5d67eaa21b1f1d3283a7d680e4"
+          }
+        ],
+        "file_count": 15,
+        "total_bytes": null
+      },
+      "destination_verified": true,
+      "source_removed": true
+    },
+    {
+      "source": "C:\\Users\\lh201\\Desktop\\Continuum_Limit_Relaxation\\Continuum_Limit_Code\\outputs\\relaxation\\elastic_regime_20260915_221740_131851",
+      "destination": "C:\\Users\\lh201\\Desktop\\Continuum_Limit_Relaxation\\Continuum_Limit_Code\\outputs\\relaxation\\output_atomistic_two_chain_lj_lbfgs_convergence_study\\elastic_regime_20260915_221740_131851",
+      "inventory": {
+        "directories": [
+          "scale_1"
+        ],
+        "files": [
+          {
+            "path": "case_summary.csv",
+            "bytes": 278,
+            "sha256": "fa7be7585c1cf617a54f347294be311a4a057d348f50f2426d9ab8f1298e948c"
+          },
+          {
+            "path": "convergence_comparison.png",
+            "bytes": 184865,
+            "sha256": "03c67267e1b0d98299ab765fe2a7acd3720361de31800ceb168d495c577689f6"
+          },
+          {
+            "path": "profile_comparison.png",
+            "bytes": 108959,
+            "sha256": "8e8cdba7354eea5910a7e460d75965ac1f2ad3bbbab9bf2fb7fac0a76801323c"
+          },
+          {
+            "path": "regime_bounds.png",
+            "bytes": 73864,
+            "sha256": "414ee6a17819e3f837128d4dc8ec2760bdc9105855ffcb035453c51420dbf7ad"
+          },
+          {
+            "path": "regime_summary.csv",
+            "bytes": 2486,
+            "sha256": "8923edb296e747b11855ccf7674384907cf43f0a3ab42912ead137d7273a0105"
+          },
+          {
+            "path": "scale_1/case_status.json",
+            "bytes": 7791,
+            "sha256": "68804ab963a3cd91bc78c9a5d97f6ecaad1c8ee51af69711f8df69b4ef608756"
+          },
+          {
+            "path": "scale_1/check_report.txt",
+            "bytes": 9544,
+            "sha256": "391331dde6737f2b9ebd04d55589af3b57869d49b811c356ee694e1c70a4c66d"
+          },
+          {
+            "path": "scale_1/convergence_loglog.png",
+            "bytes": 155910,
+            "sha256": "b8f59a889ca720ea118db6d04fbb80d7811e28a47116c3579c5ebe3083c47e59"
+          },
+          {
+            "path": "scale_1/convergence_summary.csv",
+            "bytes": 12356,
+            "sha256": "929b7e2b192fcd030210cd6417eb8acdf96c9ca36e47d5d319468a355eb9b68d"
+          },
+          {
+            "path": "scale_1/profiles.npz",
+            "bytes": 211028,
+            "sha256": "acfa38d0de76addf156b875aa38b798e6d08157205f5f5e8dddffd90831c29d7"
+          },
+          {
+            "path": "scale_1/run.log",
+            "bytes": 9544,
+            "sha256": "391331dde6737f2b9ebd04d55589af3b57869d49b811c356ee694e1c70a4c66d"
+          },
+          {
+            "path": "scale_1/study.pkl",
+            "bytes": 156453,
+            "sha256": "bb44555967e6fba0ad7eeff5db90b8d67f5db3421fc015efe68827e635b67562"
+          },
+          {
+            "path": "slope_summary.csv",
+            "bytes": 842,
+            "sha256": "0334dcdf9bc654b38c342ebc59a6cc40e2a7beca33edebf48697a44ac9ea197f"
+          },
+          {
+            "path": "sweep_status.json",
+            "bytes": 9432,
+            "sha256": "2f0ecb6660075faaab07ebfdf4b7a0b4b77a722f549230fde539f05bfdbc074a"
+          }
+        ],
+        "file_count": 14,
+        "total_bytes": null
+      },
+      "destination_verified": true,
+      "source_removed": true
+    },
+    {
+      "source": "C:\\Users\\lh201\\Desktop\\Continuum_Limit_Relaxation\\Continuum_Limit_Code\\outputs\\relaxation\\elastic_regime_validation_20260915_212820",
+      "destination": "C:\\Users\\lh201\\Desktop\\Continuum_Limit_Relaxation\\Continuum_Limit_Code\\outputs\\relaxation\\output_atomistic_two_chain_lj_lbfgs_convergence_study\\elastic_regime_validation_20260915_212820",
+      "inventory": {
+        "directories": [
+          "final_checks",
+          "final_checks_retained",
+          "final_sweep",
+          "final_sweep/scale_1",
+          "final_sweep/scale_2",
+          "final_sweep/scale_3",
+          "final_sweep/scale_4",
+          "final_sweep/scale_5",
+          "final_sweep/scale_8",
+          "formula_checks",
+          "smoke",
+          "smoke/scale_1",
+          "sweep",
+          "sweep/scale_1",
+          "sweep/scale_2",
+          "sweep/scale_3",
+          "sweep/scale_4",
+          "sweep/scale_5",
+          "sweep/scale_8",
+          "timeout_check",
+          "timeout_check/scale_1"
+        ],
+        "files": [
+          {
+            "path": "artifact_compatibility.json",
+            "bytes": 2670,
+            "sha256": "784f53e49121d95fe8f4206d093b59930b832c5e9a13d4766926f653e6d96ae2"
+          },
+          {
+            "path": "baseline_source.py",
+            "bytes": 69473,
+            "sha256": "65e4dee630c54cff3c10fe814d27a073af3063ebbe8312ad17ab8021c07db6b0"
+          },
+          {
+            "path": "baseline_study.pkl",
+            "bytes": 130976,
+            "sha256": "5381d550fe408ce8ed7e107cfcbf56fa17402acc588e86adf11f4700088f9336"
+          },
+          {
+            "path": "convergence_summary.csv",
+            "bytes": 9565,
+            "sha256": "3272128c3ae725b01cebef6e2ed107074788aea95925ca6b8a705756c9e46e8c"
+          },
+          {
+            "path": "final_checks_retained/elastic_regime_validation.json",
+            "bytes": 9547,
+            "sha256": "32fd037723ae1e1093d20dc19dac0186720b0a538e7499a1cd864abdf5141434"
+          },
+          {
+            "path": "final_checks/elastic_regime_validation.json",
+            "bytes": 9547,
+            "sha256": "32fd037723ae1e1093d20dc19dac0186720b0a538e7499a1cd864abdf5141434"
+          },
+          {
+            "path": "final_sweep/case_summary.csv",
+            "bytes": 782,
+            "sha256": "b2963c62131ab1f5fef3c1961d03b305b2a2b80468715ff799f086822acc1266"
+          },
+          {
+            "path": "final_sweep/convergence_comparison.png",
+            "bytes": 303003,
+            "sha256": "8f3d6e24dbd122e892530a1a4ce99e031a1a087350d0f28319e3d8e94e6587ff"
+          },
+          {
+            "path": "final_sweep/profile_comparison.png",
+            "bytes": 254180,
+            "sha256": "ad216c5c6c388ee241bde31abd167683dabf9ce5f75799a134d51c3f7d3d7f75"
+          },
+          {
+            "path": "final_sweep/regime_bounds.png",
+            "bytes": 113091,
+            "sha256": "7f8eda23dccbe9799d2db3516f38f729157d3d9a377cce8c7c088491f3f6d102"
+          },
+          {
+            "path": "final_sweep/regime_summary.csv",
+            "bytes": 11486,
+            "sha256": "0060a5a448102345136d51ed5477dd51162d12dd5f9d414a391ec3e4c4af0d0c"
+          },
+          {
+            "path": "final_sweep/scale_1/case_status.json",
+            "bytes": 7791,
+            "sha256": "2068c909d15f774efb02d83e2aa2b8bd7a2975447e2a3fd9fb41144656c0503e"
+          },
+          {
+            "path": "final_sweep/scale_1/check_report.txt",
+            "bytes": 9544,
+            "sha256": "391331dde6737f2b9ebd04d55589af3b57869d49b811c356ee694e1c70a4c66d"
+          },
+          {
+            "path": "final_sweep/scale_1/convergence_loglog.png",
+            "bytes": 155910,
+            "sha256": "9b42813940690378430c70db5945f47b2d496544a802889a2a1535556d0e6329"
+          },
+          {
+            "path": "final_sweep/scale_1/convergence_summary.csv",
+            "bytes": 12356,
+            "sha256": "929b7e2b192fcd030210cd6417eb8acdf96c9ca36e47d5d319468a355eb9b68d"
+          },
+          {
+            "path": "final_sweep/scale_1/profiles.npz",
+            "bytes": 211028,
+            "sha256": "acfa38d0de76addf156b875aa38b798e6d08157205f5f5e8dddffd90831c29d7"
+          },
+          {
+            "path": "final_sweep/scale_1/run.log",
+            "bytes": 9368,
+            "sha256": "88f80b100dbd7f72f3f4df8638dce60df708637d7abc326ef658c2eabcacc767"
+          },
+          {
+            "path": "final_sweep/scale_1/study.pkl",
+            "bytes": 156453,
+            "sha256": "bb44555967e6fba0ad7eeff5db90b8d67f5db3421fc015efe68827e635b67562"
+          },
+          {
+            "path": "final_sweep/scale_2/case_status.json",
+            "bytes": 7979,
+            "sha256": "4304b94a0d4034141b7bec9dc8ed34d2bdfa8cc42ac951bfa6d9ed48a7b0763e"
+          },
+          {
+            "path": "final_sweep/scale_2/check_report.txt",
+            "bytes": 10228,
+            "sha256": "f375673fbedee66ce198fc92d3d97e19c960e3a6c55c3634db5c700155d53289"
+          },
+          {
+            "path": "final_sweep/scale_2/convergence_loglog.png",
+            "bytes": 99389,
+            "sha256": "803f66eeb75ece403025b62ace0459225a00d65069b3c19508bff0b54e0d914a"
+          },
+          {
+            "path": "final_sweep/scale_2/convergence_summary.csv",
+            "bytes": 12364,
+            "sha256": "0ca5cde9c58eae136d45e47bd80273c83dfa342b43b859019e55ad2d19890afb"
+          },
+          {
+            "path": "final_sweep/scale_2/profiles.npz",
+            "bytes": 293050,
+            "sha256": "7079c34fb36885c83507ef443ab782ce778283bba82e0452adede3a3055d49c2"
+          },
+          {
+            "path": "final_sweep/scale_2/run.log",
+            "bytes": 10044,
+            "sha256": "dac5fb1f7b828f35867fc11e528d88d76151fb7594abb9c7d9a2b6ca0d44a753"
+          },
+          {
+            "path": "final_sweep/scale_2/study.pkl",
+            "bytes": 233508,
+            "sha256": "991b8f13b52804cd7353c93fe3e8a5d5f726fbbfeba0af24b9b8dae5e62c5e25"
+          },
+          {
+            "path": "final_sweep/scale_3/case_status.json",
+            "bytes": 7786,
+            "sha256": "b3c700f54d24260a211cc19fcea992b17b0561bf53d6e1c8f721bf3d038bee41"
+          },
+          {
+            "path": "final_sweep/scale_3/check_report.txt",
+            "bytes": 9495,
+            "sha256": "a40ce26196f7fe0b03c508a42b0387abc8e5e5fe4af9936bcba578349f802742"
+          },
+          {
+            "path": "final_sweep/scale_3/convergence_loglog.png",
+            "bytes": 161580,
+            "sha256": "08d09478afe5e518164acfacbc49e5f802c9e2d36236c103464722415ba14126"
+          },
+          {
+            "path": "final_sweep/scale_3/convergence_summary.csv",
+            "bytes": 12380,
+            "sha256": "db7ae070dca93e7e3c421766278b0c5c2e1a2af7131df7226623cb56b19f399b"
+          },
+          {
+            "path": "final_sweep/scale_3/profiles.npz",
+            "bytes": 211028,
+            "sha256": "f916168ff2d1b6906eadec74b5d8e9b806f06aa8500d1325803e00b8341b717a"
+          },
+          {
+            "path": "final_sweep/scale_3/run.log",
+            "bytes": 9319,
+            "sha256": "5f69294497b47a81cb0755006afa65e38aae5452b3e0490ab1c2ece18b2201ca"
+          },
+          {
+            "path": "final_sweep/scale_3/study.pkl",
+            "bytes": 155866,
+            "sha256": "861f25957b54570bfef3aec2462a6cf1655814a59c67f4e0d4e875c1b4eb4fe4"
+          },
+          {
+            "path": "final_sweep/scale_4/case_status.json",
+            "bytes": 8140,
+            "sha256": "2156806fa740caa1a004dc83abd2d245f2cd082e47e04d646d8b70cb972788d3"
+          },
+          {
+            "path": "final_sweep/scale_4/check_report.txt",
+            "bytes": 10799,
+            "sha256": "18ffafd0bb22be3b92816120aa2fbcba12d270972fcba5ded9c0f08f9c217432"
+          },
+          {
+            "path": "final_sweep/scale_4/convergence_loglog.png",
+            "bytes": 96872,
+            "sha256": "cdcd88b435766cf3b2af05f370b692482e4bf8a46111d88f19fde485629e530b"
+          },
+          {
+            "path": "final_sweep/scale_4/convergence_summary.csv",
+            "bytes": 12355,
+            "sha256": "f4a90054a7d754a2f2210a362c0acac1e6aa0c8bb3a3935783c9ca3abe281b04"
+          },
+          {
+            "path": "final_sweep/scale_4/profiles.npz",
+            "bytes": 293418,
+            "sha256": "17ec849b7505ab8aa79e60820458312110c6a7ae3170bf6e0bf8535f799922a7"
+          },
+          {
+            "path": "final_sweep/scale_4/run.log",
+            "bytes": 10615,
+            "sha256": "292ac41950fcaccb6eab33782f6ee2cfa4ec1875771f45598bb09c198e6bc17e"
+          },
+          {
+            "path": "final_sweep/scale_4/study.pkl",
+            "bytes": 233667,
+            "sha256": "4a63947ef0ea6f229ecf6525041b5afed8b783b9f27419bf1c2cc421380c5dad"
+          },
+          {
+            "path": "final_sweep/scale_5/case_status.json",
+            "bytes": 8146,
+            "sha256": "9e2fb6aaa9c62b8174cf3a4e429216f39756c480c574c0427af7f939bd9177c1"
+          },
+          {
+            "path": "final_sweep/scale_5/check_report.txt",
+            "bytes": 10801,
+            "sha256": "eb282270825fc0ad2e86f9e5643b3e7d53ec1501dbe94c097e195bab17bf79fb"
+          },
+          {
+            "path": "final_sweep/scale_5/convergence_loglog.png",
+            "bytes": 97599,
+            "sha256": "16fd40cced8069053a06e8db715b106f792391d67a25226c6bf5071942abec63"
+          },
+          {
+            "path": "final_sweep/scale_5/convergence_summary.csv",
+            "bytes": 12349,
+            "sha256": "e595cba48edaebea9bd94cf00b0e29cf34fe64af424e7e54f0922841be92e5db"
+          },
+          {
+            "path": "final_sweep/scale_5/profiles.npz",
+            "bytes": 293418,
+            "sha256": "10f0a1d1f417a5fa4f4601be88c9f61c6896d265969aeb951bf3fd7f24e97322"
+          },
+          {
+            "path": "final_sweep/scale_5/run.log",
+            "bytes": 10617,
+            "sha256": "9022e75471f484fb6f38a89bc62b53bce5f3feb7b489c2870933be696183a424"
+          },
+          {
+            "path": "final_sweep/scale_5/study.pkl",
+            "bytes": 233667,
+            "sha256": "2564e319c4ea261c8d91b59206b2260efa8315384e04636c85506305f0097214"
+          },
+          {
+            "path": "final_sweep/scale_8/case_status.json",
+            "bytes": 85,
+            "sha256": "f66e6754b047f0f2cce1d04d7e72b5195f0044e5a51b74dd6247dddeb43844e8"
+          },
+          {
+            "path": "final_sweep/scale_8/run.log",
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "path": "final_sweep/slope_summary.csv",
+            "bytes": 1854,
+            "sha256": "7c1fb4bdc77d08104c418f9b2f5b6758258b713b07dcadc9e21f6a31cc3c1472"
+          },
+          {
+            "path": "final_sweep/sweep_status.json",
+            "bytes": 47074,
+            "sha256": "fd07d731b65df152aef3ec999295ba6fab8ff5bbe215196af7b6eadbd748647b"
+          },
+          {
+            "path": "formula_checks/elastic_regime_validation.json",
+            "bytes": 9407,
+            "sha256": "7e93df6a220b4862557d5af6c0b3d3f2505c839aa18bfdf1c2f41836edae1b34"
+          },
+          {
+            "path": "implementation_manifest.json",
+            "bytes": 530,
+            "sha256": "23a129aaf581c17c32bb4cfef1e33a67d5f6c09292d4841fa9b8904ae479f336"
+          },
+          {
+            "path": "original_artifact_hashes.json",
+            "bytes": 680,
+            "sha256": "817f070ac27a691c6f8be087b81d0eb7c51b154b13d53906c976ceddf97d0c08"
+          },
+          {
+            "path": "preservation_check.json",
+            "bytes": 136,
+            "sha256": "b38b1198ad2d24380d6d491732c16141e7c3f75e404eee9f36e217ab18985143"
+          },
+          {
+            "path": "RESULTS.md",
+            "bytes": 4708,
+            "sha256": "5159716e265497167b93a5515a3972beaec7e9c0e5a7edea4ce1dc703992e90a"
+          },
+          {
+            "path": "smoke/convergence_comparison.png",
+            "bytes": 180950,
+            "sha256": "9ebbd95df427ddd263f5da0211e6ab6ea68cce6ea49fb44dcc0bb2922041a11d"
+          },
+          {
+            "path": "smoke/profile_comparison.png",
+            "bytes": 121654,
+            "sha256": "451099063d873786eaea67f07db935efd9fac2291c32d9363f0df08475138a5c"
+          },
+          {
+            "path": "smoke/regime_bounds.png",
+            "bytes": 71788,
+            "sha256": "9d54336c12d2b1f187d5f50ce1703bf9b9c31d8a80e9f9bbf53d6e5dd36fa5a3"
+          },
+          {
+            "path": "smoke/regime_summary.csv",
+            "bytes": 1354,
+            "sha256": "27afdfddc247c6a371674768765b379f3b4be70a81468372fb187481fc8f4905"
+          },
+          {
+            "path": "smoke/scale_1/case_status.json",
+            "bytes": 7271,
+            "sha256": "e364cf9465b1f1a1269fab5e6d57b8f212cef7adf3da935d08cbabfe8b596816"
+          },
+          {
+            "path": "smoke/scale_1/check_report.txt",
+            "bytes": 7710,
+            "sha256": "7395d1ab0f0319de82aa3c9e9553e1e2de77462c7636dd9b9ba583f5cd570ca1"
+          },
+          {
+            "path": "smoke/scale_1/convergence_loglog.png",
+            "bytes": 168848,
+            "sha256": "b66ee55105645d759595b199526a40865725e66e87368d92b941abfe01b6534b"
+          },
+          {
+            "path": "smoke/scale_1/convergence_summary.csv",
+            "bytes": 6643,
+            "sha256": "a7cce69b5e597108d9163398fd8bac70c3247449f25ec146b4548f4dff248dae"
+          },
+          {
+            "path": "smoke/scale_1/profiles.npz",
+            "bytes": 48106,
+            "sha256": "8931a4a77de11978071d8a0b59c04c404eca90969c730fbf3ea6451beb37937a"
+          },
+          {
+            "path": "smoke/scale_1/run.log",
+            "bytes": 7710,
+            "sha256": "7395d1ab0f0319de82aa3c9e9553e1e2de77462c7636dd9b9ba583f5cd570ca1"
+          },
+          {
+            "path": "smoke/scale_1/study.pkl",
+            "bytes": 29315,
+            "sha256": "64c236a54f79b89b4753b016121acbceb821f8ac45f53b7c86a93092853b5037"
+          },
+          {
+            "path": "smoke/slope_summary.csv",
+            "bytes": 812,
+            "sha256": "898e467d73ece35b15856a520c31ee02c13440700d14bc41c6a4bd4f9e7b7fb0"
+          },
+          {
+            "path": "smoke/sweep_status.json",
+            "bytes": 8793,
+            "sha256": "4fdf73a320695970813eb46ca2855a0795310badd8286897a8ad77ea41406476"
+          },
+          {
+            "path": "sweep/convergence_comparison.png",
+            "bytes": 266006,
+            "sha256": "ad1fc62312e63bdfce09b59b873dd17048fd20eaf2bffcefed1f4a8bf0c9303a"
+          },
+          {
+            "path": "sweep/profile_comparison.png",
+            "bytes": 166128,
+            "sha256": "ae7320dfad429ca2b7918f1954349c38e776d6a3f84a27e8f5a9b8a17c444984"
+          },
+          {
+            "path": "sweep/regime_bounds.png",
+            "bytes": 112096,
+            "sha256": "76a9c00ae1587ae49c6a1afc98837833d5cb3b5fea72b60ab701c28851f53649"
+          },
+          {
+            "path": "sweep/regime_summary.csv",
+            "bytes": 4743,
+            "sha256": "6019345ad06f3d67cb9a5fc4d4c55fbd8e3bd8a012b7c7673c5fd04967c8e9fe"
+          },
+          {
+            "path": "sweep/scale_1/case_status.json",
+            "bytes": 7346,
+            "sha256": "ebb8abfad9ebe45cb08dd2fab0fe9457f926bbc838eaf874a5fa8f5ba3803cdc"
+          },
+          {
+            "path": "sweep/scale_1/check_report.txt",
+            "bytes": 9214,
+            "sha256": "29e316470a4a2a365b7d4de72a4281dadeda1c968bbc2bf3206801ed7c005dff"
+          },
+          {
+            "path": "sweep/scale_1/convergence_loglog.png",
+            "bytes": 155910,
+            "sha256": "9b42813940690378430c70db5945f47b2d496544a802889a2a1535556d0e6329"
+          },
+          {
+            "path": "sweep/scale_1/convergence_summary.csv",
+            "bytes": 12356,
+            "sha256": "929b7e2b192fcd030210cd6417eb8acdf96c9ca36e47d5d319468a355eb9b68d"
+          },
+          {
+            "path": "sweep/scale_1/profiles.npz",
+            "bytes": 209882,
+            "sha256": "d1a6a5c0f9bfdc04b5ab2ee3373c086a0b26b5080d14fdaab8647a901bf48c54"
+          },
+          {
+            "path": "sweep/scale_1/run.log",
+            "bytes": 9214,
+            "sha256": "29e316470a4a2a365b7d4de72a4281dadeda1c968bbc2bf3206801ed7c005dff"
+          },
+          {
+            "path": "sweep/scale_1/study.pkl",
+            "bytes": 156277,
+            "sha256": "573eda16e2d944601eb02f1d666df811a7262655bdc76a835a3f80901b1dec01"
+          },
+          {
+            "path": "sweep/scale_2/case_status.json",
+            "bytes": 239,
+            "sha256": "592c647f9aab655dde6970b049b5f94dd0e12eee8524423e76718a24538420ef"
+          },
+          {
+            "path": "sweep/scale_2/run.log",
+            "bytes": 1346,
+            "sha256": "90d288f8584cbd14036d3591131176b7a5300ccf83652a6433f045c70c02ab83"
+          },
+          {
+            "path": "sweep/scale_3/case_status.json",
+            "bytes": 7352,
+            "sha256": "c683c47014cf60f536ce74136f8e299ca8db19d633d71ce07f0ba5114892a341"
+          },
+          {
+            "path": "sweep/scale_3/check_report.txt",
+            "bytes": 9165,
+            "sha256": "f46056e7c836f8576c4429b61e563a6acedd6224c4cd51bb79a50d72d814a072"
+          },
+          {
+            "path": "sweep/scale_3/convergence_loglog.png",
+            "bytes": 161580,
+            "sha256": "08d09478afe5e518164acfacbc49e5f802c9e2d36236c103464722415ba14126"
+          },
+          {
+            "path": "sweep/scale_3/convergence_summary.csv",
+            "bytes": 12380,
+            "sha256": "db7ae070dca93e7e3c421766278b0c5c2e1a2af7131df7226623cb56b19f399b"
+          },
+          {
+            "path": "sweep/scale_3/profiles.npz",
+            "bytes": 209882,
+            "sha256": "acbace757cb53f20d1f6574c24e7595f8aff1e1481125a7b03ed6bd2615f71c2"
+          },
+          {
+            "path": "sweep/scale_3/run.log",
+            "bytes": 9165,
+            "sha256": "f46056e7c836f8576c4429b61e563a6acedd6224c4cd51bb79a50d72d814a072"
+          },
+          {
+            "path": "sweep/scale_3/study.pkl",
+            "bytes": 155690,
+            "sha256": "9b69f45b7927aa947d3f6914ae94aadc51e343a674b5566a6f7733568878fac5"
+          },
+          {
+            "path": "sweep/scale_4/case_status.json",
+            "bytes": 226,
+            "sha256": "581f1a4977efb814d6141fe799e730e4dd2785642368b582998bd350a9821c17"
+          },
+          {
+            "path": "sweep/scale_4/run.log",
+            "bytes": 1346,
+            "sha256": "3853aa028c35df6ec7cfbe489bd59640289e4e961cd30f18ac89963f9197b9d6"
+          },
+          {
+            "path": "sweep/scale_5/case_status.json",
+            "bytes": 239,
+            "sha256": "ceabb101c14010796f21738740ff02ff4f954127087ec59659b5ea86c01964a4"
+          },
+          {
+            "path": "sweep/scale_5/run.log",
+            "bytes": 1346,
+            "sha256": "66ffa0b4f1c8aaa64e52c2d6dcd06161e9c4de8ceb6605194adadec0e9592f06"
+          },
+          {
+            "path": "sweep/scale_8/case_status.json",
+            "bytes": 238,
+            "sha256": "4fcc124a68ecedd960d7bb961f8a7cf7e1d4fdd0862bbe930eac0d498e43776b"
+          },
+          {
+            "path": "sweep/scale_8/run.log",
+            "bytes": 1346,
+            "sha256": "46392f9f82bd5315bc34e9f6218d589dfaa1265d84f2e41061dbd95b339cf43b"
+          },
+          {
+            "path": "sweep/slope_summary.csv",
+            "bytes": 1410,
+            "sha256": "f82347a36a0ed42c54d2299dd95d6c3bc5ab32d77dfad8e21d8100532531e681"
+          },
+          {
+            "path": "sweep/sweep_status.json",
+            "bytes": 18779,
+            "sha256": "53ce6eeb1fbaaf907ea18e3c741abd50e92abd73cce5ba674b923bf6a1db2ea4"
+          },
+          {
+            "path": "timeout_check/scale_1/case_status.json",
+            "bytes": 85,
+            "sha256": "2e81c7b8f76d688efdc359bc34f257b74fd79ffde9d9f7adb5816a733a856a0f"
+          },
+          {
+            "path": "timeout_check/sweep_status.json",
+            "bytes": 558,
+            "sha256": "fa509c10c057ba0cba3cba7fca8e053639b2073110c9981b8f39ca5d97e34b73"
+          }
+        ],
+        "file_count": 98,
+        "total_bytes": null
+      },
+      "destination_verified": true,
+      "source_removed": true
+    }
+  ],
+  "historical_paths": "Historical artifacts are preserved byte-for-byte; use these mappings for former provenance paths.",
+  "numerical_solves_rerun": false,
+  "completed_at": "2026-09-16T14:47:13.0614057-05:00",
+  "validation": {
+    "focused_checks_passed": 9,
+    "default_timestamped_children": true,
+    "explicit_output_path_preserved": true,
+    "existing_run_directory_rejected": true,
+    "case_and_sweep_checkpoints_preserved": true,
+    "migrated_files_hash_verified": 136,
+    "retained_fixed_files_unchanged": 4,
+    "former_top_level_experiment_folders_remaining": 0,
+    "fourier_reader_verified_grids": [
+      20,
+      40,
+      80,
+      160,
+      320,
+      640
+    ],
+    "changed_python_files_compile": 3,
+    "numerical_solves_run": false,
+    "plots_regenerated": false
+  }
+}

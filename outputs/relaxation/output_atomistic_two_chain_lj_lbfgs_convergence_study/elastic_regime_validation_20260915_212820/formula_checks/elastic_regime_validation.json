@@ -1,0 +1,273 @@
+{
+  "checks": [
+    {
+      "name": "continuum_derivatives_scale_0.5",
+      "description": "Central energy difference and gradient difference versus analytic derivatives.",
+      "measured": {
+        "gradient_error": 1.3785761421303278e-10,
+        "hessian_error": 1.9405862114333967e-11
+      },
+      "criterion": "Both scaled errors <= 1e-8",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "name": "atomistic_derivatives_scale_0.5",
+      "description": "Central energy difference and gradient difference versus analytic derivatives.",
+      "measured": {
+        "gradient_error": 4.486331792175058e-11,
+        "hessian_error": 2.6078996403507864e-11
+      },
+      "criterion": "Both scaled errors <= 1e-8",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "name": "reduced_chain_rule_scale_0.5",
+      "description": "Directional derivatives in the actual odd and mean-gauge solver coordinates.",
+      "measured": {
+        "continuum_error": 1.4964214780819122e-11,
+        "atomistic_error": 5.031608810157628e-12
+      },
+      "criterion": "Both scaled errors <= 1e-8",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "name": "continuum_derivatives_scale_1",
+      "description": "Central energy difference and gradient difference versus analytic derivatives.",
+      "measured": {
+        "gradient_error": 3.647920854277231e-11,
+        "hessian_error": 1.8679351425844012e-11
+      },
+      "criterion": "Both scaled errors <= 1e-8",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "name": "atomistic_derivatives_scale_1",
+      "description": "Central energy difference and gradient difference versus analytic derivatives.",
+      "measured": {
+        "gradient_error": 1.3812057053641524e-10,
+        "hessian_error": 3.2742591989708385e-11
+      },
+      "criterion": "Both scaled errors <= 1e-8",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "name": "reduced_chain_rule_scale_1",
+      "description": "Directional derivatives in the actual odd and mean-gauge solver coordinates.",
+      "measured": {
+        "continuum_error": 2.2109532260561338e-10,
+        "atomistic_error": 2.034020694929861e-11
+      },
+      "criterion": "Both scaled errors <= 1e-8",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "name": "continuum_derivatives_scale_8",
+      "description": "Central energy difference and gradient difference versus analytic derivatives.",
+      "measured": {
+        "gradient_error": 4.946402454297782e-10,
+        "hessian_error": 7.534672850358667e-11
+      },
+      "criterion": "Both scaled errors <= 1e-8",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "name": "atomistic_derivatives_scale_8",
+      "description": "Central energy difference and gradient difference versus analytic derivatives.",
+      "measured": {
+        "gradient_error": 6.443617028839554e-10,
+        "hessian_error": 1.3659474742996277e-10
+      },
+      "criterion": "Both scaled errors <= 1e-8",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "name": "reduced_chain_rule_scale_8",
+      "description": "Directional derivatives in the actual odd and mean-gauge solver coordinates.",
+      "measured": {
+        "continuum_error": 3.823213412523785e-10,
+        "atomistic_error": 1.3952132782435456e-09
+      },
+      "criterion": "Both scaled errors <= 1e-8",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "name": "continuum_interaction_linearity",
+      "description": "Only the nonlinear energy, gradient, and Hessian are scaled.",
+      "measured": {
+        "maximum_scaled_error": 8.881784197001252e-16
+      },
+      "criterion": "<= 5e-13",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "name": "atomistic_interaction_linearity",
+      "description": "Only the nonlinear energy, gradient, and Hessian are scaled.",
+      "measured": {
+        "maximum_scaled_error": 1.8588020642496583e-14
+      },
+      "criterion": "<= 5e-13",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "name": "custom_potential_scaled_once",
+      "description": "Explicit continuum callback is multiplied by lambda exactly once.",
+      "measured": {
+        "maximum_scaled_error": 2.7755575615628914e-16
+      },
+      "criterion": "<= 5e-13",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "name": "pair_second_interval_extrema",
+      "description": "Interval endpoints and independently bracketed V''' roots, with 4097 dense samples per interval.",
+      "measured": {
+        "maximum_extremum_difference": 7.840950111415168e-16,
+        "maximum_sample_violation": 0.0,
+        "independent_stationary_points": [
+          -5.492503565554366,
+          -2.0297313907061656,
+          0.0,
+          2.0297313907061656,
+          5.492503565554366
+        ],
+        "interval_count": 52
+      },
+      "criterion": "Extremum difference <= 5e-13 and coverage violation <= 5e-14",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "name": "invalid_intervals",
+      "description": "Malformed intervals are rejected rather than reported as finite bounds.",
+      "measured": {
+        "reversed": true,
+        "nan": true,
+        "infinite": true,
+        "shape": true
+      },
+      "criterion": "Each case raises ValueError",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "name": "weighted_segment_bound_scale_0.5",
+      "description": "Sampled D_h^-1/2 H_interaction D_h^-1/2 spectral norms are below the whole-segment bound.",
+      "measured": {
+        "norms": [
+          0.10156803372520054,
+          0.10158796164467258,
+          0.10160941068879226,
+          0.10163236794557201,
+          0.10165681823946374,
+          0.10168274443481864,
+          0.10171012772908104,
+          0.10173894793471568,
+          0.10176918374934502
+        ],
+        "bound": 0.1738854251130215,
+        "poincare_error": 0.0,
+        "rho": 0.1753226606559305
+      },
+      "criterion": "All 9 sampled norms <= bound + 1e-12; Poincare constant error <= 1e-14",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "name": "weighted_segment_bound_scale_1",
+      "description": "Sampled D_h^-1/2 H_interaction D_h^-1/2 spectral norms are below the whole-segment bound.",
+      "measured": {
+        "norms": [
+          0.20313606745045737,
+          0.20317592328938516,
+          0.20321882137762765,
+          0.20326473589119715,
+          0.20331363647897224,
+          0.20336548886967606,
+          0.20342025545820228,
+          0.2034778958694557,
+          0.2035383674987303
+        ],
+        "bound": 0.347770850226043,
+        "poincare_error": 0.0,
+        "rho": 0.350645321311861
+      },
+      "criterion": "All 9 sampled norms <= bound + 1e-12; Poincare constant error <= 1e-14",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "name": "weighted_segment_bound_scale_8",
+      "description": "Sampled D_h^-1/2 H_interaction D_h^-1/2 spectral norms are below the whole-segment bound.",
+      "measured": {
+        "norms": [
+          1.6250885396036057,
+          1.6254073863151395,
+          1.6257505710210864,
+          1.6261178871296127,
+          1.6265090918317966,
+          1.6269239109575038,
+          1.627362043665681,
+          1.6278231669557544,
+          1.6283069399899261
+        ],
+        "bound": 2.782166801808344,
+        "poincare_error": 0.0,
+        "rho": 2.805162570494888
+      },
+      "criterion": "All 9 sampled norms <= bound + 1e-12; Poincare constant error <= 1e-14",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "name": "continuum_interval_refinement",
+      "description": "2048/4096 interval bounds both cover a dense independent image-sum sample.",
+      "measured": {
+        "rho_2048": 0.2305404101281218,
+        "rho_4096": 0.2305032501445387,
+        "dense_maximum": 0.23046606163168804
+      },
+      "criterion": "Dense maximum <= both bounds + 1e-12, and nested refinement does not enlarge bound",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "name": "regime_cutoff_sensitivity",
+      "description": "Finite-cutoff dominance diagnostics are stable between M=80 and M=160.",
+      "measured": {
+        "continuum_rho_difference": 5.845324224651449e-14,
+        "atomistic_rho_difference": 6.250555628639631e-14
+      },
+      "criterion": "Both absolute rho differences <= 1e-6",
+      "passed": true,
+      "status": "PASS"
+    },
+    {
+      "name": "saved_lambda_one_baseline",
+      "description": "Comparison requires both --baseline and --study; no study is launched here.",
+      "measured": {
+        "baseline": "None",
+        "study": "None"
+      },
+      "criterion": "Supply both saved study paths",
+      "passed": null,
+      "status": "SKIP"
+    }
+  ],
+  "passed": true,
+  "performed_count": 19,
+  "skipped_count": 1,
+  "python_executable": "C:\\Users\\lh201\\anaconda3\\envs\\relax\\python.exe",
+  "limits": "Sampled verification checks implementation consistency; it is not a proof of exact-arithmetic bounds or global minimality."
+}

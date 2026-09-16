@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "C:\Users\lh201\Desktop\Continuum_Limit_Relaxation\Continuum_Limit_Code\experiments\relaxation\lj_elastic_regime_sweep.py", line 279, in _case_worker
+    study = model.run_study(scale, n_values, continuum_points, max_points)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\lh201\Desktop\Continuum_Limit_Relaxation\Continuum_Limit_Code\experiments\relaxation\atomistic_two_chain_lj_lbfgs_convergence_study.py", line 901, in run_study
+    points: solve_continuum_reference(points, interaction_scale=interaction_scale)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\lh201\Desktop\Continuum_Limit_Relaxation\Continuum_Limit_Code\experiments\relaxation\atomistic_two_chain_lj_lbfgs_convergence_study.py", line 296, in solve_continuum_reference
+    solution = solve_continuum_initial(initial, x, dx, potential,
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\lh201\Desktop\Continuum_Limit_Relaxation\Continuum_Limit_Code\experiments\relaxation\atomistic_two_chain_lj_lbfgs_convergence_study.py", line 281, in solve_continuum_initial
+    raise RuntimeError(
+RuntimeError: Continuum FACTR restarts missed the acceptance tolerances: grad=3.845e-07, residual=1.224e-05

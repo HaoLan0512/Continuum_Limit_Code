@@ -1,0 +1,89 @@
+{
+  "checks": [
+    {
+      "name": "csv_original_columns",
+      "description": "Every original CSV column remains available.",
+      "measured": {
+        "original_count": 42,
+        "updated_count": 57,
+        "missing": []
+      },
+      "criterion": "No missing original columns",
+      "passed": true
+    },
+    {
+      "name": "csv_original_values",
+      "description": "All original CSV cell text matches at lambda=1.",
+      "measured": {
+        "original_rows": 12,
+        "updated_rows": 12,
+        "differences": []
+      },
+      "criterion": "Equal row counts and every original cell unchanged",
+      "passed": true
+    },
+    {
+      "name": "npz_original_keys",
+      "description": "Every original NPZ profile key remains available.",
+      "measured": {
+        "original_count": 88,
+        "updated_count": 168,
+        "missing": []
+      },
+      "criterion": "No missing original keys",
+      "passed": true
+    },
+    {
+      "name": "npz_original_values",
+      "description": "Original profile arrays and metadata are unchanged at lambda=1.",
+      "measured": {
+        "changed_keys": []
+      },
+      "criterion": "Every original value exactly equal including NaNs",
+      "passed": true
+    },
+    {
+      "name": "original_artifact_preservation",
+      "description": "Fresh SHA-256 comparison with the hashes captured before implementation.",
+      "measured": {
+        "checked_files": 4,
+        "changed_files": []
+      },
+      "criterion": "All four original research artifacts unchanged",
+      "passed": true
+    },
+    {
+      "name": "source_syntax",
+      "description": "Compile all four changed/new scientific source files in memory without imports or solves.",
+      "measured": {
+        "checked_files": 4,
+        "failures": []
+      },
+      "criterion": "All files compile",
+      "passed": true
+    },
+    {
+      "name": "git_diff_check",
+      "description": "Check tracked task diff for whitespace errors.",
+      "measured": {
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "criterion": "git diff --check exit code zero",
+      "passed": true
+    },
+    {
+      "name": "documentation_links",
+      "description": "Check local links in the new study workflow documentation.",
+      "measured": {
+        "checked_links": 2,
+        "missing": []
+      },
+      "criterion": "All local link targets exist",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "limitation": "Read-only compatibility checks and artifact preservation; numerical validation is reported separately."
+}

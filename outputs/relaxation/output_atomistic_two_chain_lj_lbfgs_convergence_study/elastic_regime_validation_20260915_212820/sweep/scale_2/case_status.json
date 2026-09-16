@@ -1,0 +1,7 @@
+{
+  "status": "failed",
+  "interaction_scale": 2.0,
+  "error": "RuntimeError: Continuum FACTR restarts missed the acceptance tolerances: grad=2.032e-07, residual=6.467e-06",
+  "warnings": [],
+  "elapsed_seconds": 1.3280000000013388
+}

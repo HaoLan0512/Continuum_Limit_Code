@@ -1,0 +1,33 @@
+{
+  "interaction_scales": [
+    1.0,
+    2.0
+  ],
+  "n_values": [
+    20,
+    40,
+    80,
+    160,
+    320,
+    640
+  ],
+  "initial_continuum_points": [
+    400,
+    800
+  ],
+  "max_continuum_points": 3200,
+  "time_budget_seconds": 0.05,
+  "cases": [
+    {
+      "interaction_scale": 1.0,
+      "status": "timed_out",
+      "directory": "scale_1"
+    },
+    {
+      "interaction_scale": 2.0,
+      "status": "not_run_budget_exhausted",
+      "directory": "scale_2"
+    }
+  ],
+  "compute_elapsed_seconds": 0.07799999999406282
+}

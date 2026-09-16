@@ -9,7 +9,7 @@ Purpose:
     atomistic-to-continuum comparison as the real-image continuum potential.
 Inputs:
     warm-track aliases in profiles.npz from
-    atomistic_two_chain_lj_lbfgs_convergence_study.py;
+    atomistic_two_chain_lj_lbfgs_elastic_dominance_convergence_study.py;
     a=1, sigma=0.9, L=1, epsilon=0.5; Fourier cutoffs K=5 and K=6.
 Outputs:
     A convergence CSV, NPZ profiles, PNG figure, and verification report.
@@ -19,8 +19,9 @@ Output location:
 Dependencies:
     clr.potentials.lj_periodic and the established atomistic study helpers.
 Related files:
-    atomistic_two_chain_lj_lbfgs_convergence_study.py produces the input
-    atomistic minimizers and retains the M=80 real-image continuum default.
+    atomistic_two_chain_lj_lbfgs_elastic_dominance_convergence_study.py produces
+    the fixed-study input profiles. atomistic_two_chain_lj_lbfgs_convergence_study.py
+    supplies shared helpers with the M=80 real-image continuum default.
 """
 
 import csv
@@ -379,7 +380,7 @@ def main():
     """Run the postprocessing comparison and save its new artifacts."""
     repository = Path(__file__).resolve().parents[2]
     source = (repository / "outputs" / "relaxation" /
-              "output_atomistic_two_chain_lj_lbfgs_convergence_study" /
+              "output_atomistic_two_chain_lj_lbfgs_elastic_dominance_convergence_study" /
               "profiles.npz")
     outdir = (repository / "outputs" / "relaxation" /
               "output_atomistic_two_chain_lj_fourier_continuum_convergence_comparison")

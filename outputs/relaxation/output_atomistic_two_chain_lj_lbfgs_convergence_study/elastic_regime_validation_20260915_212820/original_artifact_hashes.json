@@ -1,0 +1,6 @@
+{
+  "outputs\\relaxation\\output_atomistic_two_chain_lj_lbfgs_convergence_study\\check_report.txt": "d1720b2ed9333bf1f6fb050689cbb4d10a23ff348c1d24b4275e7e8ae8ddbc36",
+  "outputs\\relaxation\\output_atomistic_two_chain_lj_lbfgs_convergence_study\\convergence_loglog.png": "4ecaf1afa562b075fdd0a9a5cd20c1d2b02a19813f1e6b8363cd620a3aa2b919",
+  "outputs\\relaxation\\output_atomistic_two_chain_lj_lbfgs_convergence_study\\convergence_summary.csv": "3272128c3ae725b01cebef6e2ed107074788aea95925ca6b8a705756c9e46e8c",
+  "outputs\\relaxation\\output_atomistic_two_chain_lj_lbfgs_convergence_study\\profiles.npz": "18a315dc0a2e685bad17e795e9317858fc7f39528c5c172e3b799764cf61c30d"
+}

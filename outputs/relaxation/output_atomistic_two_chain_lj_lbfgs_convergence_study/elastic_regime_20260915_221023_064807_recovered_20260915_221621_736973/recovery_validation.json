@@ -1,0 +1,27 @@
+{
+  "source_directory": "C:\\Users\\lh201\\Desktop\\Continuum_Limit_Relaxation\\Continuum_Limit_Code\\outputs\\relaxation\\elastic_regime_20260915_221023_064807",
+  "numerical_solve_rerun": false,
+  "original_file_hashes_preserved": {
+    "sweep_status.json": "d935e958089ba51e0b4bf9ff57a839edd3a88cf1b8ee7f589b508d3711aca94e",
+    "sweep_status.json.tmp": "952c961a1dea48870424bddcd0d85d965902ba5d67eaa21b1f1d3283a7d680e4",
+    "scale_1\\case_status.json": "6b2d9c2c57f95cf0dbd05ada8fdbe0cc05f911df7962086417f5dcc38324b614",
+    "scale_1\\check_report.txt": "391331dde6737f2b9ebd04d55589af3b57869d49b811c356ee694e1c70a4c66d",
+    "scale_1\\convergence_loglog.png": "b8f59a889ca720ea118db6d04fbb80d7811e28a47116c3579c5ebe3083c47e59",
+    "scale_1\\convergence_summary.csv": "929b7e2b192fcd030210cd6417eb8acdf96c9ca36e47d5d319468a355eb9b68d",
+    "scale_1\\profiles.npz": "acfa38d0de76addf156b875aa38b798e6d08157205f5f5e8dddffd90831c29d7",
+    "scale_1\\run.log": "391331dde6737f2b9ebd04d55589af3b57869d49b811c356ee694e1c70a4c66d",
+    "scale_1\\study.pkl": "bb44555967e6fba0ad7eeff5db90b8d67f5db3421fc015efe68827e635b67562"
+  },
+  "checkpoint_regression_checks_passed": {
+    "base_python_3_13": 8,
+    "relax_python_3_12": 8
+  },
+  "summary_files_regenerated": [
+    "case_summary.csv",
+    "regime_summary.csv",
+    "slope_summary.csv",
+    "regime_bounds.png",
+    "convergence_comparison.png",
+    "profile_comparison.png"
+  ]
+}

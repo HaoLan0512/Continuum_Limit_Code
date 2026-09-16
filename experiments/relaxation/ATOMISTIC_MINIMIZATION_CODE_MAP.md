@@ -11,6 +11,7 @@ connects its pair potential to the matched continuum problem.
 | `clr/potentials/lj_periodic.py`: `EffectiveLJParameters`, pair derivatives, real-image sums, and analytic Fourier coefficients | Define one matched pair/continuum model | Use the same effective `V` in the atomistic energy and either the real-image or Fourier representation of `W=4*sum_m V`. | The Fourier cutoff must be rechecked when `L/a` or other parameters change. |
 | `clr/relaxation/odd_periodic.py`: `build_odd_periodic`, `reduce_odd_gradient` | Define phase-fixed continuum optimization coordinates | Reconstruct `[0,a,0,-a[::-1]]` and apply its transpose-Jacobian gradient reduction in each continuum solver. | This construction assumes the established even periodic grid and is not the atomistic mean gauge. |
 | `experiments/relaxation/atomistic_two_chain_lj_lbfgs_convergence_study.py` | Solve and validate the full two-chain problem | Implements Equations (12)--(13), the mean gauge, Appendix-B normalization, two fixed initializations, cutoff checks, and the paper's convergence norms. | The finite image cutoff and numerical stationarity are verified computationally; the two tracks are not selected against each other and do not prove global minimality or the uniform stability gap. |
+| `experiments/relaxation/atomistic_two_chain_lj_lbfgs_elastic_dominance_convergence_study.py` | Preserve the clean fixed-parameter convergence workflow | Reproduces the GitHub `66bf89f` source with only a producer-owned output path change, so future fixed-regime work can start without the tunable-sweep modifications. | It does not import the tunable sweep or itself prove a uniform elastic-dominance gap; running it performs the original full convergence calculation. |
 | `experiments/potentials/lj_stacking_potential_exploration.py`: `phi_lj`, `dphi_lj_dr`, `V_gsfe_delta`, `dV_gsfe_ddelta` | Define a concrete pair potential | Use the effective even interaction `V(A) = phi_lj(sqrt(A**2 + L**2))` and `V'(A) = dphi_lj_dr(r) * A/r`. | It sums one registry point against a rigid lattice; it does not construct two relaxed chains. |
 | `experiments/potentials/lj_lattice_sum_parameter_sweep.py`: `LatticeSumParams`, `LatticeSummedPotential.W`, `Wprime` | Build and differentiate the matched continuum lattice sum | Reuse the vectorized integer-image sum, analytic chain rule, and `image_count` convention `m=-M,...,M`. | The default `prefactor_W=2` is not the paper's reduced `W`; the class is an experiment-local rigid-lattice model. |
 | `experiments/potentials/lj_registry_diagnostic_parameter_sweep.py`: `registry_summary`, `assumption_report` | Check the chosen continuum potential | Check phase location, evenness, and sampled monotonicity before solving. | These are numerical diagnostics, not proofs of the paper's assumptions or atomistic stability. |
@@ -26,6 +27,10 @@ potential module. The phase-fixed single case, cosine mesh-study core, and
 atomistic study's continuum solver import the reusable odd reduction directly;
 the two LJ-Fourier workflows use it through those imported solvers. The cosine
 study remains available as a separate illustrative continuum calculation.
+The elastic-dominance convergence file is an independent fixed-parameter source
+snapshot; the current canonical atomistic file remains the model used by the
+tunable elastic-regime sweep, and existing Fourier-comparison imports remain
+pointed at that canonical module.
 
 ## Paper-to-code correspondence
 

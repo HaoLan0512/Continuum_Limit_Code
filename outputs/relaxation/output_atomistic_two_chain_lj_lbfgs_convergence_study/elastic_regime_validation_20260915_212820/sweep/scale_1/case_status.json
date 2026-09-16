@@ -1,0 +1,307 @@
+{
+  "status": "complete",
+  "interaction_scale": 1.0,
+  "numerically_valid": true,
+  "baseline_checks_passed": true,
+  "continuum_regime": {
+    "available": true,
+    "rho": 0.2305404101281218,
+    "gap": 0.7694595898718782,
+    "established": true,
+    "Lbound": 0.2305404101281218,
+    "unscaled_curvature_bound": 0.2305404101281218,
+    "interaction_scale": 1.0,
+    "cutoff": 80,
+    "interval_count": 2048,
+    "phase_cell_lower": -3.141592653589793,
+    "phase_cell_upper": 3.141592653589793,
+    "bound_method": "signed image intervals; analytic V''' quartic roots",
+    "rho_4096": 0.2305032501445387,
+    "rho_cutoff_check": 0.23054041012818025,
+    "cutoff_rho_change": 5.845324224651449e-14,
+    "phase_cell_covered": true
+  },
+  "reference_points": 800,
+  "warm_initial_continuum_points": 800,
+  "reference_checks": [
+    {
+      "start": "sampled_continuum",
+      "phase": "fixed",
+      "norm": "h2",
+      "coarse_points": 400,
+      "fine_points": 800,
+      "change": 9.815919512191593e-06,
+      "limit": 3.214961894421174e-05,
+      "passed": true
+    },
+    {
+      "start": "sampled_continuum",
+      "phase": "fixed",
+      "norm": "max",
+      "coarse_points": 400,
+      "fine_points": 800,
+      "change": 1.381400901764862e-06,
+      "limit": 7.469128239096651e-06,
+      "passed": true
+    },
+    {
+      "start": "sampled_continuum",
+      "phase": "phase_matched",
+      "norm": "h2",
+      "coarse_points": 400,
+      "fine_points": 800,
+      "change": 9.815919503890145e-06,
+      "limit": 3.214961894341968e-05,
+      "passed": true
+    },
+    {
+      "start": "sampled_continuum",
+      "phase": "phase_matched",
+      "norm": "max",
+      "coarse_points": 400,
+      "fine_points": 800,
+      "change": 1.3814009017787399e-06,
+      "limit": 7.469067314502809e-06,
+      "passed": true
+    },
+    {
+      "start": "random_fourier_seed_3",
+      "phase": "fixed",
+      "norm": "h2",
+      "coarse_points": 400,
+      "fine_points": 800,
+      "change": 9.815919512191593e-06,
+      "limit": 0.00015100458383944851,
+      "passed": true
+    },
+    {
+      "start": "random_fourier_seed_3",
+      "phase": "fixed",
+      "norm": "max",
+      "coarse_points": 400,
+      "fine_points": 800,
+      "change": 1.381400901764862e-06,
+      "limit": 5.087785771938046e-05,
+      "passed": true
+    },
+    {
+      "start": "random_fourier_seed_3",
+      "phase": "phase_matched",
+      "norm": "h2",
+      "coarse_points": 400,
+      "fine_points": 800,
+      "change": 9.813811311997772e-06,
+      "limit": 3.214962691042864e-05,
+      "passed": true
+    },
+    {
+      "start": "random_fourier_seed_3",
+      "phase": "phase_matched",
+      "norm": "max",
+      "coarse_points": 400,
+      "fine_points": 800,
+      "change": 1.3814111299581544e-06,
+      "limit": 7.469906544465416e-06,
+      "passed": true
+    }
+  ],
+  "refinement_failures": [],
+  "numerical_checks": [
+    [
+      "mean-gauged atomistic gradient",
+      true,
+      6.35109853597271e-10,
+      "<= 1.0e-08"
+    ],
+    [
+      "phase-fixed continuum gradient",
+      true,
+      5.023695348604917e-10,
+      "<= 1.0e-08"
+    ],
+    [
+      "seed-3 reduced length",
+      true,
+      1.0,
+      "== 1"
+    ],
+    [
+      "seed-3 mean gauge",
+      true,
+      0.0,
+      "<= 1.0e-12"
+    ],
+    [
+      "seed-3 finite energy and gradient",
+      true,
+      1.0,
+      "== 1"
+    ],
+    [
+      "accepted atomistic endpoints",
+      true,
+      12.0,
+      "== 12"
+    ],
+    [
+      "continuum curvature screen",
+      true,
+      2.0,
+      "== 2; lambda_min >= -tau_H"
+    ],
+    [
+      "Appendix B mean sums",
+      true,
+      1.9281910950856096e-17,
+      "<= 1.0e-12"
+    ],
+    [
+      "Appendix B mean bounds",
+      true,
+      -0.0007592890782942745,
+      "<= 1.0e-14"
+    ],
+    [
+      "M=80/160 EL difference over h",
+      true,
+      1.618017032111176e-11,
+      "<= 1.0e-04"
+    ],
+    [
+      "continuum phase-cell coverage",
+      true,
+      1.0,
+      "== 1"
+    ],
+    [
+      "all reference comparisons resolved",
+      true,
+      8.0,
+      "== 8"
+    ],
+    [
+      "refined continuum curvature",
+      true,
+      1.0,
+      "== 1"
+    ],
+    [
+      "continuum regime cutoff change",
+      true,
+      5.845324224651449e-14,
+      "<= 1e-6"
+    ],
+    [
+      "atomistic regime cutoff change",
+      true,
+      6.245004513516506e-14,
+      "<= 1e-6"
+    ]
+  ],
+  "observational_checks": [
+    [
+      "two-start energy comparison",
+      true,
+      6.0,
+      "== 6; accepted pair and E_seed3 >= E_warm - tau_E"
+    ],
+    [
+      "sampled_continuum h2 all-grid slope",
+      true,
+      -0.9968990977337705,
+      "in [-1.2, -0.8]; unavailable unless every grid is valid"
+    ],
+    [
+      "sampled_continuum max all-grid slope",
+      true,
+      -0.9990810782048494,
+      "in [-1.2, -0.8]; unavailable unless every grid is valid"
+    ],
+    [
+      "random_fourier_seed_3 h2 all-grid slope",
+      true,
+      -1.0808151244123894,
+      "in [-1.2, -0.8]; unavailable unless every grid is valid"
+    ],
+    [
+      "random_fourier_seed_3 max all-grid slope",
+      true,
+      -1.0818610551504921,
+      "in [-1.2, -0.8]; unavailable unless every grid is valid"
+    ],
+    [
+      "warm H_h^2 monotonic decrease",
+      true,
+      -0.0006419884153074022,
+      "< 0; unavailable unless every grid is valid"
+    ],
+    [
+      "warm maximum-error monotonic decrease",
+      true,
+      -0.00014846616670603774,
+      "< 0; unavailable unless every grid is valid"
+    ]
+  ],
+  "slopes": {
+    "sampled_continuum": {
+      "h2": -0.9968990977337705,
+      "max": -0.9990810782048494,
+      "phase_matched_h2": -0.996894851598811,
+      "phase_matched_max": -0.9973355867284885
+    },
+    "random_fourier_seed_3": {
+      "h2": -1.0808151244123894,
+      "max": -1.0818610551504921,
+      "phase_matched_h2": -0.9971522263312931,
+      "phase_matched_max": -0.9976027237319273
+    }
+  },
+  "finest_slopes": {
+    "sampled_continuum": {
+      "h2": -0.9984289976213482,
+      "max": -0.9958282310895072,
+      "phase_matched_h2": -0.9984289931838122,
+      "phase_matched_max": -0.9957411739945824
+    },
+    "random_fourier_seed_3": {
+      "h2": -1.185311790415611,
+      "max": -1.1806666377183783,
+      "phase_matched_h2": -0.9984352833069983,
+      "phase_matched_max": -0.9962080339057686
+    }
+  },
+  "valid_subset_slopes": {
+    "sampled_continuum": {
+      "h2": -0.9968990977337705,
+      "max": -0.9990810782048494,
+      "phase_matched_h2": -0.996894851598811,
+      "phase_matched_max": -0.9973355867284885
+    },
+    "random_fourier_seed_3": {
+      "h2": -1.0808151244123894,
+      "max": -1.0818610551504921,
+      "phase_matched_h2": -0.9971522263312931,
+      "phase_matched_max": -0.9976027237319273
+    }
+  },
+  "fit_n_values": {
+    "sampled_continuum": [
+      20,
+      40,
+      80,
+      160,
+      320,
+      640
+    ],
+    "random_fourier_seed_3": [
+      20,
+      40,
+      80,
+      160,
+      320,
+      640
+    ]
+  },
+  "warnings": [],
+  "elapsed_seconds": 36.65699999999924
+}

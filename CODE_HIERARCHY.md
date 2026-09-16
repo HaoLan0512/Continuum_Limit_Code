@@ -51,6 +51,10 @@ Names containing fd_symbol_fft deliberately distinguish FFT application of finit
     |   |   +-- jv_unrestricted_finite_difference_lbfgs_mesh_study.py
     |   |   +-- jv_unrestricted_lj_fourier_finite_difference_lbfgs_mesh_study.py
     |   |   +-- atomistic_two_chain_lj_lbfgs_convergence_study.py
+    |   |   +-- atomistic_two_chain_lj_lbfgs_elastic_dominance_convergence_study.py
+    |   |   +-- lj_elastic_dominance.py
+    |   |   +-- lj_elastic_regime_sweep.py
+    |   |   +-- validate_lj_elastic_regime.py
     |   |   +-- atomistic_two_chain_lj_fourier_continuum_convergence_comparison.py
     |   |   +-- ATOMISTIC_MINIMIZATION_CODE_MAP.md
     |   |   +-- fd_symbol_fft_virtual_time_single_case.py
@@ -74,6 +78,12 @@ Names containing fd_symbol_fft deliberately distinguish FFT application of finit
     +-- outputs/
         +-- potentials/
         +-- relaxation/
+        |   +-- output_atomistic_two_chain_lj_lbfgs_elastic_dominance_convergence_study/
+        |   +-- output_atomistic_two_chain_lj_lbfgs_convergence_study/
+        |       +-- output_migration.json
+        |       +-- elastic_regime_<timestamp>/
+        |       +-- elastic_regime_<timestamp>_recovered_<timestamp>/
+        |       +-- elastic_regime_validation_20260915_212820/
         +-- band_structure/
         +-- archive/
 
@@ -115,8 +125,12 @@ These instruction files do not alter the scientific workflow or producer paths.
 | experiments/relaxation/jv_phase_fixed_finite_difference_lbfgs_single_case.py | Forward differences; odd parametrization; L-BFGS-B | Phase-fixed J[v] minimizer and constraints | coded grid and energy parameters | arrays and plots under outputs/relaxation/output_jv_phase_fixed_finite_difference_lbfgs_single_case | clr.relaxation.odd_periodic |
 | experiments/relaxation/jv_unrestricted_finite_difference_lbfgs_mesh_study.py | Forward differences; unrestricted and odd-reference L-BFGS-B; mesh refinement | Independent numerical check of Theorem 1 through nonsymmetric multistart and postprocessed phase alignment | N=100, 200, 400; alpha=1; W=2*cos; deterministic Fourier starts | CSV, NPZ, report, and plots under outputs/relaxation/output_jv_unrestricted_finite_difference_lbfgs_mesh_study | clr.relaxation.odd_periodic |
 | experiments/relaxation/jv_unrestricted_lj_fourier_finite_difference_lbfgs_mesh_study.py | Analytic LJ Fourier cutoff; forward differences; unrestricted and odd-reference L-BFGS-B | Repeat the unrestricted mesh study with the pair-derived K=5 continuum potential | N=100, 200, 400; a=1, sigma=0.9, L=1, epsilon=0.5 | CSV, NPZ, report, and plots under outputs/relaxation/output_jv_unrestricted_lj_fourier_finite_difference_lbfgs_mesh_study | clr.potentials.lj_periodic; cosine mesh runner |
-| experiments/relaxation/atomistic_two_chain_lj_lbfgs_convergence_study.py | Two-chain long-range LJ energy; exact truncated gradient; phase-fixed continuum finite differences; L-BFGS-B | Compare two fixed atomistic solution tracks for N=20, 40, 80, 160, 320, 640 with the matched continuum minimizer in the paper's discrete norms | N and N+1 periodic chains, finite LJ image sum, sampled-continuum warm start, fixed random-Fourier seed 3, and 400- and 800-point deterministic continuum references | convergence_summary.csv, profiles.npz, convergence_loglog.png, and check_report.txt under outputs/relaxation/output_atomistic_two_chain_lj_lbfgs_convergence_study | clr.potentials.lj_periodic; clr.relaxation.odd_periodic |
-| experiments/relaxation/atomistic_two_chain_lj_fourier_continuum_convergence_comparison.py | Analytic LJ Fourier continuum; finite-difference L-BFGS-B; saved-profile postprocessing | Recompute atomistic convergence against K=5 and compare K=6 and M=160 continuum references | validated atomistic profiles.npz, a=1, sigma=0.9, L=1, epsilon=0.5 | CSV, NPZ, report, and plot under outputs/relaxation/output_atomistic_two_chain_lj_fourier_continuum_convergence_comparison | clr.potentials.lj_periodic; atomistic convergence helpers |
+| experiments/relaxation/atomistic_two_chain_lj_lbfgs_convergence_study.py | Two-chain LJ energy with an interaction multiplier; exact finite-cutoff derivatives; L-BFGS-B | Compare warm and seed-3 convergence and elastic dominance across interaction strengths | Explicit scales and atomistic grids; deterministic continuum references with refinement | Per-scale data and cross-scale tables/plots under outputs/relaxation/output_atomistic_two_chain_lj_lbfgs_convergence_study/elastic_regime_<timestamp>/ | clr.potentials.lj_periodic; clr.relaxation.odd_periodic; lj_elastic_dominance; lj_elastic_regime_sweep |
+| experiments/relaxation/atomistic_two_chain_lj_lbfgs_elastic_dominance_convergence_study.py | Two-chain long-range LJ energy; exact truncated gradient; phase-fixed continuum finite differences; L-BFGS-B | Preserve the fixed-parameter scale-one convergence study from GitHub commit `66bf89f` as an independent clean starting point in the elastic-dominance regime | N and N+1 periodic chains, fixed effective LJ parameters, sampled-continuum warm start, fixed random-Fourier seed 3, and 400- and 800-point deterministic continuum references | convergence_summary.csv, profiles.npz, convergence_loglog.png, and check_report.txt under outputs/relaxation/output_atomistic_two_chain_lj_lbfgs_elastic_dominance_convergence_study when run | clr.potentials.lj_periodic; clr.relaxation.odd_periodic; no runtime dependency on the tunable sweep |
+| experiments/relaxation/lj_elastic_dominance.py | Analytic pair-curvature extrema and weighted Jacobian bounds | Reusable finite-cutoff dominance diagnostics | Potential parameters, scale, continuum cell or comparison segment | Returned bounds; no output directory | clr.potentials.lj_periodic |
+| experiments/relaxation/lj_elastic_regime_sweep.py | Independent parameter cases, reference refinement, bounded workers | Sweep orchestration and reporting | Study model, scales, grids, output override, time budget | Timestamped run directory inside output_atomistic_two_chain_lj_lbfgs_convergence_study by default | atomistic convergence study; lj_elastic_dominance |
+| experiments/relaxation/validate_lj_elastic_regime.py | Deterministic formula and saved-baseline comparisons | Focused implementation verification | Optional trusted baseline/study pickles; required --outdir | elastic_regime_validation.json in the exact supplied directory | atomistic convergence study; lj_elastic_dominance |
+| experiments/relaxation/atomistic_two_chain_lj_fourier_continuum_convergence_comparison.py | Analytic LJ Fourier continuum; finite-difference L-BFGS-B; saved-profile postprocessing | Recompute atomistic convergence against K=5 and compare K=6 and M=160 continuum references | profiles.npz from output_atomistic_two_chain_lj_lbfgs_elastic_dominance_convergence_study; a=1, sigma=0.9, L=1, epsilon=0.5 | CSV, NPZ, report, and plot under outputs/relaxation/output_atomistic_two_chain_lj_fourier_continuum_convergence_comparison | clr.potentials.lj_periodic; atomistic convergence helpers |
 | experiments/relaxation/fd_symbol_fft_virtual_time_single_case.py | FD Laplacian symbols applied through FFT | Picard and semi-implicit virtual-time solvers | grid, epsilon, iterations, tolerance | arrays, console diagnostics, displayed figure | None |
 | experiments/relaxation/fd_symbol_fft_constraint_comparison.py | FD symbols through FFT; projected virtual time | Constraint and initial-guess comparison | solver options and admissible-set projections | arrays, console diagnostics, displayed figure | None |
 | experiments/relaxation/fd_symbol_fft_diagnostics_comparison.py | FD derivative symbols through FFT; projected virtual time | Constraint, residual, and energy-history comparison | solver options, pinning, initial guesses | histories, console diagnostics, displayed figures | None |
@@ -140,6 +154,11 @@ These instruction files do not alter the scientific workflow or producer paths.
   atomistic producer's unsuffixed NPZ aliases because changing only the
   continuum evaluator does not change the atomistic objective; K=6 and M=160
   references quantify the resulting approximation error.
+- `atomistic_two_chain_lj_lbfgs_elastic_dominance_convergence_study.py` is the
+  fixed-parameter source from GitHub commit `66bf89f`, with only its dedicated
+  output path changed. It remains independent of the tunable elastic-regime
+  sweep. The modified canonical study and the Fourier-continuum comparison's
+  existing import and input paths are unchanged.
 - The atomistic convergence study reports `sampled_continuum` and
   `random_fourier_seed_3` as two independent tracks; it does not select between
   them. An endpoint is accepted when it is finite, L-BFGS-B reports success,
@@ -164,7 +183,8 @@ These instruction files do not alter the scientific workflow or producer paths.
 | None (new numerical study) | outputs/relaxation/output_jv_unrestricted_lj_fourier_finite_difference_lbfgs_mesh_study | jv_unrestricted_lj_fourier_finite_difference_lbfgs_mesh_study.py |
 | Three-start atomistic study snapshot | outputs/archive/output_atomistic_two_chain_lj_lbfgs_convergence_study_three_start_snapshot_20260906.zip | Preserved baseline with SHA-256 inventory |
 | Seven-start atomistic study snapshot | outputs/archive/output_atomistic_two_chain_lj_lbfgs_convergence_study_seven_start_snapshot_20260907.zip | Preserved baseline with SHA-256 inventory |
-| None (new numerical study) | outputs/relaxation/output_atomistic_two_chain_lj_lbfgs_convergence_study | atomistic_two_chain_lj_lbfgs_convergence_study.py; four live two-track outputs |
+| Four fixed-study files formerly under output_atomistic_two_chain_lj_lbfgs_convergence_study | outputs/relaxation/output_atomistic_two_chain_lj_lbfgs_elastic_dominance_convergence_study | Retained identical CSV, NPZ, and plot plus an expanded report; redundant former files removed |
+| outputs/relaxation/elastic_regime* (four existing experiment directories) | outputs/relaxation/output_atomistic_two_chain_lj_lbfgs_convergence_study/<same_directory_name> | All runs, recovery artifacts, and validation workspace preserved; future default runs use timestamped children here |
 | Validated atomistic profiles | outputs/relaxation/output_atomistic_two_chain_lj_fourier_continuum_convergence_comparison | atomistic_two_chain_lj_fourier_continuum_convergence_comparison.py |
 | FFT base relaxation artifacts | outputs/relaxation/output_fd_symbol_fft_lbfgs_single_case | fd_symbol_fft_lbfgs_single_case.py |
 | output_pair_potential | outputs/potentials/output_lj_lattice_sum_parameter_sweep | lj_lattice_sum_parameter_sweep.py |
@@ -225,6 +245,7 @@ Run modules from the repository root with the selected relax Conda interpreter:
     C:\Users\lh201\anaconda3\envs\relax\python.exe -m experiments.relaxation.jv_unrestricted_finite_difference_lbfgs_mesh_study
     C:\Users\lh201\anaconda3\envs\relax\python.exe -m experiments.relaxation.jv_unrestricted_lj_fourier_finite_difference_lbfgs_mesh_study
     C:\Users\lh201\anaconda3\envs\relax\python.exe -m experiments.relaxation.atomistic_two_chain_lj_lbfgs_convergence_study
+    C:\Users\lh201\anaconda3\envs\relax\python.exe -m experiments.relaxation.atomistic_two_chain_lj_lbfgs_elastic_dominance_convergence_study
     C:\Users\lh201\anaconda3\envs\relax\python.exe -m experiments.relaxation.atomistic_two_chain_lj_fourier_continuum_convergence_comparison
     C:\Users\lh201\anaconda3\envs\relax\python.exe -m experiments.relaxation.fd_symbol_fft_lbfgs_single_case
     C:\Users\lh201\anaconda3\envs\relax\python.exe -m experiments.band_structure.bloch_finite_difference_band_study
@@ -356,3 +377,38 @@ The expensive full 121 by 121 diagnostic sweep, default 512-point virtual-time r
   loader, plot rendering, scoped `compileall`, stale-label searches, and
   `git diff --check` pass. The live output directory contains only the four
   documented artifacts.
+
+### 2026-09-16 clean elastic-dominance source preservation
+
+- Added `atomistic_two_chain_lj_lbfgs_elastic_dominance_convergence_study.py`
+  from GitHub commit `66bf89f`. Its bytes match that source after exactly two
+  substitutions of the producer-owned output-directory name; the resulting
+  SHA-256 is `ccb3d180ab471edd7ae6bef29467a757ec51fbb73aaf18d4dcd8082a8273e555`.
+- The new module compiles and imports under Python 3.12.12 in the `relax`
+  environment without creating its output directory. The full convergence
+  calculation was not rerun because the numerical implementation is unchanged.
+- No output artifacts were copied, moved, deleted, or overwritten. The modified
+  tunable study, its sweep helpers, and the Fourier-comparison import and input
+  paths remain unchanged; `git diff --check` passes with only Windows
+  line-ending conversion notices.
+
+### 2026-09-16 elastic-regime output consolidation
+
+- Retained the fixed-study outputs under
+  `outputs/relaxation/output_atomistic_two_chain_lj_lbfgs_elastic_dominance_convergence_study/`.
+  The former CSV, NPZ, and plot were byte-identical; the retained report includes
+  the entire former report plus phase-mode diagnostics. Removed the four
+  redundant files from the former location.
+- Repurposed `output_atomistic_two_chain_lj_lbfgs_convergence_study/` as the
+  sweep container. All four formerly top-level `elastic_regime*` directories,
+  including recovery and validation artifacts, now live beneath it. All 136
+  migrated files and directory inventories were verified; the four retained
+  fixed-study files are unchanged.
+- Future default runs create timestamped children of this container. Explicit
+  `--output-dir` paths retain their exact meaning. The Fourier postprocessor
+  reads the retained fixed-study profiles. Historical artifact paths remain
+  provenance records; `output_migration.json` contains their mappings and hashes.
+- Nine focused checks passed: default and explicit routing, timestamp separation,
+  checkpoint locations, existing-directory rejection, inventory preservation,
+  removal of redundant locations, the Fourier reader, and compilation/imports.
+  No numerical solves or plot regeneration were performed.
